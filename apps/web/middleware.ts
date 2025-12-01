@@ -42,19 +42,30 @@ export default clerkMiddleware(async (auth, req) => {
 
   const { userId, orgId } = await auth();
   const pathname = req.nextUrl.pathname;
+  const searchParams = req.nextUrl.searchParams;
 
   // Extrair locale do pathname
   let locale = getLocaleFromPath(pathname);
 
   // Se o usuário faz login vindo de uma página sem locale (/),
-  // tentar recuperar o locale do cookie 'preferred-locale'
+  // tentar recuperar o locale de múltiplas fontes na ordem:
+  // 1. Query param ?locale=en
+  // 2. Cookie preferred-locale
+  // 3. Padrão: pt-BR
   if (pathname === '/' && userId) {
-    const cookies = req.cookies.get('preferred-locale');
-    if (cookies?.value) {
-      locale = cookies.value;
+    // Tentar query param primeiro
+    const queryLocale = searchParams.get('locale');
+    if (queryLocale && VALID_LOCALES.includes(queryLocale as any)) {
+      locale = queryLocale;
     } else {
-      // Se não tem cookie, manter padrão
-      locale = DEFAULT_LOCALE;
+      // Tentar cookie
+      const cookies = req.cookies.get('preferred-locale');
+      if (cookies?.value && VALID_LOCALES.includes(cookies.value as any)) {
+        locale = cookies.value;
+      } else {
+        // Usar padrão
+        locale = DEFAULT_LOCALE;
+      }
     }
   }
 
