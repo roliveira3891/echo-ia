@@ -47,33 +47,40 @@ export default clerkMiddleware(async (auth, req) => {
   // Extrair locale do pathname
   let locale = getLocaleFromPath(pathname);
 
-  // Se o usuário faz login vindo de uma página sem locale (/),
-  // tentar recuperar o locale de múltiplas fontes na ordem:
-  // 1. Query param ?locale=en
-  // 2. Cookie preferred-locale
-  // 3. Padrão: pt-BR
-  if (pathname === '/' && userId) {
-    // Tentar query param primeiro
+  // Se o usuário fez login e tem query param ?locale=en,
+  // usar esse locale em vez do que está na URL
+  // Isso acontece quando Clerk redireciona para /pt-BR/conversations?locale=en
+  if (userId) {
     const queryLocale = searchParams.get('locale');
     const cookieValue = req.cookies.get('preferred-locale')?.value;
 
     // DEBUG: Log para debug
-    console.log(`[MW] pathname=/,userId=${userId}`);
-    console.log(`[MW] queryLocale=${queryLocale}, cookieValue=${cookieValue}`);
+    console.log(`[MW] pathname=${pathname}, userId=${userId}`);
+    console.log(`[MW] queryLocale=${queryLocale}, cookieValue=${cookieValue}, urlLocale=${locale}`);
 
     if (queryLocale && VALID_LOCALES.includes(queryLocale as any)) {
+      // Query param tem prioridade - foi explicitamente passado
+      if (locale !== queryLocale) {
+        console.log(`[MW] Query param locale diferente! urlLocale=${locale}, queryLocale=${queryLocale}`);
+        // Se o locale do URL é diferente do query param, redirecionar para o correto
+        const redirectUrl = new URL(`/${queryLocale}${pathname.replace(/^\/(en|pt-BR)/, '')}`, req.url);
+        // Preservar query params sem o locale
+        searchParams.forEach((value, key) => {
+          if (key !== 'locale') {
+            redirectUrl.searchParams.set(key, value);
+          }
+        });
+        console.log(`[MW] Redirecting to correct locale: ${redirectUrl.toString()}`);
+        return NextResponse.redirect(redirectUrl);
+      }
       locale = queryLocale;
       console.log(`[MW] Using queryLocale: ${locale}`);
     } else if (cookieValue && VALID_LOCALES.includes(cookieValue as any)) {
       locale = cookieValue;
       console.log(`[MW] Using cookieValue: ${locale}`);
-    } else {
-      // Usar padrão
-      locale = DEFAULT_LOCALE;
-      console.log(`[MW] Using DEFAULT_LOCALE: ${locale}`);
     }
 
-    console.log(`[MW] Final locale for redirect: ${locale}`);
+    console.log(`[MW] Final locale: ${locale}`);
   }
 
   // Se o usuário está autenticado mas não tem organização,
