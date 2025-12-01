@@ -43,9 +43,11 @@ export const SignInView = () => {
     // localStorage para manter histórico do locale (client-side)
     if (typeof window !== 'undefined') {
       localStorage.setItem('preferred-locale', locale);
+      localStorage.setItem('auth-locale', locale);
     }
 
     // Cookie para o middleware ler (server-side)
+    // Garante que o locale será transmitido para após o login
     document.cookie = `preferred-locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
   }, [locale]);
 

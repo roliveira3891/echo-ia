@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLocale } from 'next-intl'
 import { AuthHeader } from '../components/auth-header'
 
 /**
@@ -14,7 +15,8 @@ import { AuthHeader } from '../components/auth-header'
  * Comportamento:
  * - Header sempre visível (logo, tema e idioma)
  * - Clerk carrega no centro da página
- * - Esconde logo apenas durante o carregamento inicial do Clerk
+ * - Monitora autenticação e redireciona para locale correto
+ * - Salva locale em localStorage para persistência
  *
  * @component
  * @param {React.ReactNode} children - Conteúdo principal (Clerk SignIn/SignUp)
@@ -24,7 +26,15 @@ import { AuthHeader } from '../components/auth-header'
  * </AuthLayout>
  */
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+  const locale = useLocale()
   const [clerkReady, setClerkReady] = useState(false)
+
+  // Guardar locale em localStorage para sincronizar
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('auth-locale', locale)
+    }
+  }, [locale])
 
   useEffect(() => {
     // Aguarda o Clerk renderizar
