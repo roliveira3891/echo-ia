@@ -27,8 +27,11 @@ const DEFAULT_LOCALE = 'pt-BR';
  */
 function getLocaleFromPath(pathname: string): string {
   const pathSegments = pathname.split('/').filter(Boolean);
-  const potentialLocale = pathSegments[0] || '';
-  return VALID_LOCALES.includes(potentialLocale as any) ? potentialLocale : DEFAULT_LOCALE;
+  const potentialLocale = pathSegments[0];
+  if (potentialLocale && VALID_LOCALES.includes(potentialLocale as any)) {
+    return potentialLocale;
+  }
+  return DEFAULT_LOCALE;
 }
 
 export default clerkMiddleware(async (auth, req) => {
