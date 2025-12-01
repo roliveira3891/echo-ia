@@ -43,32 +43,30 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId, orgId } = await auth();
   const pathname = req.nextUrl.pathname;
 
-  // Extrair locale do referrer ou cookies para manter a seleção de idioma
+  // Extrair locale do pathname
   let locale = getLocaleFromPath(pathname);
 
-  // Se veio do sign-in/sign-up sem locale (redirecionamento do Clerk),
-  // tentar recuperar o locale do referrer
-  if (!pathname.startsWith(`/${locale}`) && pathname === '/') {
-    const referer = req.headers.get('referer') || '';
-    const refererLocale = getLocaleFromPath(referer);
-    if (refererLocale !== DEFAULT_LOCALE || referer.includes('/en/')) {
-      locale = refererLocale;
+  // Se o usuário faz login vindo de uma página sem locale (/),
+  // tentar recuperar o locale do cookie 'preferred-locale'
+  if (pathname === '/' && userId) {
+    const cookies = req.cookies.get('preferred-locale');
+    if (cookies?.value) {
+      locale = cookies.value;
     }
+  }
+
+  // Se o usuário está autenticado mas não tem organização,
+  // redirecionar para seleção/criação de organização
+  if (userId && !orgId && !isOrgFreeRoute(req)) {
+    const redirectUrl = new URL(`/${locale}/org-selection`, req.url);
+    redirectUrl.searchParams.set('redirectUrl', req.url);
+    return NextResponse.redirect(redirectUrl);
   }
 
   // Se o caminho não começa com um locale válido e o usuário está autenticado,
   // redirecionar para o locale correto
   if (pathname === '/' && userId) {
     const redirectUrl = new URL(`/${locale}/conversations`, req.url);
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  // Se o usuário está autenticado mas não tem organização,
-  // redirecionar para seleção/criação de organização
-  if (userId && !orgId && !isOrgFreeRoute(req)) {
-    const locale = getLocaleFromPath(pathname);
-    const redirectUrl = new URL(`/${locale}/org-selection`, req.url);
-    redirectUrl.searchParams.set('redirectUrl', req.url);
     return NextResponse.redirect(redirectUrl);
   }
 
