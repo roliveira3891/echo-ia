@@ -51,9 +51,15 @@ export const SignInView = () => {
     document.cookie = `preferred-locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
   }, [locale]);
 
+  // Construir URL de fallback com locale como query param
+  const fallbackRedirectUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/?locale=${locale}`
+    : '/?locale=pt-BR';
+
   return (
     <SignIn
       routing="hash"
+      fallbackRedirectUrl={fallbackRedirectUrl}
       appearance={{
         elements: {
           // Container principal - aumentado para melhor espaço

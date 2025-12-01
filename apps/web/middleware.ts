@@ -55,18 +55,25 @@ export default clerkMiddleware(async (auth, req) => {
   if (pathname === '/' && userId) {
     // Tentar query param primeiro
     const queryLocale = searchParams.get('locale');
+    const cookieValue = req.cookies.get('preferred-locale')?.value;
+
+    // DEBUG: Log para debug
+    console.log(`[MW] pathname=/,userId=${userId}`);
+    console.log(`[MW] queryLocale=${queryLocale}, cookieValue=${cookieValue}`);
+
     if (queryLocale && VALID_LOCALES.includes(queryLocale as any)) {
       locale = queryLocale;
+      console.log(`[MW] Using queryLocale: ${locale}`);
+    } else if (cookieValue && VALID_LOCALES.includes(cookieValue as any)) {
+      locale = cookieValue;
+      console.log(`[MW] Using cookieValue: ${locale}`);
     } else {
-      // Tentar cookie
-      const cookies = req.cookies.get('preferred-locale');
-      if (cookies?.value && VALID_LOCALES.includes(cookies.value as any)) {
-        locale = cookies.value;
-      } else {
-        // Usar padrão
-        locale = DEFAULT_LOCALE;
-      }
+      // Usar padrão
+      locale = DEFAULT_LOCALE;
+      console.log(`[MW] Using DEFAULT_LOCALE: ${locale}`);
     }
+
+    console.log(`[MW] Final locale for redirect: ${locale}`);
   }
 
   // Se o usuário está autenticado mas não tem organização,
@@ -74,6 +81,7 @@ export default clerkMiddleware(async (auth, req) => {
   if (userId && !orgId && !isOrgFreeRoute(req)) {
     const redirectUrl = new URL(`/${locale}/org-selection`, req.url);
     redirectUrl.searchParams.set('redirectUrl', req.url);
+    console.log(`[MW] Redirecting to org-selection: ${redirectUrl.toString()}`);
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -81,6 +89,7 @@ export default clerkMiddleware(async (auth, req) => {
   // redirecionar para conversations com o locale correto
   if (pathname === '/' && userId) {
     const redirectUrl = new URL(`/${locale}/conversations`, req.url);
+    console.log(`[MW] Redirecting to conversations: ${redirectUrl.toString()}`);
     return NextResponse.redirect(redirectUrl);
   }
 
