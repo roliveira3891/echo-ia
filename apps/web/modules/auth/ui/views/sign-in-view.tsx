@@ -1,4 +1,8 @@
+'use client';
+
 import { SignIn } from "@clerk/nextjs";
+import { useLocale } from 'next-intl';
+import { useEffect } from 'react';
 
 /**
  * Componente de visualização do sign-in do Clerk
@@ -8,6 +12,12 @@ import { SignIn } from "@clerk/nextjs";
  * - Tamanho otimizado para melhor legibilidade
  * - Cores e espaçamento consistentes com o design do projeto
  * - Suporte a múltiplas estratégias de autenticação (OAuth, email/senha)
+ * - Redirecionamento pós-login para locale correto
+ *
+ * Funcionalidades:
+ * - Salva o locale atual em cookie antes do login
+ * - Clerk redireciona para /, middleware lê o cookie
+ * - Usuário é redirecionado para /[locale]/conversations
  *
  * @component
  * @example
@@ -25,6 +35,14 @@ import { SignIn } from "@clerk/nextjs";
  * de middleware e i18n routing do Next.js
  */
 export const SignInView = () => {
+  const locale = useLocale();
+
+  // Salvar o locale atual em cookie quando o componente monta
+  useEffect(() => {
+    // Garante que o locale correto está no cookie para quando o Clerk redirecionar
+    document.cookie = `preferred-locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+  }, [locale]);
+
   return (
     <SignIn
       routing="hash"

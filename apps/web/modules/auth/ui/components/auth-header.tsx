@@ -40,15 +40,11 @@ export const AuthHeader = () => {
   /**
    * Muda o idioma alterando a URL locale
    * Remove o locale atual e adiciona o novo
-   * Salva o locale em cookie para recuperar após login
    *
    * @param newLocale - 'en' ou 'pt-BR'
    */
   const changeLanguage = (newLocale: string) => {
     if (locale === newLocale) return
-
-    // Salvar locale em cookie para recuperar após redirect do Clerk
-    document.cookie = `preferred-locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
 
     // Remove o locale atual do pathname
     const pathWithoutLocale = pathname.replace(`/${locale}`, '')
