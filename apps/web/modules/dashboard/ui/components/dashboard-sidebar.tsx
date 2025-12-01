@@ -26,6 +26,16 @@ import {
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
 import { cn } from "@workspace/ui/lib/utils";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
+
+import { useLocale } from "next-intl";
 
 const customerSupportItems = [
   {
@@ -63,11 +73,12 @@ const accountItems = [
     title: "Plans & Billing",
     url: "/billing",
     icon: CreditCardIcon,
-  },
+  }
 ];
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
+  const { setTheme, theme } = useTheme();
 
   const isActive = (url: string) => {
     if (url === "/") {
@@ -77,14 +88,24 @@ export const DashboardSidebar = () => {
     return pathname.startsWith(url);
   };
 
+  const locale = useLocale();
+
+  const getLocalizedUrl = (url: string) => {
+    // Verifica se a URL já contém o locale, se não, adiciona
+    if (url.startsWith(`/${locale}/`)) {
+      return url;
+    }
+    return `/${locale}${url}`;
+  };
+
   return (
     <Sidebar className="group" collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg">
-              <OrganizationSwitcher 
-                hidePersonal 
+              <OrganizationSwitcher
+                hidePersonal
                 skipInvitationScreen
                 appearance={{
                   elements: {
@@ -118,7 +139,7 @@ export const DashboardSidebar = () => {
                     )}
                     tooltip={item.title}
                   >
-                    <Link href={item.url}>
+                    <Link href={getLocalizedUrl(item.url)}>
                       <item.icon className="size-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -144,7 +165,7 @@ export const DashboardSidebar = () => {
                     )}
                     tooltip={item.title}
                   >
-                    <Link href={item.url}>
+                    <Link href={getLocalizedUrl(item.url)}>
                       <item.icon className="size-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -170,7 +191,7 @@ export const DashboardSidebar = () => {
                     )}
                     tooltip={item.title}
                   >
-                    <Link href={item.url}>
+                    <Link href={getLocalizedUrl(item.url)}>
                       <item.icon className="size-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -181,8 +202,63 @@ export const DashboardSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
         <SidebarMenu>
+
+
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  asChild={false} // importante: não é um Link
+                  isActive={false} // vamos controlar o visual manualmente
+                  tooltip="Theme"
+
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5">
+                        <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                        <Moon className="size-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      </div>
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {theme === "dark" ? "Dark" : theme === "light" ? "Light" : "System"}
+                      </span>
+                    </div>
+
+                    {/* Pequena seta para indicar dropdown (opcional, mas fica bonito) */}
+                    <svg
+                      className="size-3.5 text-sidebar-foreground/60 group-data-[collapsible=icon]:hidden"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7l1.5 1.5L12 16.086l5.5-5.5L19 9z" />
+                    </svg>
+                  </div>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent side="right" align="start" className="min-w-[140px]">
+                <DropdownMenuItem onClick={() => setTheme("light")} className="gap-2">
+                  <Sun className="size-4" />
+                  Light
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")} className="gap-2">
+                  <Moon className="size-4" />
+                  Dark
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")} className="gap-2">
+                  <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  System
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <UserButton
               showName
@@ -199,6 +275,7 @@ export const DashboardSidebar = () => {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );

@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "Echo IA",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Deletar",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "warning": "Aviso",
+    "close": "Fechar"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signUp": "Cadastro",
+    "signOut": "Sair",
+    "email": "Email",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "forgotPassword": "Esqueceu a Senha?",
+    "noAccount": "Não tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
+    "selectOrganization": "Selecionar Organização",
+    "createOrganization": "Criar Organização",
+    "createNewOrg": "Criar uma nova organização",
+    "noOrganization": "Você ainda não tem nenhuma organização",
+    "organizationName": "Nome da Organização"
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo",
+    "title": "Dashboard",
+    "addButton": "Adicionar",
+    "conversations": "Conversas",
+    "files": "Arquivos",
+    "integrations": "Integrações",
+    "customization": "Personalização",
+    "billing": "Faturamento",
+    "settings": "Configurações",
+    "plugins": "Plugins",
+    "newConversation": "Nova Conversa",
+    "conversation": "Conversa",
+    "noConversations": "Nenhuma conversa ainda",
+    "startConversation": "Inicie uma nova conversa"
+  },
+  "navigation": {
+    "home": "Início",
+    "conversations": "Conversas",
+    "files": "Arquivos",
+    "integrations": "Integrações",
+    "customization": "Personalização",
+    "billing": "Faturamento",
+    "settings": "Configurações",
+    "profile": "Perfil",
+    "organization": "Organização",
+    "logout": "Sair"
+  },
+  "errors": {
+    "notFound": "Página não encontrada",
+    "unauthorized": "Você não está autorizado",
+    "forbidden": "Acesso proibido",
+    "serverError": "Erro do servidor",
+    "tryAgain": "Tentar novamente",
+    "goHome": "Ir para a página inicial",
+    "invalidInput": "Entrada inválida",
+    "required": "Este campo é obrigatório"
+  },
+  "validation": {
+    "emailRequired": "Email é obrigatório",
+    "emailInvalid": "Por favor, insira um email válido",
+    "passwordRequired": "Senha é obrigatória",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "passwordsDoNotMatch": "As senhas não correspondem",
+    "nameRequired": "Nome é obrigatório"
+  }
+}

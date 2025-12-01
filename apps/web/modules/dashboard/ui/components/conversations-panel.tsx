@@ -19,10 +19,12 @@ import { usePaginatedQuery } from "convex/react";
 import { ListIcon, ArrowRightIcon, ArrowUpIcon, CheckIcon, CornerUpLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import { ConversationStatusIcon } from "@workspace/ui/components/conversation-status-icon";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { statusFilterAtom } from "../../atoms";
 import { Skeleton } from "@workspace/ui/components/skeleton";
+
 
 export const ConversationsPanel = () => {
   const pathname = usePathname();
@@ -54,6 +56,16 @@ export const ConversationsPanel = () => {
     loadMore: conversations.loadMore,
     loadSize: 10,
   });
+
+  const locale = useLocale();
+
+  // Função para obter URL localizada
+  const getLocalizedUrl = (path: string) => {
+    if (path.startsWith(`/${locale}/`)) {
+      return path;
+    }
+    return `/${locale}${path}`;
+  };
 
   return (
     <div className="flex h-full w-full flex-col bg-background text-sidebar-foreground">
@@ -97,6 +109,7 @@ export const ConversationsPanel = () => {
             </SelectItem>
           </SelectContent>
         </Select>
+
       </div>
       {isLoadingFirstPage ? (
         <SkeletonConversations />
@@ -115,19 +128,22 @@ export const ConversationsPanel = () => {
                 ? getCountryFlagUrl(country.code)
                 : undefined;
 
+              const conversationUrl = `/conversations/${conversation._id}`;
+              const localizedUrl = getLocalizedUrl(conversationUrl);
+
               return (
                 <Link
                   key={conversation._id}
                   className={cn(
                     "relative flex cursor-pointer items-start gap-3 border-b p-4 py-5 text-sm leading-tight hover:bg-accent hover:text-accent-foreground",
-                    pathname === `/conversations/${conversation._id}` &&
+                    pathname === getLocalizedUrl(conversationUrl) &&
                       "bg-accent text-accent-foreground"
                   )}
-                  href={`/conversations/${conversation._id}`}
+                  href={localizedUrl}
                 >
                   <div className={cn(
                     "-translate-y-1/2 absolute top-1/2 left-0 h-[64%] w-1 rounded-r-full bg-neutral-300 opacity-0 transition-opacity",
-                    pathname === `/conversations/${conversation._id}` &&
+                    pathname === getLocalizedUrl(conversationUrl) &&
                       "opacity-100"
                   )} />
 

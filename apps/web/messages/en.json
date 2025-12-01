@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "Echo IA",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "close": "Close"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "selectOrganization": "Select Organization",
+    "createOrganization": "Create Organization",
+    "createNewOrg": "Create a new organization",
+    "noOrganization": "You don't have any organization yet",
+    "organizationName": "Organization Name"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "title": "Dashboard",
+    "addButton": "Add",
+    "conversations": "Conversations",
+    "files": "Files",
+    "integrations": "Integrations",
+    "customization": "Customization",
+    "billing": "Billing",
+    "settings": "Settings",
+    "plugins": "Plugins",
+    "newConversation": "New Conversation",
+    "conversation": "Conversation",
+    "noConversations": "No conversations yet",
+    "startConversation": "Start a new conversation"
+  },
+  "navigation": {
+    "home": "Home",
+    "conversations": "Conversations",
+    "files": "Files",
+    "integrations": "Integrations",
+    "customization": "Customization",
+    "billing": "Billing",
+    "settings": "Settings",
+    "profile": "Profile",
+    "organization": "Organization",
+    "logout": "Logout"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "unauthorized": "You are not authorized",
+    "forbidden": "Access forbidden",
+    "serverError": "Server error",
+    "tryAgain": "Try again",
+    "goHome": "Go to home",
+    "invalidInput": "Invalid input",
+    "required": "This field is required"
+  },
+  "validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "nameRequired": "Name is required"
+  }
+}
