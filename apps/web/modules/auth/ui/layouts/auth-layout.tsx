@@ -1,13 +1,20 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { AuthHeader } from '../components/auth-header'
 
 /**
  * Layout para página de autenticação
  *
  * Exibe:
- * - Cabeçalho com logo, tema e idioma
+ * - Cabeçalho com logo, tema e idioma (escondido durante carregamento do Clerk)
  * - Componente de sign-in/sign-up do Clerk centralizado
+ * - Loading spinner centralizado
+ *
+ * Comportamento:
+ * - Detecta quando o Clerk está carregando
+ * - Esconde header enquanto Clerk carrega
+ * - Centraliza o loading do Clerk
  *
  * @component
  * @param {React.ReactNode} children - Conteúdo principal (Clerk SignIn/SignUp)
@@ -17,16 +24,46 @@ import { AuthHeader } from '../components/auth-header'
  * </AuthLayout>
  */
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+  const [isClerkLoading, setIsClerkLoading] = useState(true)
+
+  useEffect(() => {
+    // Aguarda um pouco para o Clerk carregar
+    const timer = setTimeout(() => {
+      // Verifica se o Clerk terminou de carregar
+      const clerkElement = document.querySelector('[data-clerk-loaded]')
+      if (clerkElement) {
+        setIsClerkLoading(false)
+      } else {
+        // Se ainda não carregou, tenta novamente
+        const observer = new MutationObserver(() => {
+          setIsClerkLoading(false)
+          observer.disconnect()
+        })
+
+        const formElement = document.querySelector('[data-clerk-form]')
+        if (formElement) {
+          observer.observe(formElement, { childList: true, subtree: true })
+          setIsClerkLoading(false)
+        }
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="min-h-screen min-w-screen h-full w-full bg-white dark:bg-gray-950 transition-colors duration-300">
-      {/* Cabeçalho fixo com logo, tema e idioma */}
-      <AuthHeader />
+      {/* Cabeçalho fixo com logo, tema e idioma - escondido durante carregamento */}
+      <AuthHeader isLoading={isClerkLoading} />
 
       {/* Conteúdo principal - Centralizado com espaço para header */}
-      <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 pt-24 sm:pt-28 pb-8">
-        {/* Container do conteúdo */}
-        <div className="w-full max-w-md">
-          {children}
+      <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-8">
+        {/* Container do conteúdo - maior para acomodar melhor o formulário */}
+        <div className="w-full max-w-lg">
+          {/* Wrapper para centralizar loading do Clerk */}
+          <div className="flex flex-col items-center justify-center">
+            {children}
+          </div>
         </div>
 
         {/* Rodapé opcional - Links ou info adicional */}

@@ -5,6 +5,7 @@ import { SignIn } from "@clerk/nextjs";
  *
  * Exibe o formulário de autenticação do Clerk com:
  * - Estilização personalizada (light/dark mode)
+ * - Tamanho otimizado para melhor legibilidade
  * - Cores e espaçamento consistentes com o design do projeto
  * - Suporte a múltiplas estratégias de autenticação (OAuth, email/senha)
  *
@@ -29,42 +30,42 @@ export const SignInView = () => {
       routing="hash"
       appearance={{
         elements: {
-          // Container principal
-          card: "bg-white dark:bg-gray-900 shadow-lg rounded-xl border border-gray-200 dark:border-gray-800",
+          // Container principal - aumentado para melhor espaço
+          card: "bg-white dark:bg-gray-900 shadow-lg rounded-xl border border-gray-200 dark:border-gray-800 w-full",
           cardBox: "shadow-none",
 
           // Headers e títulos
-          headerTitle: "text-2xl font-bold text-gray-900 dark:text-white",
+          headerTitle: "text-3xl font-bold text-gray-900 dark:text-white",
           headerSubtitle:
-            "text-sm text-gray-600 dark:text-gray-400 mt-1",
+            "text-base text-gray-600 dark:text-gray-400 mt-2 mb-6",
 
           // Form fields (inputs)
           formFieldInput:
-            "bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors",
+            "bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors h-12 text-base",
           formFieldLabel:
-            "text-sm font-medium text-gray-700 dark:text-gray-300",
+            "text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2",
 
           // Botões
           formButtonPrimary:
-            "bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-medium rounded-lg transition-colors",
+            "bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors h-12 text-base",
           formResendCodeButton:
-            "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium",
+            "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-base font-semibold",
 
           // Divisor e alternativas
           dividerLine: "bg-gray-200 dark:bg-gray-700",
           dividerText:
-            "text-gray-600 dark:text-gray-400 text-sm font-medium",
+            "text-gray-600 dark:text-gray-400 text-base font-medium",
 
           // Botões sociais/OAuth
           socialButtonsBlockButton:
-            "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors",
+            "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors h-12 text-base",
 
           // Links
           footerActionLink:
-            "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium",
+            "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold text-base",
 
           // Mensagens de erro
-          alertText: "text-red-600 dark:text-red-400 text-sm",
+          alertText: "text-red-600 dark:text-red-400 text-base",
 
           // Spinner (carregando)
           spinner: "text-blue-600 dark:text-blue-400",
@@ -82,14 +83,14 @@ export const SignInView = () => {
           colorText: "#111827", // gray-900
           colorTextSecondary: "#6b7280", // gray-500
 
-          // Espaçamento
-          spacingUnit: "8px",
+          // Espaçamento - aumentado
+          spacingUnit: "12px",
 
           // Bordas
           borderRadius: "0.5rem",
 
-          // Fontes
-          fontSize: "0.9375rem",
+          // Fontes - aumentado
+          fontSize: "1rem",
           fontFamily: "system-ui, -apple-system, sans-serif",
 
           // Dark mode
