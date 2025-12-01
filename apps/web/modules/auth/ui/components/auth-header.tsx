@@ -31,7 +31,7 @@ import { useRouter, usePathname } from 'next/navigation'
  * @example
  * <AuthHeader />
  */
-export const AuthHeader = ({ isLoading = false }: { isLoading?: boolean }) => {
+export const AuthHeader = () => {
   const { setTheme } = useTheme()
   const locale = useLocale()
   const router = useRouter()
@@ -51,11 +51,6 @@ export const AuthHeader = ({ isLoading = false }: { isLoading?: boolean }) => {
     const newPath = `/${newLocale}${pathWithoutLocale || '/'}`
 
     router.push(newPath)
-  }
-
-  // Se está carregando, não mostra nada
-  if (isLoading) {
-    return null
   }
 
   return (
