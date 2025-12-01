@@ -52,6 +52,9 @@ export default clerkMiddleware(async (auth, req) => {
     const cookies = req.cookies.get('preferred-locale');
     if (cookies?.value) {
       locale = cookies.value;
+    } else {
+      // Se não tem cookie, manter padrão
+      locale = DEFAULT_LOCALE;
     }
   }
 
@@ -63,8 +66,8 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Se o caminho não começa com um locale válido e o usuário está autenticado,
-  // redirecionar para o locale correto
+  // Se o caminho é / e o usuário está autenticado,
+  // redirecionar para conversations com o locale correto
   if (pathname === '/' && userId) {
     const redirectUrl = new URL(`/${locale}/conversations`, req.url);
     return NextResponse.redirect(redirectUrl);

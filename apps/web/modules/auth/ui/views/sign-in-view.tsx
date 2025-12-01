@@ -15,7 +15,8 @@ import { useEffect } from 'react';
  * - Redirecionamento pós-login para locale correto
  *
  * Funcionalidades:
- * - Salva o locale atual em cookie antes do login
+ * - Salva o locale atual em localStorage (client-side)
+ * - Também seta cookie para middleware (server-side)
  * - Clerk redireciona para /, middleware lê o cookie
  * - Usuário é redirecionado para /[locale]/conversations
  *
@@ -37,9 +38,14 @@ import { useEffect } from 'react';
 export const SignInView = () => {
   const locale = useLocale();
 
-  // Salvar o locale atual em cookie quando o componente monta
+  // Salvar o locale no localStorage e cookie quando o componente monta
   useEffect(() => {
-    // Garante que o locale correto está no cookie para quando o Clerk redirecionar
+    // localStorage para manter histórico do locale (client-side)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('preferred-locale', locale);
+    }
+
+    // Cookie para o middleware ler (server-side)
     document.cookie = `preferred-locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
   }, [locale]);
 
