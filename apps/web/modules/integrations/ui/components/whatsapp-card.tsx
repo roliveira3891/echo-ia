@@ -7,7 +7,7 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Loader2, CheckCircle2, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "@workspace/backend/convex/_generated/api";
+import { api } from "@workspace/backend/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
 
