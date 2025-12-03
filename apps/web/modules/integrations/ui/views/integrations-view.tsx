@@ -19,6 +19,8 @@ import {
 import { useState } from "react";
 import { createScript } from "../../utils";
 import { WhatsAppCard } from "../components/whatsapp-card";
+import { InstagramCard } from "../components/instagram-card";
+import { TikTokCard } from "../components/tiktok-card";
 
 export const IntegrationsView = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -95,7 +97,8 @@ export const IntegrationsView = () => {
             </div>
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <WhatsAppCard />
-              {/* Instagram, TikTok, and other channels can be added here */}
+              <InstagramCard />
+              <TikTokCard />
             </div>
           </div>
 
