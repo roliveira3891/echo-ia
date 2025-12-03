@@ -155,6 +155,48 @@
       "connect": "Conectar TikTok",
       "description2": "Conecte sua conta TikTok Shop para receber consultas de clientes e fornecer suporte.",
       "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "description": "Conecte seu bot Telegram para suporte ao cliente",
+      "comingSoon": "Em Breve",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Token do Bot Telegram",
+        "Nome de usuário do bot",
+        "Acesso de administrador ao bot"
+      ],
+      "connect": "Conectar Telegram",
+      "description2": "Conecte seu bot Telegram para receber e responder mensagens de clientes.",
+      "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
+    },
+    "facebookMessenger": {
+      "title": "Facebook Messenger",
+      "description": "Conecte sua Página Facebook para mensagens",
+      "comingSoon": "Em Breve",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Conta Facebook Business",
+        "Página Facebook",
+        "Acesso de administrador à página"
+      ],
+      "connect": "Conectar Facebook Messenger",
+      "description2": "Conecte sua Página Facebook para receber e responder mensagens de clientes.",
+      "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
+    },
+    "linkedin": {
+      "title": "Mensagens LinkedIn",
+      "description": "Conecte sua conta LinkedIn para mensagens",
+      "comingSoon": "Em Breve",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Conta LinkedIn Business",
+        "Página de Empresa LinkedIn",
+        "Acesso de administrador à Página de Empresa"
+      ],
+      "connect": "Conectar LinkedIn",
+      "description2": "Conecte sua Página de Empresa LinkedIn para receber e responder mensagens de clientes.",
+      "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
     }
   }
 }

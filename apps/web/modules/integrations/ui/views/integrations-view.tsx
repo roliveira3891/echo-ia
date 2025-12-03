@@ -22,6 +22,9 @@ import { createScript } from "../../utils";
 import { WhatsAppCard } from "../components/whatsapp-card";
 import { InstagramCard } from "../components/instagram-card";
 import { TikTokCard } from "../components/tiktok-card";
+import { TelegramCard } from "../components/telegram-card";
+import { FacebookMessengerCard } from "../components/facebook-messenger-card";
+import { LinkedInCard } from "../components/linkedin-card";
 
 export const IntegrationsView = () => {
   const t = useTranslations("integrations");
@@ -101,6 +104,9 @@ export const IntegrationsView = () => {
               <WhatsAppCard />
               <InstagramCard />
               <TikTokCard />
+              <TelegramCard />
+              <FacebookMessengerCard />
+              <LinkedInCard />
             </div>
           </div>
 
