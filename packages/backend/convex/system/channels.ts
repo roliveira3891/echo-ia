@@ -27,7 +27,7 @@ export const handleIncomingMessage = internalAction({
     messageText: v.string(),
     externalMessageId: v.optional(v.string()), // ID do provider (para rastreamento)
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     try {
       // 1. Lookup/create contactSession (agnóstico)
       let contactSession = await ctx.db
@@ -79,7 +79,7 @@ export const handleIncomingMessage = internalAction({
         const widgetSettings = await ctx.db
           .query("widgetSettings")
           .withIndex("by_organization_id")
-          .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+          .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
           .first();
 
         await saveMessage(ctx, components.agent, {
@@ -176,11 +176,11 @@ async function sendMessageToChannel(
   switch (args.channel) {
     case "whatsapp":
       return await ctx.runAction(internal.system.providers.whatsapp_provider.sendMessage, args);
-    case "instagram":
-      return await ctx.runAction(internal.system.providers.instagram_provider.sendMessage, args);
-    case "tiktok":
-      return await ctx.runAction(internal.system.providers.tiktok_provider.sendMessage, args);
-    // ... adiciona novos canais conforme necessário
+    // case "instagram":
+    //   return await ctx.runAction(internal.system.providers.instagram_provider.sendMessage, args);
+    // case "tiktok":
+    //   return await ctx.runAction(internal.system.providers.tiktok_provider.sendMessage, args);
+    // TODO: Implement additional channel providers (Instagram, TikTok, etc)
     default:
       throw new Error(`Unknown channel: ${args.channel}`);
   }

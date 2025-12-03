@@ -17,7 +17,7 @@ export const sendMessage = internalAction({
     messageText: v.string(),
     organizationId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     try {
       // 1. Get WhatsApp account credentials from database
       const whatsappAccount = await ctx.db

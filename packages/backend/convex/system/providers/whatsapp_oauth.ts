@@ -12,7 +12,7 @@ export const handleCallback = internalAction({
     code: v.string(),
     state: v.string(), // organizationId
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     if (!args.code || !args.state) {
       throw new ConvexError({
         code: "BAD_REQUEST",
@@ -175,7 +175,7 @@ export const disconnect = internalAction({
   args: {
     organizationId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     const account = await ctx.db
       .query("whatsappAccounts")
       .withIndex("by_organization_id")
