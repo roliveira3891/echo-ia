@@ -82,4 +82,30 @@ export default defineSchema({
   })
     .index("by_organization_id", ["organizationId"])
     .index("by_channel", ["channel"]),
+  whatsappAccounts: defineTable({
+    organizationId: v.string(),
+
+    // Meta OAuth
+    accessToken: v.string(),                    // Meta access token (long-lived)
+    accessTokenExpiresAt: v.optional(v.number()), // Expiry timestamp
+
+    // WhatsApp Business Info
+    whatsappBusinessAccountId: v.string(),      // WABA ID from Meta
+    phoneNumberId: v.string(),                  // Phone number object ID
+    phoneNumber: v.string(),                    // Actual phone number (+55119999999)
+
+    // Security
+    webhookToken: v.string(),                   // For validating incoming webhooks
+    webhookSecret: v.optional(v.string()),      // Optional: HMAC secret
+
+    // Status
+    isActive: v.boolean(),                      // Is this account currently connected?
+    connectedAt: v.number(),                    // When was it connected?
+
+    // Meta metadata (for refresh/validation)
+    metaUserId: v.optional(v.string()),         // The Meta user who authorized
+    metaBusinessAccountId: v.optional(v.string()), // Meta Business Account ID
+  })
+    .index("by_organization_id", ["organizationId"])
+    .index("by_phone_number_id", ["phoneNumberId"]),
 });
