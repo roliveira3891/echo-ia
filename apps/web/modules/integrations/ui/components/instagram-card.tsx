@@ -17,9 +17,9 @@ export const InstagramCard = () => {
             <div className="rounded-lg bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 p-2">
               <Image
                 alt="Instagram"
-                height={24}
-                src="/instagram-logo.svg"
-                width={24}
+                height={50}
+                src="/channels/instagram.svg"
+                width={50}
               />
             </div>
             <div>
@@ -51,12 +51,12 @@ export const InstagramCard = () => {
             disabled
             className="w-full gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
           >
-            <Image
+            {/* <Image
               alt="Instagram"
               height={16}
               src="/instagram-logo-white.svg"
               width={16}
-            />
+            /> */}
             {t("connect")}
           </Button>
 

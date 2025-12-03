@@ -106,6 +106,8 @@
       "connected": "Connected",
       "active": "Your WhatsApp Business account is active and ready to receive messages.",
       "receiving": "Messages from customers will be automatically processed by your AI assistant.",
+      "description2": "Click below to connect your WhatsApp Business account using Meta Embedded Signup.",
+      "comingSoonMsg": "You'll be redirected to Meta to authorize the connection.",
       "initiatingConnection": "Failed to initiate WhatsApp connection",
       "initiatingConnectionPopup": "Failed to open popup. Please allow popups in your browser.",
       "disconnecting": "Disconnecting...",

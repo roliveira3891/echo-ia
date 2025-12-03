@@ -17,9 +17,9 @@ export const TikTokCard = () => {
             <div className="rounded-lg bg-black p-2">
               <Image
                 alt="TikTok"
-                height={24}
-                src="/tiktok-logo.svg"
-                width={24}
+                height={50}
+                src="/channels/tiktok.svg"
+                width={50}
               />
             </div>
             <div>
@@ -51,12 +51,12 @@ export const TikTokCard = () => {
             disabled
             className="w-full gap-2 bg-black hover:bg-gray-900"
           >
-            <Image
+            {/* <Image
               alt="TikTok"
               height={16}
-              src="/tiktok-logo-white.svg"
+              src="/channels/tiktok.svg"
               width={16}
-            />
+            /> */}
             {t("connect")}
           </Button>
 

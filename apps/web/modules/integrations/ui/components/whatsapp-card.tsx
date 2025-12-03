@@ -120,9 +120,9 @@ export const WhatsAppCard = () => {
             <div className="rounded-lg bg-green-100 p-2">
               <Image
                 alt="WhatsApp"
-                height={24}
-                src="/whatsapp-logo.svg"
-                width={24}
+                height={50}
+                src="/channels/whatsapp.svg"
+                width={50}
               />
             </div>
             <div>
@@ -184,10 +184,10 @@ export const WhatsAppCard = () => {
           <div className="space-y-4">
             <div className="rounded-lg border-2 border-dashed p-4 text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                Click below to connect your WhatsApp Business account using Meta Embedded Signup.
+                {t("description2")}
               </p>
               <p className="text-xs text-muted-foreground">
-                You&apos;ll be redirected to Meta to authorize the connection.
+                {t("comingSoonMsg")}
               </p>
             </div>
 
@@ -203,12 +203,12 @@ export const WhatsAppCard = () => {
                 </>
               ) : (
                 <>
-                  <Image
+                  {/* <Image
                     alt="WhatsApp"
                     height={16}
                     src="/whatsapp-logo-white.svg"
                     width={16}
-                  />
+                  /> */}
                   {t("connect")}
                 </>
               )}
