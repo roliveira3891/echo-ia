@@ -95,7 +95,7 @@ http.route({
 
       // Call the OAuth handler action
       const result = await ctx.runAction(
-        internal.system.providers.whatsapp_oauth.handleCallback,
+        api.system.providers.whatsapp_oauth.handleCallback,
         {
           code,
           state,
@@ -240,7 +240,7 @@ http.route({
 
         if (message.type === "text" && message.text?.body) {
           // Process incoming message through the channel handler
-          await ctx.runAction(internal.system.channels.handleIncomingMessage, {
+          await ctx.scheduler.runAfter(0, internal.system.channels.handleIncomingMessage, {
             channel: "whatsapp",
             organizationId: whatsappAccount.organizationId,
             channelUserId: `+${message.from}`, // Meta doesn't include +, we add it

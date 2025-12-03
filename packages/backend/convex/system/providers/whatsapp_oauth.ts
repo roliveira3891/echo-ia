@@ -1,46 +1,13 @@
-import { action } from "../../_generated/server";
+import { internalAction } from "../../_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
-
-/**
- * Step 1: Generate Meta OAuth authorization URL
- * User clicks "Connect WhatsApp" → redirects to this URL
- *
- * Frontend should call this action to get the authorization URL
- */
-export const getAuthorizationUrl = action({
-  args: {
-    organizationId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const appId = process.env.META_APP_ID;
-    const redirectUri = process.env.META_REDIRECT_URI;
-
-    if (!appId || !redirectUri) {
-      throw new Error("META_APP_ID or META_REDIRECT_URI not configured");
-    }
-
-    const scope = [
-      "whatsapp_business_messaging",
-      "whatsapp_business_account_management",
-    ].join(",");
-
-    const url = new URL("https://www.facebook.com/v18.0/dialog/oauth");
-    url.searchParams.set("client_id", appId);
-    url.searchParams.set("redirect_uri", redirectUri);
-    url.searchParams.set("scope", scope);
-    url.searchParams.set("state", args.organizationId); // Store org ID in state for validation
-
-    return { authorizationUrl: url.toString() };
-  },
-});
 
 /**
  * Step 2: Handle Meta OAuth callback
  * Meta redirects here with authorization code
  * Called from backend route: /webhooks/whatsapp/callback
  */
-export const handleCallback = action({
+export const handleCallback = internalAction({
   args: {
     code: v.string(),
     state: v.string(), // organizationId
@@ -204,7 +171,7 @@ export const handleCallback = action({
 /**
  * Disconnect WhatsApp account
  */
-export const disconnect = action({
+export const disconnect = internalAction({
   args: {
     organizationId: v.string(),
   },

@@ -1,4 +1,4 @@
-import { action } from "../../_generated/server";
+import { internalAction } from "../../_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
 
@@ -10,7 +10,7 @@ import { ConvexError } from "convex/values";
  * - AI generates a response
  * - We need to send it back to the user
  */
-export const sendMessage = action({
+export const sendMessage = internalAction({
   args: {
     channel: v.literal("whatsapp"),
     channelUserId: v.string(),  // "+5511999999999" (with or without +)

@@ -1,4 +1,4 @@
-import { action } from "../_generated/server";
+import { internalAction } from "../_generated/server";
 import { v } from "convex/values";
 import { api, internal } from "../_generated/api";
 import { supportAgent } from "./ai/agents/supportAgent";
@@ -19,7 +19,7 @@ import { SESSION_DURATION_MS } from "../constants";
  * 6. Send response via same channel
  * 7. Log webhook event (optional)
  */
-export const handleIncomingMessage = action({
+export const handleIncomingMessage = internalAction({
   args: {
     channel: v.string(),                    // "whatsapp", "instagram", "tiktok", etc
     organizationId: v.string(),
