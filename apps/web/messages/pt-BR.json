@@ -73,5 +73,71 @@
     "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
     "passwordsDoNotMatch": "As senhas não correspondem",
     "nameRequired": "Nome é obrigatório"
+  },
+  "integrations": {
+    "title": "Setup & Integrações",
+    "subtitle": "Escolha a integração certa para você",
+    "organizationId": "ID da Organização",
+    "copy": "Copiar",
+    "copiedToClipboard": "Copiado para a área de transferência",
+    "failedToCopy": "Falha ao copiar para a área de transferência",
+    "channelIntegrations": "Integrações de Canais",
+    "channelIntegrationsDesc": "Conecte seus canais de comunicação para receber e responder mensagens de clientes.",
+    "websiteWidget": "Widget do Website",
+    "websiteWidgetDesc": "Adicione o código abaixo ao seu website para habilitar o chatbox.",
+    "integrateWithYourWebsite": "Integrar com seu website",
+    "followSteps": "Siga estes passos para adicionar o chatbox ao seu website",
+    "copyCode": "1. Copie o código abaixo",
+    "addCodeToPage": "2. Adicione o código na sua página",
+    "pasteCodeDesc": "Cole o código do chatbox acima na seção HTML head da sua página. Você pode adicioná-lo em qualquer lugar.",
+    "whatsapp": {
+      "title": "WhatsApp Business",
+      "description": "Conecte sua conta WhatsApp Business via Meta",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Conta Meta",
+        "Conta WhatsApp Business verificada",
+        "Número de telefone associado à conta"
+      ],
+      "connect": "Conectar WhatsApp",
+      "disconnect": "Desconectar WhatsApp",
+      "connectedPhone": "Número de telefone conectado",
+      "connectedOn": "Conectado em",
+      "connected": "Conectado",
+      "active": "Sua conta WhatsApp Business está ativa e pronta para receber mensagens.",
+      "receiving": "Mensagens de clientes serão automaticamente processadas pelo seu assistente de IA.",
+      "initiatingConnection": "Falha ao iniciar conexão WhatsApp",
+      "initiatingConnectionPopup": "Falha ao abrir popup. Por favor, permita popups no seu navegador.",
+      "disconnecting": "Desconectando...",
+      "failed": "Falha ao desconectar WhatsApp"
+    },
+    "instagram": {
+      "title": "Instagram Direct",
+      "description": "Conecte sua conta Instagram Business",
+      "comingSoon": "Em Breve",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Conta Instagram Business",
+        "Conta Meta Business",
+        "Acesso de administrador"
+      ],
+      "connect": "Conectar Instagram",
+      "description2": "Conecte sua conta Instagram Business para receber e responder mensagens diretas.",
+      "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
+    },
+    "tiktok": {
+      "title": "TikTok Shop",
+      "description": "Conecte sua conta TikTok Shop",
+      "comingSoon": "Em Breve",
+      "requirements": "Requisitos:",
+      "requirementsList": [
+        "Conta TikTok Shop",
+        "Acesso de administrador à loja",
+        "Conta TikTok Business"
+      ],
+      "connect": "Conectar TikTok",
+      "description2": "Conecte sua conta TikTok Shop para receber consultas de clientes e fornecer suporte.",
+      "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
+    }
   }
 }

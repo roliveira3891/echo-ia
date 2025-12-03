@@ -1,6 +1,7 @@
 "use client";
 
 import { useOrganization } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
@@ -12,6 +13,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 
 export const WhatsAppCard = () => {
+  const t = useTranslations("integrations.whatsapp");
   const { organization } = useOrganization();
   const [isLoading, setIsLoading] = useState(false);
   const [popupWindow, setPopupWindow] = useState<Window | null>(null);
@@ -75,13 +77,13 @@ export const WhatsAppCard = () => {
       );
 
       if (!popup) {
-        toast.error("Failed to open popup. Please allow popups in your browser.");
+        toast.error(t("initiatingConnectionPopup"));
         return;
       }
 
       setPopupWindow(popup);
     } catch (error) {
-      toast.error("Failed to initiate WhatsApp connection");
+      toast.error(t("initiatingConnection"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -124,16 +126,16 @@ export const WhatsAppCard = () => {
               />
             </div>
             <div>
-              <CardTitle className="text-lg">WhatsApp Business</CardTitle>
+              <CardTitle className="text-lg">{t("title")}</CardTitle>
               <CardDescription>
-                Connect your WhatsApp Business account via Meta
+                {t("description")}
               </CardDescription>
             </div>
           </div>
           {isConnected && (
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
               <CheckCircle2 className="mr-1 h-3 w-3" />
-              Connected
+              {t("connected")}
             </Badge>
           )}
         </div>
@@ -144,19 +146,19 @@ export const WhatsAppCard = () => {
           <div className="space-y-4">
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm font-medium text-muted-foreground mb-2">
-                Connected Phone Number
+                {t("connectedPhone")}
               </p>
               <p className="font-mono text-lg font-semibold">
                 {whatsappAccount.phoneNumber}
               </p>
               <p className="text-xs text-muted-foreground mt-2">
-                Connected on {new Date(whatsappAccount.connectedAt).toLocaleDateString()}
+                {t("connectedOn")} {new Date(whatsappAccount.connectedAt).toLocaleDateString()}
               </p>
             </div>
 
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>✅ Your WhatsApp Business account is active and ready to receive messages.</p>
-              <p>Messages from customers will be automatically processed by your AI assistant.</p>
+              <p>✅ {t("active")}</p>
+              <p>{t("receiving")}</p>
             </div>
 
             <Button
@@ -168,12 +170,12 @@ export const WhatsAppCard = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Disconnecting...
+                  {t("disconnecting")}
                 </>
               ) : (
                 <>
                   <LogOut className="h-4 w-4" />
-                  Disconnect WhatsApp
+                  {t("disconnect")}
                 </>
               )}
             </Button>
@@ -197,7 +199,7 @@ export const WhatsAppCard = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Connecting...
+                  {t("disconnecting")}
                 </>
               ) : (
                 <>
@@ -207,17 +209,17 @@ export const WhatsAppCard = () => {
                     src="/whatsapp-logo-white.svg"
                     width={16}
                   />
-                  Connect WhatsApp
+                  {t("connect")}
                 </>
               )}
             </Button>
 
             <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-900">
-              <p className="font-medium mb-2">Requirements:</p>
+              <p className="font-medium mb-2">{t("requirements")}</p>
               <ul className="space-y-1 text-xs ml-4 list-disc">
-                <li>Meta Business Account</li>
-                <li>WhatsApp Business Account verified</li>
-                <li>Phone number associated with Business Account</li>
+                {t.raw("requirementsList").map((requirement: string) => (
+                  <li key={requirement}>{requirement}</li>
+                ))}
               </ul>
             </div>
           </div>

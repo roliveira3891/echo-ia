@@ -1,6 +1,7 @@
 "use client";
 
 import { useOrganization } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
@@ -23,6 +24,7 @@ import { InstagramCard } from "../components/instagram-card";
 import { TikTokCard } from "../components/tiktok-card";
 
 export const IntegrationsView = () => {
+  const t = useTranslations("integrations");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedSnippet, setSelectedSnippet] = useState("");
   const { organization } = useOrganization();
@@ -41,9 +43,9 @@ export const IntegrationsView = () => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(organization?.id ?? "");
-      toast.success("Copied to clipboard");
+      toast.success(t("copiedToClipboard"));
     } catch {
-      toast.error("Failed to copy to clipboard");
+      toast.error(t("failedToCopy"));
     }
   };
 
@@ -57,17 +59,17 @@ export const IntegrationsView = () => {
       <div className="flex min-h-screen flex-col bg-muted p-8">
         <div className="mx-auto w-full max-w-7xl">
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-4xl">Setup & Integrations</h1>
+            <h1 className="text-2xl md:text-4xl">{t("title")}</h1>
             <p className="text-muted-foreground">
-              Choose the integration that&apos;s right for you
+              {t("subtitle")}
             </p>
           </div>
           <div className="mt-8 space-y-6">
             <div className="flex items-center gap-4">
               <Label className="w-34" htmlFor="organization-id">
-                Organization ID
+                {t("organizationId")}
               </Label>
-              <Input 
+              <Input
                 disabled
                 id="organization-id"
                 readOnly
@@ -80,7 +82,7 @@ export const IntegrationsView = () => {
                 size="sm"
               >
                 <CopyIcon className="size-4" />
-                Copy
+                {t("copy")}
               </Button>
             </div>
           </div>
@@ -90,9 +92,9 @@ export const IntegrationsView = () => {
           {/* Channel Integrations */}
           <div className="space-y-6">
             <div className="space-y-1">
-              <Label className="text-lg">Channel Integrations</Label>
+              <Label className="text-lg">{t("channelIntegrations")}</Label>
               <p className="text-muted-foreground text-sm">
-                Connect your communication channels to receive and respond to messages from customers.
+                {t("channelIntegrationsDesc")}
               </p>
             </div>
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -107,9 +109,9 @@ export const IntegrationsView = () => {
           {/* Widget Integrations */}
           <div className="space-y-6">
             <div className="space-y-1">
-              <Label className="text-lg">Website Widget</Label>
+              <Label className="text-lg">{t("websiteWidget")}</Label>
               <p className="text-muted-foreground text-sm">
-                Add the following code to your website to enable the chatbox.
+                {t("websiteWidgetDesc")}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -146,12 +148,13 @@ export const IntegrationsDialog = ({
   onOpenChange: (value: boolean) => void;
   snippet: string;
 }) => {
+  const t = useTranslations("integrations");
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(snippet);
-      toast.success("Copied to clipboard");
+      toast.success(t("copiedToClipboard"));
     } catch {
-      toast.error("Failed to copy to clipboard");
+      toast.error(t("failedToCopy"));
     }
   };
 
@@ -159,16 +162,16 @@ export const IntegrationsDialog = ({
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Integrate with your website</DialogTitle>
+          <DialogTitle>{t("integrateWithYourWebsite")}</DialogTitle>
           <DialogDescription>
-            Follow these steps to add the chatbox to your website
+            {t("followSteps")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="rounded-md bg-accent p-2 text-sm">
-              1. Copy the following code
+              {t("copyCode")}
             </div>
             <div className="group relative">
               <pre className="max-h-[300px] overflow-x-auto overflow-y-auto whitespace-pre-wrap break-all rounded-md bg-foreground p-2 font-mono text-secondary text-sm">
@@ -187,10 +190,10 @@ export const IntegrationsDialog = ({
 
           <div className="space-y-2">
             <div className="rounded-md bg-accent p-2 text-sm">
-              2. Add the code in your page
+              {t("addCodeToPage")}
             </div>
             <p className="text-muted-foreground text-sm">
-              Paste the chatbox code above in your page. You can add it in the HTML head section.
+              {t("pasteCodeDesc")}
             </p>
           </div>
         </div>

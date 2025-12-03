@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
@@ -7,6 +8,7 @@ import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 export const TikTokCard = () => {
+  const t = useTranslations("integrations.tiktok");
   return (
     <Card className="overflow-hidden">
       <CardHeader className="pb-4">
@@ -21,15 +23,15 @@ export const TikTokCard = () => {
               />
             </div>
             <div>
-              <CardTitle className="text-lg">TikTok Shop</CardTitle>
+              <CardTitle className="text-lg">{t("title")}</CardTitle>
               <CardDescription>
-                Connect your TikTok Shop account
+                {t("description")}
               </CardDescription>
             </div>
           </div>
           <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
             <AlertCircle className="mr-1 h-3 w-3" />
-            Coming Soon
+            {t("comingSoon")}
           </Badge>
         </div>
       </CardHeader>
@@ -38,10 +40,10 @@ export const TikTokCard = () => {
         <div className="space-y-4">
           <div className="rounded-lg border-2 border-dashed p-4 text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              Connect your TikTok Shop account to receive customer inquiries and provide support.
+              {t("description2")}
             </p>
             <p className="text-xs text-muted-foreground">
-              This integration is coming soon. Stay tuned!
+              {t("comingSoonMsg")}
             </p>
           </div>
 
@@ -55,15 +57,15 @@ export const TikTokCard = () => {
               src="/tiktok-logo-white.svg"
               width={16}
             />
-            Connect TikTok
+            {t("connect")}
           </Button>
 
           <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-900">
-            <p className="font-medium mb-2">Requirements:</p>
+            <p className="font-medium mb-2">{t("requirements")}</p>
             <ul className="space-y-1 text-xs ml-4 list-disc">
-              <li>TikTok Shop account</li>
-              <li>Admin access to shop</li>
-              <li>TikTok Business Account</li>
+              {t.raw("requirementsList").map((requirement: string) => (
+                <li key={requirement}>{requirement}</li>
+              ))}
             </ul>
           </div>
         </div>

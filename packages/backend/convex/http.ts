@@ -237,7 +237,7 @@ http.route({
       if (messages && messages.length > 0) {
         const message = messages[0];
 
-        if (message.type === "text" && message.text?.body) {
+        if (message && message.type === "text" && message.text?.body) {
           // Process incoming message through the channel handler
           await ctx.scheduler.runAfter(0, internal.system.channels.handleIncomingMessage, {
             channel: "whatsapp",
@@ -251,7 +251,7 @@ http.route({
 
       // Handle status updates (optional: could log delivery/read status)
       const statuses = change.value.statuses;
-      if (statuses && statuses.length > 0) {
+      if (statuses && statuses.length > 0 && statuses[0]) {
         // Could log status changes here: sent, delivered, read, failed
         // For now, we just acknowledge
         console.log(

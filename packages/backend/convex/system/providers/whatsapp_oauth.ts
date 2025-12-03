@@ -76,6 +76,9 @@ export const handleCallback = internalAction({
       }
 
       const whatsappAccount = accountData.data[0];
+      if (!whatsappAccount) {
+        throw new Error("WhatsApp account data is invalid");
+      }
 
       // 3. Get phone number details from the WABA
       const phoneResponse = await fetch(
@@ -99,6 +102,9 @@ export const handleCallback = internalAction({
       }
 
       const phoneNumber = phoneData.data[0];
+      if (!phoneNumber) {
+        throw new Error("Phone number data is invalid");
+      }
 
       // 4. Generate unique webhook token for this organization
       const webhookToken = generateWebhookToken();
