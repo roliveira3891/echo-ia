@@ -61,10 +61,25 @@ export default defineSchema({
         currentUrl: v.optional(v.string()),
       })
     ),
+    // Multi-channel support (optional for backwards compatibility)
+    channel: v.optional(v.string()),          // "widget", "whatsapp", "instagram", "tiktok", etc.
+    channelUserId: v.optional(v.string()),    // "+55119999999" (WhatsApp), "@username" (Instagram), etc.
   })
     .index("by_organization_id", ["organizationId"])
-    .index("by_expires_at", ["expiresAt"]),
+    .index("by_expires_at", ["expiresAt"])
+    .index("by_channel_user_id", ["channel", "channelUserId"]),
   users: defineTable({
     name: v.string(),
   }),
+  webhookLogs: defineTable({
+    organizationId: v.string(),
+    channel: v.string(),          // "whatsapp", "instagram", "tiktok", etc.
+    eventType: v.string(),        // "message", "status", "qr_code", etc.
+    success: v.boolean(),
+    error: v.optional(v.string()),
+    payload: v.any(),
+    processedAt: v.number(),
+  })
+    .index("by_organization_id", ["organizationId"])
+    .index("by_channel", ["channel"]),
 });
