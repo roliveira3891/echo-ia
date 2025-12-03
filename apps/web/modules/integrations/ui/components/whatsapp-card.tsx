@@ -23,12 +23,12 @@ export const WhatsAppCard = () => {
 
   // Action to get OAuth authorization URL
   const getAuthUrl = useMutation(
-    api.system.providers.whatsappOAuth.getAuthorizationUrl
+    api.system.providers.whatsapp_oauth.getAuthorizationUrl
   );
 
   // Action to disconnect WhatsApp
   const disconnectWhatsApp = useMutation(
-    api.system.providers.whatsappOAuth.disconnect
+    api.system.providers.whatsapp_oauth.disconnect
   );
 
   const handleConnect = async () => {

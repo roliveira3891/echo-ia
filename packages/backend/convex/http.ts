@@ -95,7 +95,7 @@ http.route({
 
       // Call the OAuth handler action
       const result = await ctx.runAction(
-        internal.system.providers.whatsappOAuth.handleCallback,
+        internal.system.providers.whatsapp_oauth.handleCallback,
         {
           code,
           state,
