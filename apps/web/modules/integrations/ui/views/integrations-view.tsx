@@ -53,7 +53,7 @@ export const IntegrationsView = () => {
         snippet={selectedSnippet}
       />
       <div className="flex min-h-screen flex-col bg-muted p-8">
-        <div className="mx-auto w-full max-w-screen-md">
+        <div className="mx-auto w-full max-w-7xl">
           <div className="space-y-2">
             <h1 className="text-2xl md:text-4xl">Setup & Integrations</h1>
             <p className="text-muted-foreground">
@@ -93,7 +93,7 @@ export const IntegrationsView = () => {
                 Connect your communication channels to receive and respond to messages from customers.
               </p>
             </div>
-            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <WhatsAppCard />
               {/* Instagram, TikTok, and other channels can be added here */}
             </div>
