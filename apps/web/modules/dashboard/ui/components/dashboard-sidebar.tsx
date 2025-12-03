@@ -35,42 +35,42 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
-const customerSupportItems = [
+const customerSupportItemsKeys = [
   {
-    title: "Conversations",
+    titleKey: "sidebar.conversations",
     url: "/conversations",
     icon: InboxIcon,
   },
   {
-    title: "Knowledge Base",
+    titleKey: "sidebar.knowledgeBase",
     url: "/files",
     icon: LibraryBigIcon,
   },
 ];
 
-const configurationItems = [
+const configurationItemsKeys = [
   {
-    title: "Widget Customization",
+    titleKey: "sidebar.widgetCustomization",
     url: "/customization",
     icon: PaletteIcon,
   },
   {
-    title: "Integrations",
+    titleKey: "sidebar.integrations",
     url: "/integrations",
     icon: LayoutDashboardIcon,
   },
   {
-    title: "Voice Assistant",
+    titleKey: "sidebar.voiceAssistant",
     url: "/plugins/vapi",
     icon: Mic,
   },
 ];
 
-const accountItems = [
+const accountItemsKeys = [
   {
-    title: "Plans & Billing",
+    titleKey: "sidebar.plansBilling",
     url: "/billing",
     icon: CreditCardIcon,
   }
@@ -79,6 +79,7 @@ const accountItems = [
 export const DashboardSidebar = () => {
   const pathname = usePathname();
   const { setTheme, theme } = useTheme();
+  const t = useTranslations("navigation");
 
   const isActive = (url: string) => {
     if (url === "/") {
@@ -126,78 +127,87 @@ export const DashboardSidebar = () => {
       <SidebarContent>
         {/* Customer Support */}
         <SidebarGroup>
-          <SidebarGroupLabel>Customer Support</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("sidebar.customerSupport")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {customerSupportItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                    )}
-                    tooltip={item.title}
-                  >
-                    <Link href={getLocalizedUrl(item.url)}>
-                      <item.icon className="size-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {customerSupportItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      className={cn(
+                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                      )}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon className="size-4" />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Configuration */}
         <SidebarGroup>
-          <SidebarGroupLabel>Configuration</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("sidebar.configuration")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {configurationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                    )}
-                    tooltip={item.title}
-                  >
-                    <Link href={getLocalizedUrl(item.url)}>
-                      <item.icon className="size-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {configurationItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      className={cn(
+                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                      )}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon className="size-4" />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Account */}
         <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("sidebar.account")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {accountItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                    )}
-                    tooltip={item.title}
-                  >
-                    <Link href={getLocalizedUrl(item.url)}>
-                      <item.icon className="size-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {accountItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      className={cn(
+                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                      )}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon className="size-4" />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -213,7 +223,7 @@ export const DashboardSidebar = () => {
                 <SidebarMenuButton
                   asChild={false} // importante: não é um Link
                   isActive={false} // vamos controlar o visual manualmente
-                  tooltip="Theme"
+                  tooltip={t("sidebar.theme")}
 
                 >
                   <div className="flex w-full items-center justify-between">
@@ -223,7 +233,7 @@ export const DashboardSidebar = () => {
                         <Moon className="size-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                       </div>
                       <span className="group-data-[collapsible=icon]:hidden">
-                        {theme === "dark" ? "Dark" : theme === "light" ? "Light" : "System"}
+                        {theme === "dark" ? t("sidebar.dark") : theme === "light" ? t("sidebar.light") : t("sidebar.system")}
                       </span>
                     </div>
 
@@ -243,17 +253,17 @@ export const DashboardSidebar = () => {
               <DropdownMenuContent side="right" align="start" className="min-w-[140px]">
                 <DropdownMenuItem onClick={() => setTheme("light")} className="gap-2">
                   <Sun className="size-4" />
-                  Light
+                  {t("sidebar.light")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")} className="gap-2">
                   <Moon className="size-4" />
-                  Dark
+                  {t("sidebar.dark")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")} className="gap-2">
                   <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  System
+                  {t("sidebar.system")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

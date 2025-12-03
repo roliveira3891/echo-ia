@@ -54,7 +54,22 @@
     "settings": "Configurações",
     "profile": "Perfil",
     "organization": "Organização",
-    "logout": "Sair"
+    "logout": "Sair",
+    "sidebar": {
+      "customerSupport": "Atendimento ao Cliente",
+      "conversations": "Conversas",
+      "knowledgeBase": "Base de Conhecimento",
+      "configuration": "Configuração",
+      "widgetCustomization": "Personalizar Widget",
+      "integrations": "Integrações",
+      "voiceAssistant": "Assistente de Voz",
+      "account": "Conta",
+      "plansBilling": "Planos e Faturamento",
+      "theme": "Tema",
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema"
+    }
   },
   "errors": {
     "notFound": "Página não encontrada",

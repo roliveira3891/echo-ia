@@ -54,7 +54,22 @@
     "settings": "Settings",
     "profile": "Profile",
     "organization": "Organization",
-    "logout": "Logout"
+    "logout": "Logout",
+    "sidebar": {
+      "customerSupport": "Customer Support",
+      "conversations": "Conversations",
+      "knowledgeBase": "Knowledge Base",
+      "configuration": "Configuration",
+      "widgetCustomization": "Widget Customization",
+      "integrations": "Integrations",
+      "voiceAssistant": "Voice Assistant",
+      "account": "Account",
+      "plansBilling": "Plans & Billing",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
   },
   "errors": {
     "notFound": "Page not found",
