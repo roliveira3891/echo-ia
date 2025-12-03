@@ -23,7 +23,7 @@ export const sendMessage = internalAction({
       const whatsappAccount = await ctx.db
         .query("whatsappAccounts")
         .withIndex("by_organization_id")
-        .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+        .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
         .first();
 
       if (!whatsappAccount) {

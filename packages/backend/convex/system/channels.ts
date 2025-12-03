@@ -33,9 +33,9 @@ export const handleIncomingMessage = internalAction({
       let contactSession = await ctx.db
         .query("contactSessions")
         .withIndex("by_channel_user_id")
-        .filter((q) => q.eq(q.field("channel"), args.channel))
-        .filter((q) => q.eq(q.field("channelUserId"), args.channelUserId))
-        .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+        .filter((q: any) => q.eq(q.field("channel"), args.channel))
+        .filter((q: any) => q.eq(q.field("channelUserId"), args.channelUserId))
+        .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
         .first();
 
       if (!contactSession) {
@@ -58,7 +58,7 @@ export const handleIncomingMessage = internalAction({
       let conversation = await ctx.db
         .query("conversations")
         .withIndex("by_contact_session_id")
-        .filter((q) => q.eq(q.field("contactSessionId"), contactSession._id))
+        .filter((q: any) => q.eq(q.field("contactSessionId"), contactSession._id))
         .first();
 
       if (!conversation) {
@@ -116,13 +116,19 @@ export const handleIncomingMessage = internalAction({
       const aiResponse = messages.page[0];
 
       // 6. Send response via the same channel
-      if (aiResponse?.content) {
-        await sendMessageToChannel(ctx, {
-          channel: args.channel,
-          channelUserId: args.channelUserId,
-          messageText: aiResponse.content,
-          organizationId: args.organizationId,
-        });
+      if (aiResponse) {
+        // Extract message text from the AI response
+        // The agent returns messages with various properties, we'll attempt to get the text content
+        const messageText = (aiResponse as any).text || (aiResponse as any).content || "";
+
+        if (messageText) {
+          await sendMessageToChannel(ctx, {
+            channel: args.channel,
+            channelUserId: args.channelUserId,
+            messageText,
+            organizationId: args.organizationId,
+          });
+        }
       }
 
       // 7. Log webhook event (optional)
@@ -169,11 +175,11 @@ async function sendMessageToChannel(
 ) {
   switch (args.channel) {
     case "whatsapp":
-      return await ctx.runAction(api.system.providers.whatsapp_provider.sendMessage, args);
+      return await ctx.runAction(internal.system.providers.whatsapp_provider.sendMessage, args);
     case "instagram":
-      return await ctx.runAction(api.system.providers.instagram_provider.sendMessage, args);
+      return await ctx.runAction(internal.system.providers.instagram_provider.sendMessage, args);
     case "tiktok":
-      return await ctx.runAction(api.system.providers.tiktok_provider.sendMessage, args);
+      return await ctx.runAction(internal.system.providers.tiktok_provider.sendMessage, args);
     // ... adiciona novos canais conforme necessário
     default:
       throw new Error(`Unknown channel: ${args.channel}`);

@@ -117,7 +117,7 @@ export const handleCallback = internalAction({
       const existingAccount = await ctx.db
         .query("whatsappAccounts")
         .withIndex("by_organization_id")
-        .filter((q) => q.eq(q.field("organizationId"), args.state))
+        .filter((q: any) => q.eq(q.field("organizationId"), args.state))
         .first();
 
       if (existingAccount) {
@@ -179,7 +179,7 @@ export const disconnect = internalAction({
     const account = await ctx.db
       .query("whatsappAccounts")
       .withIndex("by_organization_id")
-      .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+      .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
       .first();
 
     if (!account) {

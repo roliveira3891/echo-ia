@@ -41,7 +41,7 @@ export const disconnect = action({
   args: {
     organizationId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ success: boolean }> => {
     return await ctx.runAction(
       internal.system.providers.whatsapp_oauth.disconnect,
       {

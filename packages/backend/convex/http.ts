@@ -3,7 +3,7 @@ import { createClerkClient } from "@clerk/backend";
 import type { WebhookEvent } from "@clerk/backend";
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { internal, api } from "./_generated/api";
 
 const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY || "",
@@ -215,11 +215,10 @@ http.route({
       }
 
       // Find the WhatsApp account by phone_number_id
-      const whatsappAccount = await ctx.db
-        .query("whatsappAccounts")
-        .withIndex("by_phone_number_id")
-        .filter((q) => q.eq(q.field("phoneNumberId"), phoneNumberId))
-        .first();
+      const whatsappAccount = await ctx.runQuery(
+        internal.system.whatsapp.getAccountByPhoneNumberId,
+        { phoneNumberId }
+      );
 
       if (!whatsappAccount) {
         console.warn(`[WhatsApp Webhook] No account found for phone_number_id: ${phoneNumberId}`);
