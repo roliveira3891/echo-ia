@@ -18,6 +18,7 @@ import {
 } from "@workspace/ui/components/dialog";
 import { useState } from "react";
 import { createScript } from "../../utils";
+import { WhatsAppCard } from "../components/whatsapp-card";
 
 export const IntegrationsView = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -83,9 +84,27 @@ export const IntegrationsView = () => {
           </div>
 
           <Separator className="my-8" />
+
+          {/* Channel Integrations */}
           <div className="space-y-6">
             <div className="space-y-1">
-              <Label className="text-lg">Integrations</Label>
+              <Label className="text-lg">Channel Integrations</Label>
+              <p className="text-muted-foreground text-sm">
+                Connect your communication channels to receive and respond to messages from customers.
+              </p>
+            </div>
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+              <WhatsAppCard />
+              {/* Instagram, TikTok, and other channels can be added here */}
+            </div>
+          </div>
+
+          <Separator className="my-8" />
+
+          {/* Widget Integrations */}
+          <div className="space-y-6">
+            <div className="space-y-1">
+              <Label className="text-lg">Website Widget</Label>
               <p className="text-muted-foreground text-sm">
                 Add the following code to your website to enable the chatbox.
               </p>
