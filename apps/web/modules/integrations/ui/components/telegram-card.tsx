@@ -14,7 +14,7 @@ export const TelegramCard = () => {
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-blue-500 p-2">
+            <div className="rounded-lg bg-blue-300 p-2">
               <Image
                 alt="Telegram"
                 height={50}
