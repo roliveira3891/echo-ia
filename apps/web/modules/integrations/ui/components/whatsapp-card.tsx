@@ -4,16 +4,25 @@ import { useOrganization } from "@clerk/nextjs";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
-import { Loader2, CheckCircle2, LogOut } from "lucide-react";
+import { Loader2, CheckCircle2, LogOut, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useAction } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@workspace/ui/components/dialog";
 
 export const WhatsAppCard = () => {
   const { organization } = useOrganization();
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [authUrl, setAuthUrl] = useState<string | null>(null);
 
   // Query to get current WhatsApp account status
   const whatsappAccount = useQuery(
@@ -43,8 +52,9 @@ export const WhatsAppCard = () => {
         organizationId: organization.id,
       });
 
-      // Redirect to Meta OAuth
-      window.location.href = authorizationUrl;
+      // Show modal with OAuth URL
+      setAuthUrl(authorizationUrl);
+      setShowModal(true);
     } catch (error) {
       toast.error("Failed to initiate WhatsApp connection");
       console.error(error);
@@ -76,7 +86,33 @@ export const WhatsAppCard = () => {
   const isConnected = whatsappAccount?.isActive;
 
   return (
-    <Card className="overflow-hidden">
+    <>
+      {/* WhatsApp OAuth Modal */}
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="max-w-2xl h-[600px] flex flex-col p-0">
+          <DialogHeader className="px-6 py-4 border-b">
+            <DialogTitle>Connect WhatsApp Business Account</DialogTitle>
+            <DialogDescription>
+              Sign in with your Meta account to authorize WhatsApp Business
+            </DialogDescription>
+          </DialogHeader>
+
+          {authUrl ? (
+            <iframe
+              src={authUrl}
+              className="flex-1 w-full border-0"
+              title="Meta OAuth"
+              sandbox="allow-same-origin allow-popups allow-scripts allow-forms allow-popups-to-escape-sandbox"
+            />
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Card className="overflow-hidden">
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -189,5 +225,6 @@ export const WhatsAppCard = () => {
         )}
       </CardContent>
     </Card>
+    </>
   );
 };
