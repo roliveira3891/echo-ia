@@ -11,9 +11,12 @@ Multi-channel chat system where messages from any source (WhatsApp, Instagram, T
 ## 🎯 Architecture Principles
 
 1. **Channel Agnostic**: Schema and logic don't care about channel type
-2. **Provider Managed**: Each provider (Evolution, Meta, TikTok) manages user sessions
+2. **Provider Managed**: Each provider manages credentials/sessions
+   - **WhatsApp**: Meta Graph API (via Embedded Signup) - stored in `whatsappAccounts` table
+   - **Instagram**: Meta Graph API - credentials per organization
+   - **TikTok**: TikTok API - credentials per organization
 3. **Single Conversation**: Same `threadId` regardless of channel
-4. **No Channel-Specific Tables**: All identified in `contactSessions`
+4. **No Channel-Specific Tables** (except credentials): Messages identified in `contactSessions` by `channel + channelUserId`
 5. **Extensible**: Adding new channel = implement one provider file
 
 ---
@@ -514,10 +517,12 @@ export const sendMessage = action({
 - [ ] Create `system/channels.ts` with `handleIncomingMessage` action
 - [ ] Test: Manual call with mock data
 
-### Step 3: WhatsApp Provider
+### Step 3: WhatsApp Provider (Meta Graph API)
+- [ ] Add `whatsappAccounts` table to schema
+- [ ] Create `system/providers/whatsapp-oauth.ts` with OAuth handlers
 - [ ] Create `system/providers/whatsapp.ts` with `sendMessage` action
-- [ ] Implement `validateEvolutionSignature` helper
-- [ ] Implement `extractPhoneFromJid` helper
+- [ ] Add WhatsApp OAuth callback route to `http.ts`
+- [ ] Add WhatsApp webhook route to `http.ts`
 
 ### Step 4: HTTP Webhook
 - [ ] Modify `http.ts` to add `/webhooks/:channel` route
