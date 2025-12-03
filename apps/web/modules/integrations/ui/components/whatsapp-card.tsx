@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@work
 import { Badge } from "@workspace/ui/components/badge";
 import { Loader2, CheckCircle2, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery, useAction } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -22,12 +22,12 @@ export const WhatsAppCard = () => {
   );
 
   // Action to get OAuth authorization URL
-  const getAuthUrl = useMutation(
+  const getAuthUrl = useAction(
     api.public.whatsapp_oauth.getAuthorizationUrl
   );
 
   // Action to disconnect WhatsApp
-  const disconnectWhatsApp = useMutation(
+  const disconnectWhatsApp = useAction(
     api.public.whatsapp_oauth.disconnect
   );
 
