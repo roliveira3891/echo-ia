@@ -4,25 +4,16 @@ import { useOrganization } from "@clerk/nextjs";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
-import { Loader2, CheckCircle2, LogOut, X } from "lucide-react";
+import { Loader2, CheckCircle2, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useMutation, useQuery, useAction } from "convex/react";
+import { useQuery, useAction } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@workspace/ui/components/dialog";
 
 export const WhatsAppCard = () => {
   const { organization } = useOrganization();
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [authUrl, setAuthUrl] = useState<string | null>(null);
   const [popupWindow, setPopupWindow] = useState<Window | null>(null);
 
   // Query to get current WhatsApp account status
@@ -41,7 +32,7 @@ export const WhatsAppCard = () => {
     api.public.whatsapp_oauth.disconnect
   );
 
-  // Monitor popup window and close modal when oauth completes
+  // Monitor popup window and refresh when oauth completes
   useEffect(() => {
     if (!popupWindow || popupWindow.closed) {
       return;
@@ -52,10 +43,9 @@ export const WhatsAppCard = () => {
         // Check if popup was closed
         if (popupWindow.closed) {
           clearInterval(interval);
-          setShowModal(false);
           setPopupWindow(null);
-          // Refresh the account status
-          setTimeout(() => window.location.reload(), 1000);
+          // Refresh the account status after popup closes
+          setTimeout(() => window.location.reload(), 1500);
         }
       } catch (e) {
         // Ignore cross-origin errors
@@ -90,7 +80,6 @@ export const WhatsAppCard = () => {
       }
 
       setPopupWindow(popup);
-      setShowModal(true);
     } catch (error) {
       toast.error("Failed to initiate WhatsApp connection");
       console.error(error);
@@ -122,45 +111,7 @@ export const WhatsAppCard = () => {
   const isConnected = whatsappAccount?.isActive;
 
   return (
-    <>
-      {/* WhatsApp OAuth Modal */}
-      <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Connect WhatsApp Business Account</DialogTitle>
-            <DialogDescription>
-              A popup window has been opened for Meta authorization
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex flex-col items-center gap-4 py-6">
-            <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            <div className="text-center space-y-2">
-              <p className="font-medium">Waiting for authorization...</p>
-              <p className="text-sm text-muted-foreground">
-                Complete the login in the popup window. This dialog will close automatically once you&apos;re done.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => {
-                setShowModal(false);
-                if (popupWindow && !popupWindow.closed) {
-                  popupWindow.close();
-                }
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Card className="overflow-hidden">
+    <Card className="overflow-hidden">
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -273,6 +224,5 @@ export const WhatsAppCard = () => {
         )}
       </CardContent>
     </Card>
-    </>
   );
 };
