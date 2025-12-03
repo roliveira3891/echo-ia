@@ -17,7 +17,7 @@ export const WhatsAppCard = () => {
 
   // Query to get current WhatsApp account status
   const whatsappAccount = useQuery(
-    api.system.providers.whatsappOAuth.getAccount,
+    api.public.whatsappAccounts.getAccount,
     organization?.id ? { organizationId: organization.id } : "skip"
   );
 
