@@ -23,6 +23,7 @@ export const WhatsAppCard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
+  const [popupWindow, setPopupWindow] = useState<Window | null>(null);
 
   // Query to get current WhatsApp account status
   const whatsappAccount = useQuery(
@@ -40,6 +41,30 @@ export const WhatsAppCard = () => {
     api.public.whatsapp_oauth.disconnect
   );
 
+  // Monitor popup window and close modal when oauth completes
+  useEffect(() => {
+    if (!popupWindow || popupWindow.closed) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      try {
+        // Check if popup was closed
+        if (popupWindow.closed) {
+          clearInterval(interval);
+          setShowModal(false);
+          setPopupWindow(null);
+          // Refresh the account status
+          setTimeout(() => window.location.reload(), 1000);
+        }
+      } catch (e) {
+        // Ignore cross-origin errors
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [popupWindow]);
+
   const handleConnect = async () => {
     if (!organization) {
       toast.error("Organization not found");
@@ -52,8 +77,19 @@ export const WhatsAppCard = () => {
         organizationId: organization.id,
       });
 
-      // Show modal with OAuth URL
-      setAuthUrl(authorizationUrl);
+      // Open popup window for OAuth
+      const popup = window.open(
+        authorizationUrl,
+        "WhatsApp OAuth",
+        "width=600,height=700,left=200,top=100"
+      );
+
+      if (!popup) {
+        toast.error("Failed to open popup. Please allow popups in your browser.");
+        return;
+      }
+
+      setPopupWindow(popup);
       setShowModal(true);
     } catch (error) {
       toast.error("Failed to initiate WhatsApp connection");
@@ -89,26 +125,38 @@ export const WhatsAppCard = () => {
     <>
       {/* WhatsApp OAuth Modal */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl h-[600px] flex flex-col p-0">
-          <DialogHeader className="px-6 py-4 border-b">
+        <DialogContent className="max-w-md">
+          <DialogHeader>
             <DialogTitle>Connect WhatsApp Business Account</DialogTitle>
             <DialogDescription>
-              Sign in with your Meta account to authorize WhatsApp Business
+              A popup window has been opened for Meta authorization
             </DialogDescription>
           </DialogHeader>
 
-          {authUrl ? (
-            <iframe
-              src={authUrl}
-              className="flex-1 w-full border-0"
-              title="Meta OAuth"
-              sandbox="allow-same-origin allow-popups allow-scripts allow-forms allow-popups-to-escape-sandbox"
-            />
-          ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <div className="flex flex-col items-center gap-4 py-6">
+            <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+            <div className="text-center space-y-2">
+              <p className="font-medium">Waiting for authorization...</p>
+              <p className="text-sm text-muted-foreground">
+                Complete the login in the popup window. This dialog will close automatically once you&apos;re done.
+              </p>
             </div>
-          )}
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => {
+                setShowModal(false);
+                if (popupWindow && !popupWindow.closed) {
+                  popupWindow.close();
+                }
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
