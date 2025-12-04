@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAction, useQuery } from "convex/react";
-import { api } from "@workspace/backend";
+import { api } from "@workspace/backend/_generated/api";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
@@ -240,7 +240,7 @@ export const TelegramCard = () => {
                           {t("validating")}
                         </>
                       ) : (
-                        t("connectButton")}
+                        t("connectButton")
                       )}
                     </Button>
                     <Button

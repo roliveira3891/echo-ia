@@ -11,7 +11,7 @@ export const connect = action({
     organizationId: v.string(),
     botToken: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<any> => {
     return await ctx.runAction(internal.system.providers.telegram_oauth.connect, {
       organizationId: args.organizationId,
       botToken: args.botToken,
@@ -27,7 +27,7 @@ export const disconnect = action({
   args: {
     organizationId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<any> => {
     return await ctx.runAction(internal.system.providers.telegram_oauth.disconnect, {
       organizationId: args.organizationId,
     });
