@@ -270,4 +270,106 @@ http.route({
   }),
 });
 
+/**
+ * Telegram Webhook Handler
+ * Receives incoming messages from Telegram Bot API
+ * Path: /webhooks/telegram?token=XXX
+ */
+http.route({
+  path: "/webhooks/telegram",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const url = new URL(request.url);
+      const token = url.searchParams.get("token");
+
+      if (!token) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+
+      const body = await request.text();
+      const data = JSON.parse(body) as {
+        update_id: number;
+        message?: {
+          message_id: number;
+          from: {
+            id: number;
+            is_bot: boolean;
+            first_name: string;
+            username?: string;
+          };
+          chat: {
+            id: number;
+            type: string;
+            username?: string;
+            first_name?: string;
+          };
+          date: number;
+          text?: string;
+        };
+        edited_message?: {
+          message_id: number;
+          from: {
+            id: number;
+            is_bot: boolean;
+            first_name: string;
+            username?: string;
+          };
+          chat: {
+            id: number;
+            type: string;
+          };
+          date: number;
+          text?: string;
+        };
+      };
+
+      // Handle regular messages
+      const message = data.message || data.edited_message;
+
+      if (!message || !message.text) {
+        // Ignore non-text messages or messages without text
+        return new Response("OK", { status: 200 });
+      }
+
+      // Ignore messages from bots
+      if (message.from.is_bot) {
+        return new Response("OK", { status: 200 });
+      }
+
+      // Find connection by webhook token
+      const connection = await ctx.runQuery(
+        internal.system.channelConnections.getConnectionByWebhookToken,
+        {
+          channel: "telegram",
+          webhookToken: token,
+        }
+      );
+
+      if (!connection) {
+        console.warn(`[Telegram Webhook] No connection found for token: ${token}`);
+        return new Response("Unauthorized", { status: 401 });
+      }
+
+      const organizationId = connection.organizationId;
+
+      // Process incoming message through the channel handler
+      await ctx.scheduler.runAfter(0, internal.system.channels.handleIncomingMessage, {
+        channel: "telegram",
+        organizationId,
+        channelUserId: message.chat.id.toString(),
+        messageText: message.text,
+        externalMessageId: message.message_id.toString(),
+      });
+
+      // Always return 200 OK to Telegram
+      return new Response("OK", { status: 200 });
+    } catch (error) {
+      console.error("[Telegram Webhook] Error:", error);
+      // Still return 200 to prevent Telegram from retrying
+      return new Response("OK", { status: 200 });
+    }
+  }),
+});
+
 export default http;

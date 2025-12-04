@@ -82,30 +82,51 @@ export default defineSchema({
   })
     .index("by_organization_id", ["organizationId"])
     .index("by_channel", ["channel"]),
-  whatsappAccounts: defineTable({
+  // ========================================
+  // CHANNEL CONNECTIONS (Agnóstico)
+  // ========================================
+  // Unified table for ALL channel integrations
+  // Supports: WhatsApp, Telegram, Instagram, TikTok, Facebook Messenger, LinkedIn, etc.
+  channelConnections: defineTable({
     organizationId: v.string(),
 
-    // Meta OAuth
-    accessToken: v.string(),                    // Meta access token (long-lived)
-    accessTokenExpiresAt: v.optional(v.number()), // Expiry timestamp
+    // Channel identification
+    channel: v.string(),                        // "whatsapp", "telegram", "instagram", etc.
+    channelAccountId: v.string(),               // Unique ID in the channel (phone, @username, user_id)
 
-    // WhatsApp Business Info
-    whatsappBusinessAccountId: v.string(),      // WABA ID from Meta
-    phoneNumberId: v.string(),                  // Phone number object ID
-    phoneNumber: v.string(),                    // Actual phone number (+55119999999)
+    // Authentication credentials (flexible for any channel)
+    credentials: v.object({
+      accessToken: v.optional(v.string()),
+      refreshToken: v.optional(v.string()),
+      apiKey: v.optional(v.string()),
+      apiSecret: v.optional(v.string()),
+      webhookToken: v.optional(v.string()),
+      webhookSecret: v.optional(v.string()),
+      expiresAt: v.optional(v.number()),
+    }),
 
-    // Security
-    webhookToken: v.string(),                   // For validating incoming webhooks
-    webhookSecret: v.optional(v.string()),      // Optional: HMAC secret
+    // Channel-specific metadata (JSON flexible)
+    // WhatsApp: { phoneNumberId, phoneNumber, wabaId, businessAccountId }
+    // Telegram: { botToken, botUsername, botId }
+    // Instagram: { userId, username, pageId, pageAccessToken }
+    channelMetadata: v.any(),
 
-    // Status
-    isActive: v.boolean(),                      // Is this account currently connected?
-    connectedAt: v.number(),                    // When was it connected?
+    // Universal status
+    status: v.union(
+      v.literal("connected"),
+      v.literal("disconnected"),
+      v.literal("error"),
+      v.literal("pending")
+    ),
 
-    // Meta metadata (for refresh/validation)
-    metaUserId: v.optional(v.string()),         // The Meta user who authorized
-    metaBusinessAccountId: v.optional(v.string()), // Meta Business Account ID
+    // Audit fields
+    connectedAt: v.number(),
+    lastSyncAt: v.optional(v.number()),
+    errorMessage: v.optional(v.string()),
   })
     .index("by_organization_id", ["organizationId"])
-    .index("by_phone_number_id", ["phoneNumberId"]),
+    .index("by_channel", ["channel"])
+    .index("by_org_and_channel", ["organizationId", "channel"])
+    .index("by_channel_account_id", ["channel", "channelAccountId"]),
+
 });

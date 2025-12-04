@@ -160,6 +160,7 @@
       "title": "Telegram",
       "description": "Connect your Telegram bot for customer support",
       "comingSoon": "Coming Soon",
+      "connected": "Connected",
       "requirements": "Requirements:",
       "requirementsList": [
         "Telegram Bot Token",
@@ -167,8 +168,26 @@
         "Admin access to bot"
       ],
       "connect": "Connect Telegram",
+      "disconnect": "Disconnect Bot",
+      "disconnecting": "Disconnecting...",
       "description2": "Connect your Telegram bot to receive and respond to customer messages.",
-      "comingSoonMsg": "This integration is coming soon. Stay tuned!"
+      "comingSoonMsg": "This integration is coming soon. Stay tuned!",
+      "connectTitle": "Connect Telegram Bot",
+      "connectDescription": "Follow the steps below to create a bot and connect it to Echo IA",
+      "stepsTitle": "Step-by-Step Guide",
+      "step1": "Open Telegram and search for @BotFather",
+      "step2": "Send the command: /newbot",
+      "step3": "Choose a name for your bot (e.g., 'Customer Support')",
+      "step4": "Choose a username ending in 'bot' (e.g., 'mycompany_support_bot')",
+      "step5": "Copy the bot token that BotFather sends you",
+      "openTelegram": "Open BotFather on Telegram",
+      "tokenLabel": "Bot Token",
+      "tokenHint": "Paste the token you received from @BotFather",
+      "connectButton": "Validate & Connect",
+      "validating": "Validating...",
+      "cancel": "Cancel",
+      "securityNotice": "Your token is encrypted and stored securely",
+      "connectedBot": "Connected Bot"
     },
     "facebookMessenger": {
       "title": "Facebook Messenger",

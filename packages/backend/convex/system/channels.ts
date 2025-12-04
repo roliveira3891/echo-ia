@@ -176,6 +176,8 @@ async function sendMessageToChannel(
   switch (args.channel) {
     case "whatsapp":
       return await ctx.runAction(internal.system.providers.whatsapp_provider.sendMessage, args);
+    case "telegram":
+      return await ctx.runAction(internal.system.providers.telegram_provider.sendMessage, args);
     // case "instagram":
     //   return await ctx.runAction(internal.system.providers.instagram_provider.sendMessage, args);
     // case "tiktok":

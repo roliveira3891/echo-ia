@@ -1,6 +1,8 @@
 import { internalAction } from "../../_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
+import { internal } from "../../_generated/api";
+import { generateSecureToken } from "./_helpers";
 
 /**
  * Step 2: Handle Meta OAuth callback
@@ -107,7 +109,7 @@ export const handleCallback = internalAction({
       }
 
       // 4. Generate unique webhook token for this organization
-      const webhookToken = generateWebhookToken();
+      const webhookToken = generateSecureToken();
 
       // 5. Get user info for metadata
       const userResponse = await fetch(
@@ -119,45 +121,28 @@ export const handleCallback = internalAction({
         name: string;
       };
 
-      // 6. Check if account already exists
-      const existingAccount = await ctx.db
-        .query("whatsappAccounts")
-        .withIndex("by_organization_id")
-        .filter((q: any) => q.eq(q.field("organizationId"), args.state))
-        .first();
-
-      if (existingAccount) {
-        // Update existing account
-        await ctx.db.patch(existingAccount._id, {
+      // 6. Save to channelConnections (upsert)
+      await ctx.runMutation(internal.system.channelConnections.upsertConnection, {
+        organizationId: args.state,
+        channel: "whatsapp",
+        channelAccountId: phoneNumber.display_phone_number,
+        credentials: {
           accessToken: tokenData.access_token,
-          accessTokenExpiresAt: tokenData.expires_in
+          webhookToken,
+          expiresAt: tokenData.expires_in
             ? Date.now() + tokenData.expires_in * 1000
             : undefined,
-          whatsappBusinessAccountId: whatsappAccount.id,
+        },
+        channelMetadata: {
           phoneNumberId: phoneNumber.id,
           phoneNumber: phoneNumber.display_phone_number,
-          webhookToken,
-          isActive: true,
-          connectedAt: Date.now(),
+          verifiedName: phoneNumber.verified_name,
+          wabaId: whatsappAccount.id,
+          wabaName: whatsappAccount.name,
           metaUserId: userData.id,
-        });
-      } else {
-        // Create new account
-        await ctx.db.insert("whatsappAccounts", {
-          organizationId: args.state,
-          accessToken: tokenData.access_token,
-          accessTokenExpiresAt: tokenData.expires_in
-            ? Date.now() + tokenData.expires_in * 1000
-            : undefined,
-          whatsappBusinessAccountId: whatsappAccount.id,
-          phoneNumberId: phoneNumber.id,
-          phoneNumber: phoneNumber.display_phone_number,
-          webhookToken,
-          isActive: true,
-          connectedAt: Date.now(),
-          metaUserId: userData.id,
-        });
-      }
+        },
+        status: "connected",
+      });
 
       return {
         success: true,
@@ -182,38 +167,12 @@ export const disconnect = internalAction({
     organizationId: v.string(),
   },
   handler: async (ctx: any, args: any) => {
-    const account = await ctx.db
-      .query("whatsappAccounts")
-      .withIndex("by_organization_id")
-      .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
-      .first();
-
-    if (!account) {
-      throw new ConvexError({
-        code: "NOT_FOUND",
-        message: "WhatsApp account not found",
-      });
-    }
-
-    // Mark as inactive instead of deleting (for audit trail)
-    await ctx.db.patch(account._id, {
-      isActive: false,
+    // Use agnostic disconnectChannel mutation
+    await ctx.runMutation(internal.system.channelConnections.disconnectChannel, {
+      organizationId: args.organizationId,
+      channel: "whatsapp",
     });
 
     return { success: true };
   },
 });
-
-/**
- * Helper: Generate a unique webhook token
- * Used to validate incoming webhooks from Meta
- */
-function generateWebhookToken(): string {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let token = "";
-  for (let i = 0; i < 32; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
-}
