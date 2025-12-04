@@ -15,10 +15,10 @@ export const connect = internalAction({
     organizationId: v.string(),
     botToken: v.string(),
   },
-  handler: async (ctx: any, args: any) => {
+  handler: async (ctx: any, args: any): Promise<any> => {
     try {
       // 1. Validate bot token with Telegram API
-      const botInfo = await ctx.runAction(
+      const botInfo: any = await ctx.runAction(
         internal.system.providers.telegram_provider.validateBotToken,
         { botToken: args.botToken }
       );
@@ -82,7 +82,7 @@ export const disconnect = internalAction({
   args: {
     organizationId: v.string(),
   },
-  handler: async (ctx: any, args: any) => {
+  handler: async (ctx: any, args: any): Promise<any> => {
     try {
       // 1. Get existing connection
       const connection = await ctx.runQuery(
