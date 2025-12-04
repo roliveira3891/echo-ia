@@ -271,7 +271,86 @@ http.route({
 });
 
 /**
- * Telegram Webhook Handler
+ * Telegram Webhook Handler (GET)
+ * Used for health checks and debugging
+ * Path: /webhooks/telegram?token=XXX
+ */
+http.route({
+  path: "/webhooks/telegram",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const url = new URL(request.url);
+      const token = url.searchParams.get("token");
+
+      if (!token) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: "Missing token parameter",
+            hint: "Add ?token=YOUR_TOKEN to the URL"
+          }),
+          {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      // Verify token exists
+      const connection = await ctx.runQuery(
+        internal.system.channelConnections.getConnectionByWebhookToken,
+        {
+          channel: "telegram",
+          webhookToken: token,
+        }
+      );
+
+      if (!connection) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: "Invalid webhook token",
+            token: token
+          }),
+          {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          status: "ok",
+          message: "Telegram webhook endpoint is active",
+          organizationId: connection.organizationId,
+          timestamp: new Date().toISOString()
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    } catch (error) {
+      console.error("[Telegram Webhook GET] Error:", error);
+      return new Response(
+        JSON.stringify({
+          status: "error",
+          message: "Internal server error",
+          error: String(error)
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    }
+  }),
+});
+
+/**
+ * Telegram Webhook Handler (POST)
  * Receives incoming messages from Telegram Bot API
  * Path: /webhooks/telegram?token=XXX
  */
