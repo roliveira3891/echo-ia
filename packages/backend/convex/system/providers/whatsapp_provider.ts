@@ -1,6 +1,13 @@
 import { internalAction } from "../../_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
+import { internal } from "../../_generated/api";
+import {
+  ensureActiveConnection,
+  getRequiredCredential,
+  getRequiredMetadata,
+  formatProviderError,
+} from "./_helpers";
 
 /**
  * Send message via WhatsApp through Meta Graph API
@@ -19,38 +26,41 @@ export const sendMessage = internalAction({
   },
   handler: async (ctx: any, args: any) => {
     try {
-      // 1. Get WhatsApp account credentials from database
-      const whatsappAccount = await ctx.db
-        .query("whatsappAccounts")
-        .withIndex("by_organization_id")
-        .filter((q: any) => q.eq(q.field("organizationId"), args.organizationId))
-        .first();
+      // 1. Get WhatsApp connection from channelConnections (agnostic)
+      const connection = await ctx.runQuery(
+        internal.system.channelConnections.getActiveConnection,
+        {
+          organizationId: args.organizationId,
+          channel: "whatsapp",
+        }
+      );
 
-      if (!whatsappAccount) {
-        throw new ConvexError({
-          code: "NOT_FOUND",
-          message: "WhatsApp account not configured for this organization",
-        });
-      }
+      // Validate connection is active
+      ensureActiveConnection(connection, "WhatsApp");
 
-      if (!whatsappAccount.isActive) {
-        throw new ConvexError({
-          code: "BAD_REQUEST",
-          message: "WhatsApp account is not active",
-        });
-      }
+      // 2. Extract credentials and metadata
+      const accessToken = getRequiredCredential(
+        connection.credentials,
+        "accessToken",
+        "WhatsApp"
+      );
+      const phoneNumberId = getRequiredMetadata(
+        connection.channelMetadata,
+        "phoneNumberId",
+        "WhatsApp"
+      );
 
-      // 2. Normalize phone number (remove special characters, add country code if needed)
+      // 3. Normalize phone number (remove special characters, add country code if needed)
       const phoneNumber = normalizePhoneNumber(args.channelUserId);
 
-      // 3. Send message via Meta Graph API
+      // 4. Send message via Meta Graph API
       const response = await fetch(
-        `https://graph.instagram.com/v18.0/${whatsappAccount.phoneNumberId}/messages`,
+        `https://graph.instagram.com/v18.0/${phoneNumberId}/messages`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${whatsappAccount.accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({
             messaging_product: "whatsapp",
@@ -86,7 +96,7 @@ export const sendMessage = internalAction({
         contacts?: Array<{ input: string; wa_id: string }>;
       };
 
-      // 4. Return success with message ID
+      // 5. Return success with message ID
       const messageId =
         responseData.messages?.[0]?.id ||
         responseData.contacts?.[0]?.wa_id ||
@@ -106,7 +116,7 @@ export const sendMessage = internalAction({
       // Otherwise wrap it
       throw new ConvexError({
         code: "INTERNAL_ERROR",
-        message: `Failed to send WhatsApp message: ${String(error)}`,
+        message: formatProviderError("WhatsApp", "sendMessage", error),
       });
     }
   },
