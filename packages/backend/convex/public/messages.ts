@@ -43,13 +43,6 @@ export const create = action({
       });
     }
 
-    if (conversation.status === "resolved") {
-      throw new ConvexError({
-        code: "BAD_REQUEST",
-        message: "Conversation resolved",
-      });
-    }
-
     // This refreshes the user's session if they are within the threshold
     await ctx.runMutation(internal.system.contactSessions.refresh, {
       contactSessionId: args.contactSessionId,
@@ -62,6 +55,9 @@ export const create = action({
       },
     );
 
+    // Only trigger AI agent if conversation is unresolved and subscription is active
+    // Note: Escalated conversations should not trigger AI (human will respond)
+    // Note: Resolved conversations are reopened by handleIncomingMessage before reaching here
     const shouldTriggerAgent =
       conversation.status === "unresolved" && subscription?.status === "active"
 

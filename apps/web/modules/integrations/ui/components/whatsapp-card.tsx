@@ -162,8 +162,9 @@ export const WhatsAppCard = () => {
             </div>
 
             <Button
+              disabled
               onClick={handleDisconnect}
-              disabled={isLoading}
+              // disabled={isLoading}
               variant="outline"
               className="w-full gap-2"
             >
@@ -192,8 +193,9 @@ export const WhatsAppCard = () => {
             </div>
 
             <Button
+              disabled
               onClick={handleConnect}
-              disabled={isLoading || !organization}
+              // disabled={isLoading || !organization}
               className="w-full gap-2 bg-green-600 hover:bg-green-700"
             >
               {isLoading ? (
