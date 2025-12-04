@@ -125,6 +125,18 @@ export const create = mutation({
         content: args.prompt,
       },
     });
+
+    // Send message back to the channel (Telegram, WhatsApp, etc)
+    const contactSession = await ctx.db.get(conversation.contactSessionId);
+
+    if (contactSession?.channel && contactSession?.channelUserId) {
+      await ctx.scheduler.runAfter(0, internal.system.channels.sendMessageToExternalChannel, {
+        channel: contactSession.channel,
+        channelUserId: contactSession.channelUserId,
+        messageText: args.prompt,
+        organizationId: conversation.organizationId,
+      });
+    }
   },
 });
 
