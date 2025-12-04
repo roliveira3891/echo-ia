@@ -27,6 +27,36 @@ export const getConnectionByChannelAccountId = internalQuery({
 });
 
 /**
+ * Internal query: Get connection by webhook token
+ * Used by webhooks that use token-based authentication (Telegram, etc)
+ *
+ * Example: Telegram webhook with ?token=XXX
+ * const connection = await getConnectionByWebhookToken({
+ *   channel: "telegram",
+ *   webhookToken: "XXX"
+ * })
+ */
+export const getConnectionByWebhookToken = internalQuery({
+  args: {
+    channel: v.string(),
+    webhookToken: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Get all connections for this channel
+    const connections = await ctx.db
+      .query("channelConnections")
+      .withIndex("by_channel")
+      .filter((q) => q.eq(q.field("channel"), args.channel))
+      .collect();
+
+    // Find the one with matching webhookToken
+    return connections.find(
+      (conn) => conn.credentials.webhookToken === args.webhookToken
+    ) || null;
+  },
+});
+
+/**
  * Internal query: Get active connection for organization + channel
  * Used by providers to get credentials for sending messages
  * Includes sensitive credentials (only for internal use)

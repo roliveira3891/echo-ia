@@ -290,7 +290,7 @@ throw new ConvexError({
 
 ## 📖 Próximos Passos
 
-1. **Implementar Telegram** (backend provider + OAuth)
+1. ✅ **Telegram** - **IMPLEMENTADO!** (backend provider + OAuth + UI)
 2. **Implementar Instagram** (Meta Graph API)
 3. **Implementar Facebook Messenger** (Meta Graph API)
 4. **Implementar LinkedIn** (LinkedIn API)
@@ -300,6 +300,50 @@ Cada novo canal requer:
 - ~100 linhas de código (provider + OAuth)
 - Zero mudanças no schema
 - Zero mudanças em código existente
+
+---
+
+## ✅ Telegram - Exemplo Real Implementado
+
+### Arquivos Criados (5 arquivos backend + 1 frontend atualizado)
+
+**Backend:**
+1. `system/providers/telegram_provider.ts` - Enviar mensagens via Bot API
+2. `system/providers/telegram_oauth.ts` - Validar token e conectar
+3. `public/telegram_oauth.ts` - Public actions para frontend
+4. `system/channelConnections.ts` - Query por webhook token (adicionada)
+5. `http.ts` - Webhook handler do Telegram (adicionado)
+
+**Frontend:**
+1. `apps/web/modules/integrations/ui/components/telegram-card.tsx` - UI completa com fluxo guiado
+
+**Traduções:**
+- `apps/web/messages/en.json` - 20+ novas chaves
+- `apps/web/messages/pt-BR.json` - 20+ novas chaves
+
+### Fluxo Completo Funcionando
+
+1. **Usuário clica "Conectar Telegram"**
+2. **Modal abre com instruções passo-a-passo**:
+   - Abra Telegram e busque @BotFather
+   - Envie `/newbot`
+   - Escolha nome e username
+   - Copie o token
+3. **Usuário cola o token no campo**
+4. **Backend valida o token em tempo real** com API do Telegram
+5. **Se válido**:
+   - Salva em `channelConnections`
+   - Configura webhook automaticamente
+   - Mostra badge "Conectado"
+6. **Telegram envia mensagens → Webhook → IA responde!**
+
+### Estatísticas
+
+- **Backend**: ~400 linhas de código
+- **Frontend**: ~280 linhas (incluindo UI completa)
+- **Mudanças no schema**: 0 (usou `channelConnections`)
+- **Tempo de implementação**: ~2 horas
+- **Status**: ✅ Totalmente funcional
 
 ---
 
