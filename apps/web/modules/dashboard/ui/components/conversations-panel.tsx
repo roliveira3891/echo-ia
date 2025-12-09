@@ -170,18 +170,13 @@ export const ConversationsPanel = () => {
                   )}
 
                   {/* Avatar com badge do canal */}
-                  <div className="relative shrink-0">
-                    <DicebearAvatar
-                      seed={conversation.contactSession._id}
-                      imageUrl={profilePicture}
-                      badgeImageUrl={channelIcon}
-                      size={40}
-                    />
-                    {/* Indicador online (mock - futuro: virá do banco) */}
-                    {conversation.status === "unresolved" && (
-                      <div className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-background bg-green-500" />
-                    )}
-                  </div>
+                  <DicebearAvatar
+                    seed={conversation.contactSession._id}
+                    imageUrl={profilePicture}
+                    badgeImageUrl={channelIcon}
+                    size={40}
+                    className="shrink-0"
+                  />
 
                   {/* Conteúdo da conversa */}
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
