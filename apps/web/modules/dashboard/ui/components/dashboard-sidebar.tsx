@@ -9,7 +9,6 @@ import {
   Mic,
   PaletteIcon,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -26,14 +25,6 @@ import {
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
 import { cn } from "@workspace/ui/lib/utils";
-import { useTheme } from "next-themes";
-import { Sun, Moon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -78,7 +69,6 @@ const accountItemsKeys = [
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
-  const { setTheme, theme } = useTheme();
   const t = useTranslations("navigation");
 
   const isActive = (url: string) => {
@@ -100,8 +90,8 @@ export const DashboardSidebar = () => {
   };
 
   return (
-    <Sidebar className="group" collapsible="icon">
-      <SidebarHeader>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg">
@@ -110,12 +100,12 @@ export const DashboardSidebar = () => {
                 skipInvitationScreen
                 appearance={{
                   elements: {
-                    rootBox: "w-full! h-8!",
-                    avatarBox: "size-4! rounded-sm!",
-                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
-                    organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2!",
-                    organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-xs! font-medium! text-sidebar-foreground!",
-                    organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground!"
+                    rootBox: "w-full!",
+                    avatarBox: "size-5! rounded-md!",
+                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors!",
+                    organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
+                    organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
+                    organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!"
                   }
                 }}
               />
@@ -124,10 +114,12 @@ export const DashboardSidebar = () => {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="gap-0">
         {/* Customer Support */}
         <SidebarGroup>
-          <SidebarGroupLabel>{t("sidebar.customerSupport")}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
+            {t("sidebar.customerSupport")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {customerSupportItemsKeys.map((item) => {
@@ -137,13 +129,10 @@ export const DashboardSidebar = () => {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive(item.url)}
-                      className={cn(
-                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                      )}
                       tooltip={itemTitle}
                     >
                       <Link href={getLocalizedUrl(item.url)}>
-                        <item.icon className="size-4" />
+                        <item.icon />
                         <span>{itemTitle}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -156,7 +145,9 @@ export const DashboardSidebar = () => {
 
         {/* Configuration */}
         <SidebarGroup>
-          <SidebarGroupLabel>{t("sidebar.configuration")}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
+            {t("sidebar.configuration")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {configurationItemsKeys.map((item) => {
@@ -166,13 +157,10 @@ export const DashboardSidebar = () => {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive(item.url)}
-                      className={cn(
-                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                      )}
                       tooltip={itemTitle}
                     >
                       <Link href={getLocalizedUrl(item.url)}>
-                        <item.icon className="size-4" />
+                        <item.icon />
                         <span>{itemTitle}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -185,7 +173,9 @@ export const DashboardSidebar = () => {
 
         {/* Account */}
         <SidebarGroup>
-          <SidebarGroupLabel>{t("sidebar.account")}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
+            {t("sidebar.account")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {accountItemsKeys.map((item) => {
@@ -195,13 +185,10 @@ export const DashboardSidebar = () => {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive(item.url)}
-                      className={cn(
-                        isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
-                      )}
                       tooltip={itemTitle}
                     >
                       <Link href={getLocalizedUrl(item.url)}>
-                        <item.icon className="size-4" />
+                        <item.icon />
                         <span>{itemTitle}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -213,72 +200,18 @@ export const DashboardSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="mt-auto border-t border-sidebar-border">
         <SidebarMenu>
-
-
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  asChild={false} // importante: não é um Link
-                  isActive={false} // vamos controlar o visual manualmente
-                  tooltip={t("sidebar.theme")}
-
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1.5">
-                        <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                        <Moon className="size-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                      </div>
-                      <span className="group-data-[collapsible=icon]:hidden">
-                        {theme === "dark" ? t("sidebar.dark") : theme === "light" ? t("sidebar.light") : t("sidebar.system")}
-                      </span>
-                    </div>
-
-                    {/* Pequena seta para indicar dropdown (opcional, mas fica bonito) */}
-                    <svg
-                      className="size-3.5 text-sidebar-foreground/60 group-data-[collapsible=icon]:hidden"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7l1.5 1.5L12 16.086l5.5-5.5L19 9z" />
-                    </svg>
-                  </div>
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent side="right" align="start" className="min-w-[140px]">
-                <DropdownMenuItem onClick={() => setTheme("light")} className="gap-2">
-                  <Sun className="size-4" />
-                  {t("sidebar.light")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")} className="gap-2">
-                  <Moon className="size-4" />
-                  {t("sidebar.dark")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")} className="gap-2">
-                  <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  {t("sidebar.system")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-
           <SidebarMenuItem>
             <UserButton
               showName
               appearance={{
                 elements: {
-                  rootBox: "w-full! h-8!",
-                  userButtonTrigger: "w-full! p-2! hover:bg-sidebar-accent! hover:text-sidebar-accent-foreground! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
-                  userButtonBox: "w-full! flex-row-reverse! justify-end! gap-2! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
-                  userButtonOuterIdentifier: "pl-0! group-data-[collapsible=icon]:hidden!",
-                  avatarBox: "size-4!"
+                  rootBox: "w-full!",
+                  userButtonTrigger: "w-full! p-2! hover:bg-sidebar-accent! transition-colors! group-data-[collapsible=icon]:size-9! group-data-[collapsible=icon]:p-2! rounded-md!",
+                  userButtonBox: "w-full! flex-row-reverse! justify-end! gap-2.5! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
+                  userButtonOuterIdentifier: "pl-0! group-data-[collapsible=icon]:hidden! text-sm! font-medium!",
+                  avatarBox: "size-8! rounded-md!"
                 }
               }}
             />
