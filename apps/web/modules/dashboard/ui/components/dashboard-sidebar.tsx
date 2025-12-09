@@ -91,27 +91,28 @@ export const DashboardSidebar = () => {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border">
+      <SidebarHeader className="border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild size="lg">
+            <div className="px-2 py-1.5">
               <OrganizationSwitcher
                 hidePersonal
                 skipInvitationScreen
                 appearance={{
                   elements: {
-                    rootBox: "w-full! z-50!",
+                    rootBox: "w-full! relative! z-[100]!",
                     avatarBox: "size-5! rounded-md!",
-                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors!",
+                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors! rounded-md!",
                     organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
                     organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
                     organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
-                    organizationSwitcherPopoverCard: "z-50!",
-                    organizationSwitcherPopoverActionButton: "z-50!"
+                    organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto",
+                    organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto",
+                    organizationSwitcherPopoverActions: "!pointer-events-auto"
                   }
                 }}
               />
-            </SidebarMenuButton>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

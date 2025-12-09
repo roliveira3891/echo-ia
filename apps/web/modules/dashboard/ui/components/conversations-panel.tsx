@@ -21,7 +21,7 @@ import { usePaginatedQuery } from "convex/react";
 import { SearchIcon, ListIcon, ArrowRightIcon, ArrowUpIcon, CheckIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ConversationStatusIcon } from "@workspace/ui/components/conversation-status-icon";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { statusFilterAtom } from "../../atoms";
@@ -32,6 +32,7 @@ import { useState } from "react";
 export const ConversationsPanel = () => {
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
+  const t = useTranslations("conversations");
 
   const statusFilter = useAtomValue(statusFilterAtom);
   const setStatusFilter = useSetAtom(statusFilterAtom);
@@ -89,7 +90,7 @@ export const ConversationsPanel = () => {
           <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="h-9 pl-9"
-            placeholder="Search conversations..."
+            placeholder={t("searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -104,31 +105,31 @@ export const ConversationsPanel = () => {
           value={statusFilter}
         >
           <SelectTrigger className="h-8 text-xs">
-            <SelectValue placeholder="Filter by status" />
+            <SelectValue placeholder={t("filterByStatus")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
               <div className="flex items-center gap-2">
                 <ListIcon className="size-3.5" />
-                <span>All Status</span>
+                <span>{t("allStatus")}</span>
               </div>
             </SelectItem>
             <SelectItem value="unresolved">
               <div className="flex items-center gap-2">
                 <ArrowRightIcon className="size-3.5" />
-                <span>Unresolved</span>
+                <span>{t("unresolved")}</span>
               </div>
             </SelectItem>
             <SelectItem value="escalated">
               <div className="flex items-center gap-2">
                 <ArrowUpIcon className="size-3.5" />
-                <span>Escalated</span>
+                <span>{t("escalated")}</span>
               </div>
             </SelectItem>
             <SelectItem value="resolved">
               <div className="flex items-center gap-2">
                 <CheckIcon className="size-3.5" />
-                <span>Resolved</span>
+                <span>{t("resolved")}</span>
               </div>
             </SelectItem>
           </SelectContent>
@@ -169,14 +170,19 @@ export const ConversationsPanel = () => {
                     <div className="absolute top-1/2 left-0 h-12 w-1 -translate-y-1/2 rounded-r-md bg-primary" />
                   )}
 
-                  {/* Avatar com badge do canal */}
+                  {/* Avatar com borda colorida baseada no status */}
                   <DicebearAvatar
                     seed={conversation.contactSession._id}
                     name={conversation.contactSession.name}
                     imageUrl={profilePicture}
                     badgeImageUrl={channelIcon}
                     size={40}
-                    className="shrink-0"
+                    className={cn(
+                      "shrink-0 ring-2",
+                      conversation.status === "resolved" && "ring-green-600",
+                      conversation.status === "escalated" && "ring-orange-500",
+                      conversation.status === "unresolved" && "ring-destructive"
+                    )}
                   />
 
                   {/* Conteúdo da conversa */}
@@ -194,13 +200,14 @@ export const ConversationsPanel = () => {
                         "line-clamp-1 flex-1 text-muted-foreground text-xs",
                         unreadCount > 0 && "font-semibold text-foreground"
                       )}>
-                        {conversation.lastMessage?.text || "No messages yet"}
+                        {conversation.lastMessage?.text || t("noMessagesYet")}
                       </p>
+
                       {/* Badge contador de não lidas */}
                       {unreadCount > 0 && (
                         <Badge
                           variant="default"
-                          className="h-5 min-w-5 rounded-full px-1.5 text-[10px] font-bold"
+                          className="h-5 min-w-5 shrink-0 rounded-full px-1.5 text-[10px] font-bold"
                         >
                           {unreadCount}
                         </Badge>
