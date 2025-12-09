@@ -82,7 +82,7 @@ export const WidgetAuthScreen = () => {
           </p>
         </div>
       </WidgetHeader>
-      <Form {...form}>
+      <Form {...(form as any)}>
         <form
           className="flex flex-1 flex-col gap-y-4 p-4"
           onSubmit={form.handleSubmit(onSubmit)}
