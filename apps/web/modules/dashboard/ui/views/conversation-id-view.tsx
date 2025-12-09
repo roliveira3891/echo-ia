@@ -7,7 +7,7 @@ import { api } from "@workspace/backend/_generated/api";
 import { Id } from "@workspace/backend/_generated/dataModel";
 import { Button } from "@workspace/ui/components/button";
 import { useAction, useMutation, useQuery } from "convex/react";
-import { MoreHorizontalIcon, Wand2Icon, SendIcon, PaperclipIcon, SmileIcon, CheckCheckIcon } from "lucide-react";
+import { MoreHorizontalIcon, Wand2Icon, SendIcon, PaperclipIcon, SmileIcon, CheckCheckIcon, ChevronLeftIcon } from "lucide-react";
 import {
   AIConversation,
   AIConversationContent,
@@ -27,12 +27,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
 import { ConversationStatusButton } from "../components/conversation-status-button";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { cn } from "@workspace/ui/lib/utils";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { toast } from "sonner";
 import { format, isToday, isYesterday, isSameDay } from "date-fns";
 import { getChannelIcon } from "@/lib/channel-utils";
+import { useRouter, useParams } from "next/navigation";
+import { useLocale } from "next-intl";
 
 const formSchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -72,6 +74,24 @@ export const ConversationIdView = ({
 }: {
   conversationId: Id<"conversations">,
 }) => {
+  const router = useRouter();
+  const locale = useLocale();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleBackToList = () => {
+    router.push(`/${locale}/conversations`);
+  };
+
   const conversation = useQuery(api.private.conversations.getOne, {
     conversationId,
   });
@@ -187,6 +207,18 @@ export const ConversationIdView = ({
       {/* Header com Avatar e Nome */}
       <header className="flex items-center justify-between border-b bg-background px-4 py-3">
         <div className="flex items-center gap-3">
+          {/* Botão Voltar - Apenas Mobile */}
+          {isMobile && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleBackToList}
+              className="h-9 w-9 p-0"
+            >
+              <ChevronLeftIcon className="size-5" />
+            </Button>
+          )}
+
           <DicebearAvatar
             seed={contactSession?._id ?? "user"}
             imageUrl={contactSession?.profilePictureUrl}
