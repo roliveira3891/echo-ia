@@ -203,7 +203,10 @@ export const ConversationIdView = ({
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-background">
+    <div className={cn(
+      "flex w-full flex-col overflow-hidden bg-background",
+      isMobile ? "h-screen" : "h-full"
+    )}>
       {/* Header com Avatar e Nome */}
       <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3">
         <div className="flex items-center gap-3">
