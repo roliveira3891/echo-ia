@@ -105,13 +105,13 @@ const VapiPluginForm = ({
           Your API keys are safely encrypted and stored using AWS Secrets
           Manager.
         </DialogDescription>
-        <Form {...form}>
+        <Form {...(form as any)}>
           <form
             className="flex flex-col gap-y-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="publicApiKey"
               render={({ field }) => (
                 <FormItem>
@@ -128,7 +128,7 @@ const VapiPluginForm = ({
               )}
             />
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="privateApiKey"
               render={({ field }) => (
                 <FormItem>

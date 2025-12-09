@@ -27,15 +27,18 @@ export const DicebearAvatar = ({
   const initials = useMemo(() => {
     if (!name) return "?";
 
-    const words = name.trim().split(/\s+/);
+    const words = name.trim().split(/\s+/).filter(w => w.length > 0);
+    if (words.length === 0) return "?";
+
     if (words.length === 1) {
       // Se for uma palavra só, pega as 2 primeiras letras
-      return words[0].substring(0, 2).toUpperCase();
+      return words[0]!.substring(0, 2).toUpperCase();
     }
     // Se for mais de uma palavra, pega a primeira letra de cada uma (máximo 2)
     return words
       .slice(0, 2)
       .map(word => word[0])
+      .filter((char): char is string => !!char)
       .join("")
       .toUpperCase();
   }, [name]);
