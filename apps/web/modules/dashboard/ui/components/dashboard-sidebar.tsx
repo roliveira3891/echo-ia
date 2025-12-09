@@ -100,12 +100,14 @@ export const DashboardSidebar = () => {
                 skipInvitationScreen
                 appearance={{
                   elements: {
-                    rootBox: "w-full!",
+                    rootBox: "w-full! z-50!",
                     avatarBox: "size-5! rounded-md!",
                     organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors!",
                     organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
                     organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
-                    organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!"
+                    organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
+                    organizationSwitcherPopoverCard: "z-50!",
+                    organizationSwitcherPopoverActionButton: "z-50!"
                   }
                 }}
               />
