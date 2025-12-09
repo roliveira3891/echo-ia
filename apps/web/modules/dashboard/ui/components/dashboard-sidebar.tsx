@@ -106,9 +106,12 @@ export const DashboardSidebar = () => {
                     organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
                     organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
                     organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
-                    organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto",
-                    organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto",
-                    organizationSwitcherPopoverActions: "!pointer-events-auto"
+                    organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto !bg-popover !text-popover-foreground !border-border",
+                    organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto !text-popover-foreground hover:!bg-accent",
+                    organizationSwitcherPopoverActions: "!pointer-events-auto",
+                    organizationPreviewMainIdentifier: "!text-popover-foreground",
+                    organizationPreviewSecondaryIdentifier: "!text-muted-foreground",
+                    organizationSwitcherPreviewButton: "!text-popover-foreground hover:!bg-accent"
                   }
                 }}
               />
