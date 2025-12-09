@@ -7,7 +7,13 @@ import { api } from "@workspace/backend/_generated/api";
 import { Id } from "@workspace/backend/_generated/dataModel";
 import { Button } from "@workspace/ui/components/button";
 import { useAction, useMutation, useQuery } from "convex/react";
-import { MoreHorizontalIcon, Wand2Icon, SendIcon, PaperclipIcon, SmileIcon, CheckCheckIcon, ChevronLeftIcon } from "lucide-react";
+import { MoreHorizontalIcon, Wand2Icon, SendIcon, PaperclipIcon, SmileIcon, CheckCheckIcon, ChevronLeftIcon, ArrowRightIcon, ArrowUpIcon, CheckIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   AIConversation,
   AIConversationContent,
@@ -26,7 +32,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
-import { ConversationStatusButton } from "../components/conversation-status-button";
 import { useState, useMemo, useEffect } from "react";
 import { cn } from "@workspace/ui/lib/utils";
 import { Skeleton } from "@workspace/ui/components/skeleton";
@@ -34,7 +39,8 @@ import { toast } from "sonner";
 import { format, isToday, isYesterday, isSameDay } from "date-fns";
 import { getChannelIcon } from "@/lib/channel-utils";
 import { useRouter, useParams } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Badge } from "@workspace/ui/components/badge";
 
 const formSchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -76,6 +82,7 @@ export const ConversationIdView = ({
 }) => {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("conversations");
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -159,23 +166,13 @@ export const ConversationIdView = ({
 
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const updateConversationStatus = useMutation(api.private.conversations.updateStatus);
-  const handleToggleStatus = async () => {
+
+  const handleSetStatus = async (newStatus: "unresolved" | "resolved" | "escalated") => {
     if (!conversation) {
       return;
     }
 
     setIsUpdatingStatus(true);
-
-    let newStatus: "unresolved" | "resolved" | "escalated";
-
-    // Cycle through states: unresolved -> escalated -> resolved -> unresolved
-    if (conversation.status === "unresolved") {
-      newStatus = "escalated";
-    } else if (conversation.status === "escalated") {
-      newStatus = "resolved"
-    } else {
-      newStatus = "unresolved"
-    }
 
     try {
       await updateConversationStatus({
@@ -239,16 +236,65 @@ export const ConversationIdView = ({
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Badge de Status */}
           {!!conversation && (
-            <ConversationStatusButton
-              onClick={handleToggleStatus}
-              status={conversation.status}
-              disabled={isUpdatingStatus}
-            />
+            <Badge
+              variant={
+                conversation.status === "resolved"
+                  ? "success"
+                  : conversation.status === "escalated"
+                  ? "warning"
+                  : "destructive"
+              }
+              className="gap-1"
+            >
+              {conversation.status === "resolved" && <CheckIcon className="size-3" />}
+              {conversation.status === "escalated" && <ArrowUpIcon className="size-3" />}
+              {conversation.status === "unresolved" && <ArrowRightIcon className="size-3" />}
+              <span className="hidden sm:inline">
+                {conversation.status === "resolved" && t("resolved")}
+                {conversation.status === "escalated" && t("escalated")}
+                {conversation.status === "unresolved" && t("unresolved")}
+              </span>
+            </Badge>
           )}
-          <Button size="sm" variant="ghost">
-            <MoreHorizontalIcon className="size-4" />
-          </Button>
+
+          {/* Dropdown Menu de Status */}
+          {!!conversation && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="ghost" disabled={isUpdatingStatus}>
+                  <MoreHorizontalIcon className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onClick={() => handleSetStatus("unresolved")}
+                  disabled={isUpdatingStatus}
+                  className="gap-2"
+                >
+                  <ArrowRightIcon className="size-4 text-destructive" />
+                  <span>{t("markAsUnresolved")}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleSetStatus("escalated")}
+                  disabled={isUpdatingStatus}
+                  className="gap-2"
+                >
+                  <ArrowUpIcon className="size-4 text-warning" />
+                  <span>{t("markAsEscalated")}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleSetStatus("resolved")}
+                  disabled={isUpdatingStatus}
+                  className="gap-2"
+                >
+                  <CheckIcon className="size-4 text-tertiary" />
+                  <span>{t("markAsResolved")}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </header>
 
@@ -364,8 +410,8 @@ export const ConversationIdView = ({
                         className="flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 touch-auto"
                         placeholder={
                           conversation?.status === "resolved"
-                            ? "Conversation resolved"
-                            : "Type a message..."
+                            ? t("conversationResolvedShort")
+                            : t("typePlaceholder")
                         }
                         onTouchStart={(e) => {
                           e.stopPropagation();
@@ -415,8 +461,8 @@ export const ConversationIdView = ({
                         }}
                         placeholder={
                           conversation?.status === "resolved"
-                            ? "This conversation has been resolved"
-                            : "Type a message..."
+                            ? t("conversationResolved")
+                            : t("typePlaceholder")
                         }
                         rows={1}
                       />
@@ -443,7 +489,7 @@ export const ConversationIdView = ({
                         className="h-8 gap-1.5 px-2"
                       >
                         <Wand2Icon className="size-3.5" />
-                        <span className="text-xs">{isEnhancing ? "Enhancing..." : "Enhance"}</span>
+                        <span className="text-xs">{isEnhancing ? t("enhancing") : t("enhance")}</span>
                       </Button>
                     </div>
                     <Button

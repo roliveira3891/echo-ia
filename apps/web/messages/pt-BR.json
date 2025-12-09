@@ -89,6 +89,25 @@
     "passwordsDoNotMatch": "As senhas não correspondem",
     "nameRequired": "Nome é obrigatório"
   },
+  "conversations": {
+    "searchPlaceholder": "Buscar conversas...",
+    "filterByStatus": "Filtrar por status",
+    "allStatus": "Todos os Status",
+    "unresolved": "Não Resolvido",
+    "escalated": "Escalado",
+    "resolved": "Resolvido",
+    "noMessagesYet": "Nenhuma mensagem ainda",
+    "typePlaceholder": "Digite uma mensagem...",
+    "conversationResolved": "Esta conversa foi resolvida",
+    "conversationResolvedShort": "Conversa resolvida",
+    "markAsUnresolved": "Marcar como Não Resolvido",
+    "markAsEscalated": "Marcar como Escalado",
+    "markAsResolved": "Marcar como Resolvido",
+    "loading": "Carregando...",
+    "enhance": "Melhorar",
+    "enhancing": "Melhorando...",
+    "send": "Enviar"
+  },
   "integrations": {
     "title": "Setup & Integrações",
     "subtitle": "Escolha a integração certa para você",

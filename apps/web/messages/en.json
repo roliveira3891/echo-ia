@@ -89,6 +89,25 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "nameRequired": "Name is required"
   },
+  "conversations": {
+    "searchPlaceholder": "Search conversations...",
+    "filterByStatus": "Filter by status",
+    "allStatus": "All Status",
+    "unresolved": "Unresolved",
+    "escalated": "Escalated",
+    "resolved": "Resolved",
+    "noMessagesYet": "No messages yet",
+    "typePlaceholder": "Type a message...",
+    "conversationResolved": "This conversation has been resolved",
+    "conversationResolvedShort": "Conversation resolved",
+    "markAsUnresolved": "Mark as Unresolved",
+    "markAsEscalated": "Mark as Escalated",
+    "markAsResolved": "Mark as Resolved",
+    "loading": "Loading...",
+    "enhance": "Enhance",
+    "enhancing": "Enhancing...",
+    "send": "Send"
+  },
   "integrations": {
     "title": "Setup & Integrations",
     "subtitle": "Choose the integration that's right for you",
