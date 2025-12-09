@@ -202,10 +202,10 @@ export const ConversationIdView = ({
   return (
     <div className={cn(
       "flex w-full flex-col bg-background",
-      isMobile ? "h-[100dvh]" : "h-full overflow-hidden"
+      isMobile ? "h-[100dvh] max-h-[100dvh]" : "h-full overflow-hidden"
     )}>
       {/* Header com Avatar e Nome */}
-      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3 z-10">
+      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3 z-10 safe-top">
         <div className="flex items-center gap-3">
           {/* Botão Voltar - Apenas Mobile */}
           {isMobile && (
@@ -299,8 +299,14 @@ export const ConversationIdView = ({
       </header>
 
       {/* Área de Mensagens */}
-      <AIConversation className={cn("flex-1", isMobile && "overflow-y-auto")}>
-        <AIConversationContent className="px-4">
+      <AIConversation className={cn(
+        "flex-1 overflow-hidden",
+        isMobile && "mb-24"
+      )}>
+        <AIConversationContent className={cn(
+          "px-4",
+          isMobile ? "pb-8" : "pb-4"
+        )}>
           <InfiniteScrollTrigger
             canLoadMore={canLoadMore}
             isLoadingMore={isLoadingMore}
@@ -382,10 +388,15 @@ export const ConversationIdView = ({
       </AIConversation>
 
       {/* Input de Mensagem */}
-      <div className={cn(
-        "shrink-0 border-t bg-background z-20",
-        isMobile ? "sticky bottom-0 p-4 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]" : "p-4"
-      )}>
+      <div
+        className={cn(
+          "shrink-0 border-t bg-background z-20",
+          isMobile
+            ? "fixed bottom-0 left-0 right-0 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+            : "p-4"
+        )}
+        style={isMobile ? { paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' } : undefined}
+      >
         <Form {...(form as any)}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full items-center gap-2">
             {isMobile ? (
