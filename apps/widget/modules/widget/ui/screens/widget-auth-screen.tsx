@@ -88,7 +88,7 @@ export const WidgetAuthScreen = () => {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
-            control={form.control}
+            control={form.control as any}
             name="name"
             render={({ field }) => (
               <FormItem>
@@ -105,7 +105,7 @@ export const WidgetAuthScreen = () => {
             )}
           />
           <FormField
-            control={form.control}
+            control={form.control as any}
             name="email"
             render={({ field }) => (
               <FormItem>
