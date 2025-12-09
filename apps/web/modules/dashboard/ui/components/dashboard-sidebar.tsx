@@ -99,6 +99,14 @@ export const DashboardSidebar = () => {
                 hidePersonal
                 skipInvitationScreen
                 appearance={{
+                  baseTheme: undefined,
+                  variables: {
+                    colorBackground: "hsl(var(--popover))",
+                    colorText: "hsl(var(--popover-foreground))",
+                    colorTextSecondary: "hsl(var(--muted-foreground))",
+                    colorInputBackground: "hsl(var(--input))",
+                    colorInputText: "hsl(var(--foreground))",
+                  },
                   elements: {
                     rootBox: "w-full! relative! z-[100]!",
                     avatarBox: "size-5! rounded-md!",
@@ -106,12 +114,9 @@ export const DashboardSidebar = () => {
                     organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
                     organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
                     organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
-                    organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto !bg-popover !text-popover-foreground !border-border",
-                    organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto !text-popover-foreground hover:!bg-accent",
+                    organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto",
+                    organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto",
                     organizationSwitcherPopoverActions: "!pointer-events-auto",
-                    organizationPreviewMainIdentifier: "!text-popover-foreground",
-                    organizationPreviewSecondaryIdentifier: "!text-muted-foreground",
-                    organizationSwitcherPreviewButton: "!text-popover-foreground hover:!bg-accent"
                   }
                 }}
               />
