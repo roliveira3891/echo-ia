@@ -204,11 +204,11 @@ export const ConversationIdView = ({
 
   return (
     <div className={cn(
-      "flex w-full flex-col overflow-hidden bg-background",
-      isMobile ? "h-screen" : "h-full"
+      "flex w-full flex-col bg-background",
+      isMobile ? "h-[100dvh]" : "h-full overflow-hidden"
     )}>
       {/* Header com Avatar e Nome */}
-      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3">
+      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3 z-10">
         <div className="flex items-center gap-3">
           {/* Botão Voltar - Apenas Mobile */}
           {isMobile && (
@@ -253,7 +253,7 @@ export const ConversationIdView = ({
       </header>
 
       {/* Área de Mensagens */}
-      <AIConversation className="flex-1">
+      <AIConversation className={cn("flex-1", isMobile && "overflow-y-auto")}>
         <AIConversationContent className="px-4">
           <InfiniteScrollTrigger
             canLoadMore={canLoadMore}
@@ -336,77 +336,133 @@ export const ConversationIdView = ({
       </AIConversation>
 
       {/* Input de Mensagem */}
-      <div className="shrink-0 border-t bg-background p-4">
+      <div className={cn(
+        "shrink-0 border-t bg-background z-20",
+        isMobile ? "sticky bottom-0 p-4 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]" : "p-4"
+      )}>
         <Form {...(form as any)}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full items-end gap-2">
-            <div className="flex flex-1 flex-col gap-2 rounded-lg border bg-background">
-              <FormField
-                control={form.control as any}
-                disabled={conversation?.status === "resolved"}
-                name="message"
-                render={({ field }) => (
-                  <textarea
-                    {...field}
-                    disabled={
-                      conversation?.status === "resolved" ||
-                      form.formState.isSubmitting ||
-                      isEnhancing
-                    }
-                    className="min-h-[44px] max-h-32 w-full resize-none border-0 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        form.handleSubmit(onSubmit)();
-                      }
-                    }}
-                    placeholder={
-                      conversation?.status === "resolved"
-                        ? "This conversation has been resolved"
-                        : "Type a message..."
-                    }
-                    rows={1}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full items-center gap-2">
+            {isMobile ? (
+              <>
+                {/* Layout Mobile - Uma linha */}
+                <div className="flex flex-1 items-center gap-2 rounded-full border bg-background px-4 py-2 touch-none">
+                  <FormField
+                    control={form.control as any}
+                    disabled={conversation?.status === "resolved"}
+                    name="message"
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        type="text"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="sentences"
+                        disabled={
+                          conversation?.status === "resolved" ||
+                          form.formState.isSubmitting
+                        }
+                        className="flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 touch-auto"
+                        placeholder={
+                          conversation?.status === "resolved"
+                            ? "Conversation resolved"
+                            : "Type a message..."
+                        }
+                        onTouchStart={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onClick={(e) => {
+                          e.currentTarget.focus();
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-              <div className="flex items-center justify-between border-t px-3 py-2">
-                <div className="flex items-center gap-1">
-                  <Button size="sm" type="button" variant="ghost" className="h-8 w-8 p-0">
-                    <PaperclipIcon className="size-4" />
-                  </Button>
-                  <Button size="sm" type="button" variant="ghost" className="h-8 w-8 p-0">
-                    <SmileIcon className="size-4" />
-                  </Button>
                   <Button
                     size="sm"
-                    type="button"
-                    variant="ghost"
-                    onClick={handleEnhanceResponse}
+                    type="submit"
                     disabled={
                       conversation?.status === "resolved" ||
-                      isEnhancing ||
-                      !form.formState.isValid
+                      !form.formState.isValid ||
+                      form.formState.isSubmitting
                     }
-                    className="h-8 gap-1.5 px-2"
+                    className="h-8 w-8 shrink-0 rounded-full p-0"
                   >
-                    <Wand2Icon className="size-3.5" />
-                    <span className="text-xs">{isEnhancing ? "Enhancing..." : "Enhance"}</span>
+                    <SendIcon className="size-4" />
                   </Button>
                 </div>
-                <Button
-                  size="sm"
-                  type="submit"
-                  disabled={
-                    conversation?.status === "resolved" ||
-                    !form.formState.isValid ||
-                    form.formState.isSubmitting ||
-                    isEnhancing
-                  }
-                  className="h-8 w-8 p-0"
-                >
-                  <SendIcon className="size-4" />
-                </Button>
-              </div>
-            </div>
+              </>
+            ) : (
+              <>
+                {/* Layout Desktop - Original */}
+                <div className="flex flex-1 flex-col gap-2 rounded-lg border bg-background shadow-sm">
+                  <FormField
+                    control={form.control as any}
+                    disabled={conversation?.status === "resolved"}
+                    name="message"
+                    render={({ field }) => (
+                      <textarea
+                        {...field}
+                        disabled={
+                          conversation?.status === "resolved" ||
+                          form.formState.isSubmitting ||
+                          isEnhancing
+                        }
+                        className="min-h-[44px] max-h-32 w-full resize-none border-0 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            form.handleSubmit(onSubmit)();
+                          }
+                        }}
+                        placeholder={
+                          conversation?.status === "resolved"
+                            ? "This conversation has been resolved"
+                            : "Type a message..."
+                        }
+                        rows={1}
+                      />
+                    )}
+                  />
+                  <div className="flex items-center justify-between border-t px-3 py-2">
+                    <div className="flex items-center gap-1">
+                      <Button size="sm" type="button" variant="ghost" className="h-8 w-8 p-0">
+                        <PaperclipIcon className="size-4" />
+                      </Button>
+                      <Button size="sm" type="button" variant="ghost" className="h-8 w-8 p-0">
+                        <SmileIcon className="size-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        type="button"
+                        variant="ghost"
+                        onClick={handleEnhanceResponse}
+                        disabled={
+                          conversation?.status === "resolved" ||
+                          isEnhancing ||
+                          !form.formState.isValid
+                        }
+                        className="h-8 gap-1.5 px-2"
+                      >
+                        <Wand2Icon className="size-3.5" />
+                        <span className="text-xs">{isEnhancing ? "Enhancing..." : "Enhance"}</span>
+                      </Button>
+                    </div>
+                    <Button
+                      size="sm"
+                      type="submit"
+                      disabled={
+                        conversation?.status === "resolved" ||
+                        !form.formState.isValid ||
+                        form.formState.isSubmitting ||
+                        isEnhancing
+                      }
+                      className="h-8 w-8 p-0"
+                    >
+                      <SendIcon className="size-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </form>
         </Form>
       </div>
