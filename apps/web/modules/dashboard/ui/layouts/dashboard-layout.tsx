@@ -5,6 +5,7 @@ import { DashboardHeader } from "@/modules/dashboard/ui/components/dashboard-hea
 import { SidebarProvider } from "@workspace/ui/components/sidebar";
 import { Provider } from "jotai";
 import { cookies } from "next/headers";
+import { DashboardLayoutClient } from "./dashboard-layout-client";
 
 export const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
@@ -16,13 +17,12 @@ export const DashboardLayout = async ({ children }: { children: React.ReactNode 
       <OrganizationGuard>
         <Provider>
           <SidebarProvider defaultOpen={defaultOpen}>
-            <DashboardSidebar />
-            <main className="flex h-screen w-full flex-1 flex-col overflow-hidden">
-              <DashboardHeader />
-              <div className="flex-1 overflow-y-auto">
-                {children}
-              </div>
-            </main>
+            <DashboardLayoutClient
+              sidebar={<DashboardSidebar />}
+              header={<DashboardHeader />}
+            >
+              {children}
+            </DashboardLayoutClient>
           </SidebarProvider>
         </Provider>
       </OrganizationGuard>
