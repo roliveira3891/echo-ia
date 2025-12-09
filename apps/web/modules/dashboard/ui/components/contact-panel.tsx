@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
-import { getCountryFlagUrl, getCountryFromTimezone } from "@/lib/country-utils";
+import { getChannelIcon } from "@/lib/channel-utils";
 import { api } from "@workspace/backend/_generated/api";
 import { Id } from "@workspace/backend/_generated/dataModel";
 import { Button } from "@workspace/ui/components/button";
@@ -62,13 +62,13 @@ export const ContactPanel = () => {
     };
   }, []);
 
-  const userAgentInfo = useMemo(() => 
-    parseUserAgent(contactSession?.metadata?.userAgent), 
+  const userAgentInfo = useMemo(() =>
+    parseUserAgent(contactSession?.metadata?.userAgent),
   [contactSession?.metadata?.userAgent, parseUserAgent]);
 
-  const countryInfo = useMemo(() => {
-    return getCountryFromTimezone(contactSession?.metadata?.timezone);
-  }, [contactSession?.metadata?.timezone]);
+  const channelIcon = useMemo(() => {
+    return getChannelIcon(contactSession?.channel);
+  }, [contactSession?.channel]);
 
   const accordionSections = useMemo<InfoSection[]>(() => {
     if (!contactSession?.metadata) {
@@ -126,19 +126,6 @@ export const ContactPanel = () => {
         icon: GlobeIcon,
         title: "Location & Language",
         items: [
-          ...(countryInfo
-            ? [
-              {
-                label: "Country",
-                value: (
-                  <span>
-                    {countryInfo.name}
-                  </span>
-                )
-              }
-            ]
-            : []
-          ),
           {
             label: "Language",
             value: contactSession.metadata.language,
@@ -167,7 +154,7 @@ export const ContactPanel = () => {
         ],
       }
     ];
-  }, [contactSession, userAgentInfo, countryInfo]);
+  }, [contactSession, userAgentInfo]);
 
   if (contactSession === undefined || contactSession === null) {
     return null;
@@ -178,12 +165,9 @@ export const ContactPanel = () => {
       <div className="flex flex-col gap-y-4 p-4">
         <div className="flex items-center gap-x-2">
           <DicebearAvatar
-            badgeImageUrl={
-              countryInfo?.code
-                ? getCountryFlagUrl(countryInfo.code)
-                : undefined
-            }
             seed={contactSession._id}
+            imageUrl={contactSession.profilePictureUrl}
+            badgeImageUrl={channelIcon}
             size={42}
           />
           <div className="flex-1 overflow-hidden">

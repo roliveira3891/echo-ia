@@ -3,7 +3,7 @@
 import { useInfiniteScroll } from "@workspace/ui/hooks/use-infinite-scroll";
 import { InfiniteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
 import { formatDistanceToNow } from "date-fns";
-import { getCountryFlagUrl, getCountryFromTimezone } from "@/lib/country-utils";
+import { getChannelIcon } from "@/lib/channel-utils";
 import { api } from "@workspace/backend/_generated/api";
 import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
@@ -120,13 +120,8 @@ export const ConversationsPanel = () => {
               const isLastMessageFromOperator =
                 conversation.lastMessage?.message?.role !== "user";
 
-              const country = getCountryFromTimezone(
-                conversation.contactSession.metadata?.timezone
-              );
-
-              const countryFlagUrl = country?.code
-                ? getCountryFlagUrl(country.code)
-                : undefined;
+              const channelIcon = getChannelIcon(conversation.contactSession.channel);
+              const profilePicture = conversation.contactSession.profilePictureUrl;
 
               const conversationUrl = `/conversations/${conversation._id}`;
               const localizedUrl = getLocalizedUrl(conversationUrl);
@@ -149,7 +144,8 @@ export const ConversationsPanel = () => {
 
                   <DicebearAvatar
                     seed={conversation.contactSession._id}
-                    badgeImageUrl={countryFlagUrl}
+                    imageUrl={profilePicture}
+                    badgeImageUrl={channelIcon}
                     size={40}
                     className="shrink-0"
                   />

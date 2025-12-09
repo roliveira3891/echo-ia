@@ -25,6 +25,7 @@ import { TikTokCard } from "../components/tiktok-card";
 import { TelegramCard } from "../components/telegram-card";
 import { FacebookMessengerCard } from "../components/facebook-messenger-card";
 import { LinkedInCard } from "../components/linkedin-card";
+import { EvolutionCard } from "../components/evolution-card";
 
 export const IntegrationsView = () => {
   const t = useTranslations("integrations");
@@ -102,6 +103,7 @@ export const IntegrationsView = () => {
             </div>
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <TelegramCard />
+              <EvolutionCard />
               <WhatsAppCard />
               <InstagramCard />
               <TikTokCard />
