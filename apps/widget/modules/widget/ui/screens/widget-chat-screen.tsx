@@ -189,13 +189,13 @@ export const WidgetChatScreen = () => {
           })}
         </AISuggestions>
       )}
-      <Form {...form}>
+      <Form {...(form as any)}>
           <AIInput
             className="rounded-none border-x-0 border-b-0"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
-              control={form.control}
+              control={form.control as any}
               disabled={conversation?.status === "resolved"}
               name="message"
               render={({ field }) => (

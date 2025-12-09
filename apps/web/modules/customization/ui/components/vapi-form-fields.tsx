@@ -32,7 +32,7 @@ export const VapiFormFields = ({
   return (
     <>
       <FormField
-        control={form.control}
+        control={form.control as any}
         name="vapiSettings.assistantId"
         render={({ field }) => (
           <FormItem>
@@ -71,7 +71,7 @@ export const VapiFormFields = ({
         )}
       />
       <FormField
-        control={form.control}
+        control={form.control as any}
         name="vapiSettings.phoneNumber"
         render={({ field }) => (
           <FormItem>

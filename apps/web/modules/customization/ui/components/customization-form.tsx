@@ -86,7 +86,7 @@ export const CustomizationForm = ({
   } 
 
   return (
-    <Form {...form}>
+    <Form {...(form as any)}>
       <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
@@ -97,7 +97,7 @@ export const CustomizationForm = ({
           </CardHeader>
           <CardContent className="space-y-6">
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="greetMessage"
               render={({ field }) => (
                 <FormItem>
@@ -131,7 +131,7 @@ export const CustomizationForm = ({
 
                 <div className="space-y-4">
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="defaultSuggestions.suggestion1"
                     render={({ field }) => (
                       <FormItem>
@@ -147,7 +147,7 @@ export const CustomizationForm = ({
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="defaultSuggestions.suggestion2"
                     render={({ field }) => (
                       <FormItem>
@@ -163,7 +163,7 @@ export const CustomizationForm = ({
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="defaultSuggestions.suggestion3"
                     render={({ field }) => (
                       <FormItem>

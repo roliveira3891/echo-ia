@@ -334,11 +334,11 @@ export const ConversationIdView = ({
 
       {/* Input de Mensagem */}
       <div className="shrink-0 border-t bg-background p-4">
-        <Form {...form}>
+        <Form {...(form as any)}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full items-end gap-2">
             <div className="flex flex-1 flex-col gap-2 rounded-lg border bg-background">
               <FormField
-                control={form.control}
+                control={form.control as any}
                 disabled={conversation?.status === "resolved"}
                 name="message"
                 render={({ field }) => (
