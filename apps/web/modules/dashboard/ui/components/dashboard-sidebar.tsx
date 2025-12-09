@@ -1,6 +1,7 @@
 "use client";
 
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import {
   CreditCardIcon,
   InboxIcon,
@@ -25,6 +26,7 @@ import {
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
 import { cn } from "@workspace/ui/lib/utils";
+import { useTheme } from "next-themes";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -70,6 +72,7 @@ const accountItemsKeys = [
 export const DashboardSidebar = () => {
   const pathname = usePathname();
   const t = useTranslations("navigation");
+  const { theme } = useTheme();
 
   const isActive = (url: string) => {
     if (url === "/") {
@@ -99,6 +102,7 @@ export const DashboardSidebar = () => {
                 hidePersonal
                 skipInvitationScreen
                 appearance={{
+                  baseTheme: theme === "dark" ? dark : undefined,
                   elements: {
                     rootBox: "w-full! relative! z-[100]!",
                     avatarBox: "size-5! rounded-md!",
@@ -108,7 +112,7 @@ export const DashboardSidebar = () => {
                     organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
                     organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto",
                     organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto",
-                    organizationSwitcherPopoverActions: "!pointer-events-auto"
+                    organizationSwitcherPopoverActions: "!pointer-events-auto",
                   }
                 }}
               />
@@ -209,6 +213,7 @@ export const DashboardSidebar = () => {
             <UserButton
               showName
               appearance={{
+                baseTheme: theme === "dark" ? dark : undefined,
                 elements: {
                   rootBox: "w-full!",
                   userButtonTrigger: "w-full! p-2! hover:bg-sidebar-accent! transition-colors! group-data-[collapsible=icon]:size-9! group-data-[collapsible=icon]:p-2! rounded-md!",
