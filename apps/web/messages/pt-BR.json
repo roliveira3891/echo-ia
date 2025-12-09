@@ -189,6 +189,51 @@
       "securityNotice": "Seu token é criptografado e armazenado com segurança",
       "connectedBot": "Bot Conectado"
     },
+    "evolution": {
+      "title": "Evolution API (WhatsApp)",
+      "description": "Conecte sua instância Evolution API para WhatsApp",
+      "connected": "Conectado",
+      "pending": "Aguardando QR Code",
+      "connectedInstance": "Instância Conectada",
+      "status": "Status",
+      "connect": "Conectar Evolution API",
+      "reconnect": "Reconectar ou Gerar QR Code",
+      "disconnect": "Desconectar Instância",
+      "disconnecting": "Desconectando...",
+      "connecting": "Conectando...",
+      "notConnected": "Conecte sua instância Evolution API para começar a receber mensagens no WhatsApp",
+      "pendingConnection": "Conexão Pendente",
+      "pendingConnectionDescription": "Sua instância está aguardando conexão. Clique abaixo para gerar um novo QR Code ou verificar o status.",
+      "unofficial": "Atenção: API Não-Oficial",
+      "unofficialWarning": "A Evolution API é uma solução não-oficial de WhatsApp. Use por sua própria conta e risco.",
+      "cancel": "Cancelar",
+      "disclaimer": {
+        "title": "Aviso Importante",
+        "subtitle": "Leia atentamente antes de continuar",
+        "warning": "Esta integração utiliza Evolution API, uma solução não-oficial de WhatsApp. O {appName} não é responsável por eventuais bloqueios ou restrições aplicadas pelo WhatsApp ao usar esta API.",
+        "point1": "A Evolution API não é uma solução oficial do WhatsApp",
+        "point2": "Existe risco de bloqueio ou suspensão da sua conta WhatsApp",
+        "point3": "Use por sua própria conta e risco",
+        "continue": "Continuar Mesmo Assim"
+      },
+      "qrcode": {
+        "title": "Escaneie o QR Code",
+        "description": "Use o WhatsApp para escanear o código e conectar sua instância",
+        "pairingCode": "Código de Pareamento:",
+        "usePairingCode": "Use o Código de Pareamento",
+        "pairingCodeInstructions": "Abra o WhatsApp > Menu > Aparelhos conectados > Conectar com código de telefone e digite este código",
+        "generating": "Gerando código de conexão...",
+        "instructions": "Como escanear:",
+        "step1": "Abra o WhatsApp no seu celular",
+        "step2": "Toque em Menu > Aparelhos conectados > Conectar aparelho",
+        "step3": "Aponte seu telefone para esta tela para capturar o código",
+        "waiting": "Aguardando conexão..."
+      },
+      "errors": {
+        "invalidInput": "Por favor, preencha todos os campos",
+        "connectionFailed": "Falha ao conectar. Verifique suas credenciais."
+      }
+    },
     "facebookMessenger": {
       "title": "Facebook Messenger",
       "description": "Conecte sua Página Facebook para mensagens",

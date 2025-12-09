@@ -12,6 +12,7 @@ import { ConvexError } from "convex/values";
 export type Channel =
   | "whatsapp"
   | "telegram"
+  | "evolution"
   | "instagram"
   | "tiktok"
   | "facebook_messenger"

@@ -34,6 +34,7 @@ export const create = mutation({
       organizationId: args.organizationId,
       expiresAt,
       metadata: args.metadata,
+      channel: "widget",
     });
 
     return contactSessionId;

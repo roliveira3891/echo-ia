@@ -64,6 +64,7 @@ export default defineSchema({
     // Multi-channel support (optional for backwards compatibility)
     channel: v.optional(v.string()),          // "widget", "whatsapp", "instagram", "tiktok", etc.
     channelUserId: v.optional(v.string()),    // "+55119999999" (WhatsApp), "@username" (Instagram), etc.
+    profilePictureUrl: v.optional(v.string()), // URL da foto de perfil do usuário (WhatsApp, Instagram, etc.)
   })
     .index("by_organization_id", ["organizationId"])
     .index("by_expires_at", ["expiresAt"])

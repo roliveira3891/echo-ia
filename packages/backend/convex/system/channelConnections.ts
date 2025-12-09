@@ -90,6 +90,53 @@ export const getActiveConnection = internalQuery({
 });
 
 /**
+ * Internal query: Get connection by organization + channel + account ID
+ * Used to get connection regardless of status (for status updates)
+ *
+ * Example: Update Evolution connection status
+ * const connection = await getActiveConnectionByAccountId({
+ *   organizationId: "org_123",
+ *   channel: "evolution",
+ *   channelAccountId: "my-instance"
+ * })
+ */
+export const getActiveConnectionByAccountId = internalQuery({
+  args: {
+    organizationId: v.string(),
+    channel: v.string(),
+    channelAccountId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("channelConnections")
+      .withIndex("by_org_and_channel")
+      .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+      .filter((q) => q.eq(q.field("channel"), args.channel))
+      .filter((q) => q.eq(q.field("channelAccountId"), args.channelAccountId))
+      .first();
+  },
+});
+
+/**
+ * Internal query: Get any connection for organization + channel (regardless of status)
+ * Used for checking connection during polling
+ */
+export const getConnectionAnyStatus = internalQuery({
+  args: {
+    organizationId: v.string(),
+    channel: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("channelConnections")
+      .withIndex("by_org_and_channel")
+      .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+      .filter((q) => q.eq(q.field("channel"), args.channel))
+      .first();
+  },
+});
+
+/**
  * Internal mutation: Upsert (create or update) channel connection
  * Used by OAuth handlers to save connection after successful authorization
  *

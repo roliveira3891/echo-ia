@@ -451,4 +451,131 @@ http.route({
   }),
 });
 
+/**
+ * Evolution API Webhook Handler (POST)
+ * Receives incoming messages and connection updates from Evolution API
+ * Path: /webhooks/evolution?token=XXX&instance=YYY
+ */
+http.route({
+  path: "/webhooks/evolution",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const url = new URL(request.url);
+      const token = url.searchParams.get("token");
+      const instanceName = url.searchParams.get("instance");
+
+      if (!token || !instanceName) {
+        return new Response("Missing token or instance parameter", { status: 401 });
+      }
+
+      const body = await request.text();
+      const data = JSON.parse(body) as {
+        event: string;
+        instance: string;
+        data?: any;
+      };
+
+      // Find connection by webhook token
+      const connection = await ctx.runQuery(
+        internal.system.channelConnections.getConnectionByWebhookToken,
+        {
+          channel: "evolution",
+          webhookToken: token,
+        }
+      );
+
+      if (!connection) {
+        console.warn(`[Evolution Webhook] No connection found for token: ${token}`);
+        return new Response("Unauthorized", { status: 401 });
+      }
+
+      const organizationId = connection.organizationId;
+
+      // Handle different event types
+      switch (data.event) {
+        case "messages.upsert":
+        case "MESSAGES_UPSERT": {
+          // Handle incoming message
+          const message = data.data?.messages?.[0] || data.data;
+
+          if (!message) {
+            return new Response("OK", { status: 200 });
+          }
+
+          // Extract message data
+          const key = message.key || {};
+          const messageData = message.message || {};
+
+          // Only process messages from users (not from bot)
+          if (key.fromMe) {
+            return new Response("OK", { status: 200 });
+          }
+
+          // Get text content
+          let messageText = "";
+          if (messageData.conversation) {
+            messageText = messageData.conversation;
+          } else if (messageData.extendedTextMessage?.text) {
+            messageText = messageData.extendedTextMessage.text;
+          }
+
+          if (!messageText) {
+            return new Response("OK", { status: 200 });
+          }
+
+          // Extract sender number (remoteJid)
+          const channelUserId = key.remoteJid?.replace("@s.whatsapp.net", "") || "";
+
+          if (!channelUserId) {
+            return new Response("OK", { status: 200 });
+          }
+
+          // Process incoming message through the channel handler
+          await ctx.scheduler.runAfter(0, internal.system.channels.handleIncomingMessage, {
+            channel: "evolution",
+            organizationId,
+            channelUserId,
+            messageText,
+            externalMessageId: key.id || "unknown",
+          });
+
+          break;
+        }
+
+        case "connection.update":
+        case "CONNECTION_UPDATE": {
+          // Handle connection status update
+          const connectionData = data.data;
+          const state = connectionData?.state || connectionData?.connection;
+
+          if (state) {
+            await ctx.runAction(
+              internal.system.providers.evolution_oauth.updateConnectionStatus,
+              {
+                organizationId,
+                instanceName,
+                state,
+                instanceData: connectionData,
+              }
+            );
+          }
+
+          break;
+        }
+
+        default:
+          console.log(`[Evolution Webhook] Ignored event: ${data.event}`);
+      }
+
+      // Always return 200 OK
+      return new Response("OK", { status: 200 });
+    } catch (error) {
+      console.error("[Evolution Webhook] Error:", error);
+      // Still return 200 to prevent Evolution from retrying
+      return new Response("OK", { status: 200 });
+    }
+  }),
+});
+
 export default http;
