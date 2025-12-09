@@ -161,71 +161,72 @@ export const ContactPanel = () => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col bg-background text-foreground">
-      <div className="flex flex-col gap-y-4 p-4">
-        <div className="flex items-center gap-x-2">
-          <DicebearAvatar
-            seed={contactSession._id}
-            imageUrl={contactSession.profilePictureUrl}
-            badgeImageUrl={channelIcon}
-            size={42}
-          />
-          <div className="flex-1 overflow-hidden">
-            <div className="flex items-center gap-x-2">
-              <h4 className="line-clamp-1">
-                {contactSession.name}
-              </h4>
-            </div>
-            <p className="line-clamp-1 text-muted-foreground text-sm">
+    <div className="flex h-full w-full flex-col overflow-y-auto bg-background">
+      {/* Header com Avatar Grande Centralizado */}
+      <div className="flex flex-col items-center gap-4 border-b p-6">
+        <DicebearAvatar
+          seed={contactSession._id}
+          imageUrl={contactSession.profilePictureUrl}
+          badgeImageUrl={channelIcon}
+          size={80}
+        />
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h3 className="font-semibold text-lg">
+            {contactSession.name}
+          </h3>
+          {contactSession.email && (
+            <p className="text-muted-foreground text-sm">
               {contactSession.email}
             </p>
-          </div>
+          )}
         </div>
-        <Button asChild className="w-full" size="lg">
+        <Button asChild className="w-full" size="sm">
           <Link href={`mailto:${contactSession.email}`}>
-            <MailIcon />
+            <MailIcon className="size-4" />
             <span>Send Email</span>
           </Link>
         </Button>
       </div>
 
-      <div>
-        {contactSession.metadata && (
-          <Accordion
-            className="w-full rounded-none border-y"
-            collapsible
-            type="single"
-          >
-            {accordionSections.map((section) => (
-              <AccordionItem
-                className="rounded-none outline-none has-focus-visible:z-10 has-focus-visible:border-ring has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50"
-                key={section.id}
-                value={section.id}
-              >
-                <AccordionTrigger
-                  className="flex w-full flex-1 items-start justify-between gap-4 rounded-none bg-accent px-5 py-4 text-left font-medium text-sm outline-none transition-all hover:no-underline disabled:pointer-events-none disabled:opacity-50"
+      {/* Informações em Cards Simples */}
+      <div className="flex-1 space-y-4 p-4">
+        {accordionSections.map((section) => (
+          <div key={section.id} className="rounded-lg border bg-card">
+            <div className="flex items-center gap-2 border-b px-4 py-3">
+              <section.icon className="size-4 text-muted-foreground" />
+              <h4 className="font-medium text-sm">{section.title}</h4>
+            </div>
+            <div className="space-y-3 p-4">
+              {section.items.map((item, index) => (
+                <div
+                  key={`${section.id}-${item.label}-${index}`}
+                  className="flex items-start justify-between gap-4 text-sm"
                 >
-                  <div className="flex items-center gap-4">
-                    <section.icon className="size-4 shrink-0" />
-                    <span>{section.title}</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-5 py-4">
-                  <div className="space-y-2 text-sm">
-                    {section.items.map((item) => (
-                      <div className="flex justify-between" key={`${section.id}-${item.label}`}>
-                        <span className="text-muted-foreground">
-                          {item.label}:
-                        </span>
-                        <span className={item.className}>{item.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        )}
+                  <span className="text-muted-foreground">
+                    {item.label}
+                  </span>
+                  <span className={`text-right font-medium ${item.className || ""}`}>
+                    {item.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* Seção de Mídia Compartilhada (preparada para futuro) */}
+        <div className="rounded-lg border bg-card">
+          <div className="border-b px-4 py-3">
+            <h4 className="font-medium text-sm">Shared Media</h4>
+          </div>
+          <div className="p-4">
+            <div className="flex items-center justify-center py-8 text-center">
+              <p className="text-muted-foreground text-sm">
+                No shared media yet
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
