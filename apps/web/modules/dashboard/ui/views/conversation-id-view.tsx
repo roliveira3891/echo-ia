@@ -203,9 +203,9 @@ export const ConversationIdView = ({
   }
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full w-full flex-col overflow-hidden bg-background">
       {/* Header com Avatar e Nome */}
-      <header className="flex items-center justify-between border-b bg-background px-4 py-3">
+      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3">
         <div className="flex items-center gap-3">
           {/* Botão Voltar - Apenas Mobile */}
           {isMobile && (
@@ -331,9 +331,9 @@ export const ConversationIdView = ({
       </AIConversation>
 
       {/* Input de Mensagem */}
-      <div className="border-t bg-background p-4">
+      <div className="shrink-0 border-t bg-background p-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-end gap-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full items-end gap-2">
             <div className="flex flex-1 flex-col gap-2 rounded-lg border bg-background">
               <FormField
                 control={form.control}
@@ -411,9 +411,9 @@ export const ConversationIdView = ({
 
 export const ConversationIdViewLoading = () => {
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full w-full flex-col overflow-hidden bg-background">
       {/* Header Skeleton */}
-      <header className="flex items-center justify-between border-b bg-background px-4 py-3">
+      <header className="flex shrink-0 items-center justify-between border-b bg-background px-4 py-3">
         <div className="flex items-center gap-3">
           <Skeleton className="size-10 shrink-0 rounded-full" />
           <div className="flex flex-col gap-1.5">
@@ -447,7 +447,7 @@ export const ConversationIdViewLoading = () => {
       </div>
 
       {/* Input Skeleton */}
-      <div className="border-t bg-background p-4">
+      <div className="shrink-0 border-t bg-background p-4">
         <Skeleton className="h-24 w-full rounded-lg" />
       </div>
     </div>
