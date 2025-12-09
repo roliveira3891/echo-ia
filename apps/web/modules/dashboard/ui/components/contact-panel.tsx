@@ -166,6 +166,7 @@ export const ContactPanel = () => {
       <div className="flex flex-col items-center gap-4 border-b p-6">
         <DicebearAvatar
           seed={contactSession._id}
+          name={contactSession.name}
           imageUrl={contactSession.profilePictureUrl}
           badgeImageUrl={channelIcon}
           size={80}

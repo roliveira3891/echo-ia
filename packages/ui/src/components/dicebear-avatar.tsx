@@ -1,9 +1,7 @@
 "use client";
 
-import { glass } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import { useMemo } from "react";
-import { Avatar, AvatarImage } from "@workspace/ui/components/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@workspace/ui/components/avatar";
 import { cn } from "@workspace/ui/lib/utils";
 
 interface DicebearAvatarProps {
@@ -13,6 +11,7 @@ interface DicebearAvatarProps {
   badgeClassName?: string;
   imageUrl?: string;
   badgeImageUrl?: string;
+  name?: string;
 };
 
 export const DicebearAvatar = ({
@@ -22,19 +21,24 @@ export const DicebearAvatar = ({
   imageUrl,
   badgeClassName,
   badgeImageUrl,
+  name,
 }: DicebearAvatarProps) => {
-  const avatarSrc = useMemo(() => {
-    if (imageUrl) {
-      return imageUrl;
+  // Gera as iniciais a partir do nome (máximo 2 letras)
+  const initials = useMemo(() => {
+    if (!name) return "?";
+
+    const words = name.trim().split(/\s+/);
+    if (words.length === 1) {
+      // Se for uma palavra só, pega as 2 primeiras letras
+      return words[0].substring(0, 2).toUpperCase();
     }
-
-    const avatar = createAvatar(glass, {
-      seed: seed.toLowerCase().trim(),
-      size,
-    });
-
-    return avatar.toDataUri();
-  }, [seed, size, imageUrl]);
+    // Se for mais de uma palavra, pega a primeira letra de cada uma (máximo 2)
+    return words
+      .slice(0, 2)
+      .map(word => word[0])
+      .join("")
+      .toUpperCase();
+  }, [name]);
 
   const badgeSize = Math.round(size * 0.5);
 
@@ -47,7 +51,10 @@ export const DicebearAvatar = ({
         className={cn("border", className)}
         style={{ width: size, height: size }}
       >
-        <AvatarImage alt="Avatar" src={avatarSrc} />
+        {imageUrl && <AvatarImage alt="Avatar" src={imageUrl} />}
+        <AvatarFallback className="bg-muted text-muted-foreground font-medium">
+          {initials}
+        </AvatarFallback>
       </Avatar>
       {badgeImageUrl && (
         <div

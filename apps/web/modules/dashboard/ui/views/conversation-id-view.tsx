@@ -221,6 +221,7 @@ export const ConversationIdView = ({
 
           <DicebearAvatar
             seed={contactSession?._id ?? "user"}
+            name={contactSession?.name}
             imageUrl={contactSession?.profilePictureUrl}
             badgeImageUrl={channelIcon}
             size={40}
@@ -284,6 +285,7 @@ export const ConversationIdView = ({
                     {isUser && (
                       <DicebearAvatar
                         seed={contactSession?._id ?? "user"}
+                        name={contactSession?.name}
                         imageUrl={contactSession?.profilePictureUrl}
                         size={32}
                         className="shrink-0"

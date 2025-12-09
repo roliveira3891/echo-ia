@@ -172,6 +172,7 @@ export const ConversationsPanel = () => {
                   {/* Avatar com badge do canal */}
                   <DicebearAvatar
                     seed={conversation.contactSession._id}
+                    name={conversation.contactSession.name}
                     imageUrl={profilePicture}
                     badgeImageUrl={channelIcon}
                     size={40}
