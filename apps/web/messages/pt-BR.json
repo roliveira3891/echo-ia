@@ -56,12 +56,15 @@
     "organization": "Organização",
     "logout": "Sair",
     "sidebar": {
+      "home": "Início",
       "customerSupport": "Atendimento ao Cliente",
       "conversations": "Conversas",
+      "contacts": "Contatos",
       "knowledgeBase": "Base de Conhecimento",
       "configuration": "Configuração",
       "channels": "Canais",
       "integrations": "Integrações",
+      "settings": "Configurações",
       "widgetCustomization": "Personalizar Widget",
       "voiceAssistant": "Assistente de Voz",
       "marketing": "Marketing",
@@ -300,5 +303,34 @@
     "failedToCopy": "Falha ao copiar para a área de transferência",
     "channelIntegrations": "Canais de Comunicação",
     "channelIntegrationsDesc": "Conecte seus canais de comunicação para receber e responder mensagens de clientes."
+  },
+  "dashboardHome": {
+    "title": "Dashboard",
+    "description": "Visão geral do seu atendimento e métricas"
+  },
+  "contacts": {
+    "title": "Contatos",
+    "description": "Gerencie todos os seus contatos e leads"
+  },
+  "settings": {
+    "title": "Configurações",
+    "description": "Configure e personalize o sistema",
+    "nav": {
+      "lifecycle": "Ciclo de Vida",
+      "contactFields": "Campos de Contatos",
+      "tags": "Tags"
+    },
+    "lifecycle": {
+      "title": "Ciclo de Vida",
+      "description": "Configure os estágios do ciclo de vida dos seus contatos"
+    },
+    "contactFields": {
+      "title": "Campos de Contatos",
+      "description": "Personalize os campos dos seus contatos"
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Gerencie as tags para organizar seus contatos"
+    }
   }
 }

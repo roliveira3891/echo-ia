@@ -56,12 +56,15 @@
     "organization": "Organization",
     "logout": "Logout",
     "sidebar": {
+      "home": "Home",
       "customerSupport": "Customer Support",
       "conversations": "Conversations",
+      "contacts": "Contacts",
       "knowledgeBase": "Knowledge Base",
       "configuration": "Configuration",
       "channels": "Channels",
       "integrations": "Integrations",
+      "settings": "Settings",
       "widgetCustomization": "Widget Customization",
       "voiceAssistant": "Voice Assistant",
       "marketing": "Marketing",
@@ -255,5 +258,34 @@
     "failedToCopy": "Failed to copy to clipboard",
     "channelIntegrations": "Communication Channels",
     "channelIntegrationsDesc": "Connect your communication channels to receive and respond to messages from customers."
+  },
+  "dashboardHome": {
+    "title": "Dashboard",
+    "description": "Overview of your support and metrics"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "description": "Manage all your contacts and leads"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure and customize the system",
+    "nav": {
+      "lifecycle": "Lifecycle",
+      "contactFields": "Contact Fields",
+      "tags": "Tags"
+    },
+    "lifecycle": {
+      "title": "Lifecycle",
+      "description": "Configure the lifecycle stages of your contacts"
+    },
+    "contactFields": {
+      "title": "Contact Fields",
+      "description": "Customize your contact fields"
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Manage tags to organize your contacts"
+    }
   }
 }
