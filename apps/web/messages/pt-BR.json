@@ -60,6 +60,7 @@
       "customerSupport": "Atendimento ao Cliente",
       "conversations": "Conversas",
       "contacts": "Contatos",
+      "aiAgents": "Agentes de IA",
       "knowledgeBase": "Base de Conhecimento",
       "configuration": "Configuração",
       "channels": "Canais",
@@ -331,6 +332,75 @@
     "tags": {
       "title": "Tags",
       "description": "Gerencie as tags para organizar seus contatos"
+    }
+  },
+  "aiAgents": {
+    "title": "Agentes de IA",
+    "description": "Configure e gerencie seus assistentes virtuais inteligentes",
+    "createNewAgent": "Criar Novo Agente",
+    "createFirstAgent": "Criar Primeiro Agente",
+    "noAgents": "Nenhum agente configurado",
+    "noAgentsDescription": "Crie seu primeiro agente de IA para começar a automatizar o atendimento ao cliente",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirmDelete": "Tem certeza que deseja excluir este agente?",
+    "agentDeleted": "Agente excluído com sucesso",
+    "agentActivated": "Agente ativado",
+    "agentDeactivated": "Agente desativado",
+    "totalConversations": "Total de Conversas",
+    "resolutionRate": "Taxa de Resolução",
+    "back": "Voltar",
+    "templates": {
+      "title": "Escolha um Template",
+      "description": "Comece com um modelo pré-configurado ou crie do zero",
+      "useTemplate": "Usar Template",
+      "startFresh": "Começar do Zero",
+      "support": {
+        "name": "Agente de Suporte",
+        "description": "Atende tickets de suporte e fornece ajuda instantânea com problemas comuns"
+      },
+      "sales": {
+        "name": "Agente de Vendas",
+        "description": "Qualifica leads, responde perguntas sobre produtos e agenda demonstrações automaticamente"
+      },
+      "receptionist": {
+        "name": "Recepcionista",
+        "description": "Perfeito para receber visitantes e direcionar conversas para a equipe certa"
+      },
+      "scratch": {
+        "name": "Criar do Zero",
+        "description": "Comece com um agente em branco e personalize tudo do seu jeito"
+      }
+    },
+    "configure": {
+      "title": "Configurar Agente",
+      "description": "Personalize o comportamento e as instruções do seu agente de IA",
+      "back": "Voltar",
+      "configuration": "Configuração Básica",
+      "configurationDescription": "Defina o nome, emoji e instruções do seu agente",
+      "emoji": "Emoji",
+      "name": "Nome do Agente",
+      "namePlaceholder": "Ex: Agente de Suporte",
+      "nameHint": "Escolha um nome descritivo para identificar seu agente",
+      "nameRequired": "O nome do agente é obrigatório",
+      "instructions": "Instruções",
+      "instructionsPlaceholder": "# Assistente de Suporte\n\nVocê é um assistente amigável que ajuda clientes...",
+      "instructionsHint": "Escreva instruções detalhadas sobre como o agente deve se comportar. Suporta Markdown.",
+      "instructionsRequired": "As instruções são obrigatórias",
+      "characters": "caracteres",
+      "tip": "Dica",
+      "tipDescription": "Seja específico nas instruções! Quanto mais detalhado, melhor o agente se comportará",
+      "knowledgeSources": "Fontes de Conhecimento",
+      "knowledgeSourcesDescription": "Conecte arquivos e documentos para o agente usar como base de conhecimento",
+      "knowledgeSourcesPlaceholder": "Recursos de conhecimento estarão disponíveis aqui em breve",
+      "knowledgeSourcesHint": "Em breve você poderá conectar arquivos, PDFs, links e mais",
+      "cancel": "Cancelar",
+      "save": "Salvar Agente",
+      "saving": "Salvando...",
+      "agentCreated": "Agente criado com sucesso!",
+      "errorCreating": "Erro ao criar agente. Tente novamente."
     }
   }
 }

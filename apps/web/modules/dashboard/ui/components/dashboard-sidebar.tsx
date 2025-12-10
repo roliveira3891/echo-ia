@@ -3,6 +3,7 @@
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import {
+  BotIcon,
   CreditCardIcon,
   HomeIcon,
   InboxIcon,
@@ -53,6 +54,11 @@ const customerSupportItemsKeys = [
     titleKey: "sidebar.contacts",
     url: "/contacts",
     icon: UsersIcon,
+  },
+  {
+    titleKey: "sidebar.aiAgents",
+    url: "/ai-agents",
+    icon: BotIcon,
   },
   {
     titleKey: "sidebar.knowledgeBase",
@@ -133,7 +139,7 @@ export const DashboardSidebar = () => {
       <SidebarHeader className="border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <div className="px-2 py-1.5">
+            <div className="py-1.5">
               <OrganizationSwitcher
                 hidePersonal
                 skipInvitationScreen
@@ -141,10 +147,10 @@ export const DashboardSidebar = () => {
                   baseTheme: theme === "dark" ? dark : undefined,
                   elements: {
                     rootBox: "w-full! relative! z-[100]!",
-                    avatarBox: "size-5! rounded-md!",
-                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors! rounded-md!",
+                    avatarBox: "size-6! rounded-md!",
+                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent! transition-colors! rounded-md!",
                     organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2.5!",
-                    organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-sm! font-semibold! text-sidebar-foreground!",
+                    organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-base! font-semibold! text-sidebar-foreground!",
                     organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground/60!",
                     organizationSwitcherPopoverCard: "!z-[200] !pointer-events-auto",
                     organizationSwitcherPopoverActionButton: "!z-[200] !pointer-events-auto",

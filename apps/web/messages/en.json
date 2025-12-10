@@ -60,6 +60,7 @@
       "customerSupport": "Customer Support",
       "conversations": "Conversations",
       "contacts": "Contacts",
+      "aiAgents": "AI Agents",
       "knowledgeBase": "Knowledge Base",
       "configuration": "Configuration",
       "channels": "Channels",
@@ -286,6 +287,75 @@
     "tags": {
       "title": "Tags",
       "description": "Manage tags to organize your contacts"
+    }
+  },
+  "aiAgents": {
+    "title": "AI Agents",
+    "description": "Configure and manage your intelligent virtual assistants",
+    "createNewAgent": "Create New Agent",
+    "createFirstAgent": "Create First Agent",
+    "noAgents": "No agents configured",
+    "noAgentsDescription": "Create your first AI agent to start automating customer support",
+    "active": "Active",
+    "inactive": "Inactive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this agent?",
+    "agentDeleted": "Agent deleted successfully",
+    "agentActivated": "Agent activated",
+    "agentDeactivated": "Agent deactivated",
+    "totalConversations": "Total Conversations",
+    "resolutionRate": "Resolution Rate",
+    "back": "Back",
+    "templates": {
+      "title": "Choose a Template",
+      "description": "Start with a pre-configured model or create from scratch",
+      "useTemplate": "Use Template",
+      "startFresh": "Start from Scratch",
+      "support": {
+        "name": "Support Agent",
+        "description": "Handle customer support tickets and provide instant help with common issues"
+      },
+      "sales": {
+        "name": "Sales Agent",
+        "description": "Qualify leads, answer product questions, and book demos automatically"
+      },
+      "receptionist": {
+        "name": "Receptionist",
+        "description": "Perfect for greeting visitors and routing conversations to the right team"
+      },
+      "scratch": {
+        "name": "Create from Scratch",
+        "description": "Start with a blank agent and customize everything your way"
+      }
+    },
+    "configure": {
+      "title": "Configure Agent",
+      "description": "Customize the behavior and instructions of your AI agent",
+      "back": "Back",
+      "configuration": "Basic Configuration",
+      "configurationDescription": "Define your agent's name, emoji, and instructions",
+      "emoji": "Emoji",
+      "name": "Agent Name",
+      "namePlaceholder": "e.g., Support Agent",
+      "nameHint": "Choose a descriptive name to identify your agent",
+      "nameRequired": "Agent name is required",
+      "instructions": "Instructions",
+      "instructionsPlaceholder": "# Support Assistant\n\nYou are a friendly assistant that helps customers...",
+      "instructionsHint": "Write detailed instructions about how the agent should behave. Supports Markdown.",
+      "instructionsRequired": "Instructions are required",
+      "characters": "characters",
+      "tip": "Tip",
+      "tipDescription": "Be specific in your instructions! The more detailed, the better the agent will behave",
+      "knowledgeSources": "Knowledge Sources",
+      "knowledgeSourcesDescription": "Connect files and documents for the agent to use as knowledge base",
+      "knowledgeSourcesPlaceholder": "Knowledge resources will be available here soon",
+      "knowledgeSourcesHint": "Soon you'll be able to connect files, PDFs, links and more",
+      "cancel": "Cancel",
+      "save": "Save Agent",
+      "saving": "Saving...",
+      "agentCreated": "Agent created successfully!",
+      "errorCreating": "Error creating agent. Please try again."
     }
   }
 }
