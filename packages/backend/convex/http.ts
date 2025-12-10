@@ -439,6 +439,11 @@ http.route({
         channelUserId: message.chat.id.toString(),
         messageText: message.text,
         externalMessageId: message.message_id.toString(),
+        metadata: {
+          userId: message.from.id.toString(),
+          firstName: message.from.first_name,
+          username: message.from.username,
+        },
       });
 
       // Always return 200 OK to Telegram
