@@ -32,7 +32,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { cn } from "@workspace/ui/lib/utils";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { toast } from "sonner";
@@ -84,6 +84,7 @@ export const ConversationIdView = ({
   const locale = useLocale();
   const t = useTranslations("conversations");
   const [isMobile, setIsMobile] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -94,6 +95,14 @@ export const ConversationIdView = ({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  const handleInputFocus = () => {
+    if (isMobile && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300); // Delay para dar tempo do teclado aparecer
+    }
+  };
 
   const handleBackToList = () => {
     router.push(`/${locale}/conversations`);
@@ -392,7 +401,7 @@ export const ConversationIdView = ({
         className={cn(
           "shrink-0 border-t bg-background z-20",
           isMobile
-            ? "fixed bottom-0 left-0 right-0 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+            ? "sticky bottom-0 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
             : "p-4"
         )}
         style={isMobile ? { paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' } : undefined}
@@ -410,6 +419,7 @@ export const ConversationIdView = ({
                     render={({ field }) => (
                       <input
                         {...field}
+                        ref={inputRef}
                         type="text"
                         autoComplete="off"
                         autoCorrect="off"
@@ -430,6 +440,7 @@ export const ConversationIdView = ({
                         onClick={(e) => {
                           e.currentTarget.focus();
                         }}
+                        onFocus={handleInputFocus}
                       />
                     )}
                   />
