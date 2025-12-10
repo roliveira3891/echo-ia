@@ -215,11 +215,14 @@ export const DashboardSidebar = () => {
               appearance={{
                 baseTheme: theme === "dark" ? dark : undefined,
                 elements: {
-                  rootBox: "w-full!",
+                  rootBox: "w-full! relative! z-[100]!",
                   userButtonTrigger: "w-full! p-2! hover:bg-sidebar-accent! transition-colors! group-data-[collapsible=icon]:size-9! group-data-[collapsible=icon]:p-2! rounded-md!",
                   userButtonBox: "w-full! flex-row-reverse! justify-end! gap-2.5! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
                   userButtonOuterIdentifier: "pl-0! group-data-[collapsible=icon]:hidden! text-sm! font-medium!",
-                  avatarBox: "size-8! rounded-md!"
+                  avatarBox: "size-8! rounded-md!",
+                  userButtonPopoverCard: "!z-[200] !pointer-events-auto",
+                  userButtonPopoverActionButton: "!z-[200] !pointer-events-auto",
+                  userButtonPopoverActions: "!pointer-events-auto"
                 }
               }}
             />
