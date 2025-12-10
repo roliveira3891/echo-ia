@@ -59,10 +59,13 @@
       "customerSupport": "Customer Support",
       "conversations": "Conversations",
       "knowledgeBase": "Knowledge Base",
-      "channels": "Channels",
       "configuration": "Configuration",
+      "channels": "Channels",
+      "integrations": "Integrations",
       "widgetCustomization": "Widget Customization",
       "voiceAssistant": "Voice Assistant",
+      "marketing": "Marketing",
+      "broadcast": "Broadcast",
       "account": "Account",
       "plansBilling": "Plans & Billing",
       "theme": "Theme",
@@ -109,8 +112,9 @@
     "send": "Send"
   },
   "integrations": {
-    "title": "Setup & Integrations",
+    "title": "Integrations",
     "subtitle": "Choose the integration that's right for you",
+    "description": "Configure integrations with external tools and services",
     "organizationId": "Organization ID",
     "copy": "Copy",
     "copiedToClipboard": "Copied to clipboard",
@@ -236,5 +240,20 @@
       "description2": "Connect your LinkedIn Company Page to receive and respond to customer messages.",
       "comingSoonMsg": "This integration is coming soon. Stay tuned!"
     }
+  },
+  "broadcast": {
+    "title": "Broadcast",
+    "description": "Send bulk messages to your contacts",
+    "subtitle": "Configure and manage your mass messaging campaigns"
+  },
+  "channels": {
+    "title": "Channels",
+    "subtitle": "Connect and manage your communication channels",
+    "organizationId": "Organization ID",
+    "copy": "Copy",
+    "copiedToClipboard": "Copied to clipboard",
+    "failedToCopy": "Failed to copy to clipboard",
+    "channelIntegrations": "Communication Channels",
+    "channelIntegrationsDesc": "Connect your communication channels to receive and respond to messages from customers."
   }
 }

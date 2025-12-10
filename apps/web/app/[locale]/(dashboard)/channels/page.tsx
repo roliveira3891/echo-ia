@@ -1,7 +1,7 @@
-import { IntegrationsView } from "@/modules/integrations/ui/views/integrations-view";
+import { ChannelsView } from "@/modules/channels/ui/views/channels-view";
 
 const Page = () => {
-  return <IntegrationsView />
-}
+  return <ChannelsView />;
+};
 
 export default Page;

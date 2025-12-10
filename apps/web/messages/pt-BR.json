@@ -59,10 +59,13 @@
       "customerSupport": "Atendimento ao Cliente",
       "conversations": "Conversas",
       "knowledgeBase": "Base de Conhecimento",
-      "channels": "Canais",
       "configuration": "Configuração",
+      "channels": "Canais",
+      "integrations": "Integrações",
       "widgetCustomization": "Personalizar Widget",
       "voiceAssistant": "Assistente de Voz",
+      "marketing": "Marketing",
+      "broadcast": "Broadcast",
       "account": "Conta",
       "plansBilling": "Planos e Faturamento",
       "theme": "Tema",
@@ -109,8 +112,9 @@
     "send": "Enviar"
   },
   "integrations": {
-    "title": "Setup & Integrações",
+    "title": "Integrações",
     "subtitle": "Escolha a integração certa para você",
+    "description": "Configure integrações com ferramentas e serviços externos",
     "organizationId": "ID da Organização",
     "copy": "Copiar",
     "copiedToClipboard": "Copiado para a área de transferência",
@@ -281,5 +285,20 @@
       "description2": "Conecte sua Página de Empresa LinkedIn para receber e responder mensagens de clientes.",
       "comingSoonMsg": "Esta integração está chegando em breve. Fique ligado!"
     }
+  },
+  "broadcast": {
+    "title": "Broadcast",
+    "description": "Envie mensagens em massa para seus contatos",
+    "subtitle": "Configure e gerencie suas campanhas de envio em massa"
+  },
+  "channels": {
+    "title": "Canais",
+    "subtitle": "Conecte e gerencie seus canais de comunicação",
+    "organizationId": "ID da Organização",
+    "copy": "Copiar",
+    "copiedToClipboard": "Copiado para a área de transferência",
+    "failedToCopy": "Falha ao copiar para a área de transferência",
+    "channelIntegrations": "Canais de Comunicação",
+    "channelIntegrationsDesc": "Conecte seus canais de comunicação para receber e responder mensagens de clientes."
   }
 }

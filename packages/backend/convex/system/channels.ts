@@ -237,6 +237,12 @@ export const getOrCreateContactSession = internalMutation({
         channelUserId: args.channelUserId,
       });
       contactSession = await ctx.db.get(contactSessionId);
+    } else if (contactSession.expiresAt < Date.now()) {
+      // Session exists but is expired, renew it
+      await ctx.db.patch(contactSession._id, {
+        expiresAt: Date.now() + SESSION_DURATION_MS,
+      });
+      contactSession = await ctx.db.get(contactSession._id);
     }
 
     return contactSession;

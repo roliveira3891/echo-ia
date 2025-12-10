@@ -9,6 +9,8 @@ import {
   LibraryBigIcon,
   Mic,
   PaletteIcon,
+  PlugIcon,
+  RadioIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -55,9 +57,22 @@ const configurationItemsKeys = [
     icon: LayoutDashboardIcon,
   },
   {
+    titleKey: "sidebar.integrations",
+    url: "/integrations",
+    icon: PlugIcon,
+  },
+  {
     titleKey: "sidebar.voiceAssistant",
     url: "/plugins/vapi",
     icon: Mic,
+  },
+];
+
+const marketingItemsKeys = [
+  {
+    titleKey: "sidebar.broadcast",
+    url: "/broadcast",
+    icon: RadioIcon,
   },
 ];
 
@@ -158,6 +173,34 @@ export const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {configurationItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Marketing */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
+            {t("sidebar.marketing")}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {marketingItemsKeys.map((item) => {
                 const itemTitle = t(item.titleKey as any);
                 return (
                   <SidebarMenuItem key={item.titleKey}>
