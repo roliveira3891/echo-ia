@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
@@ -15,12 +15,13 @@ import { getTemplateById, MOCK_TEMPLATES } from "../../lib/mock-data";
 
 interface AIAgentFormData {
   name: string;
-  emoji: string;
+  iconName: string;
   instructions: string;
 }
 
 export const AIAgentConfigureView = () => {
   const t = useTranslations("aiAgents.configure");
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateId = searchParams?.get("template");
@@ -28,7 +29,7 @@ export const AIAgentConfigureView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<AIAgentFormData>({
     name: "",
-    emoji: "🤖",
+    iconName: "Bot",
     instructions: "",
   });
 
@@ -39,7 +40,7 @@ export const AIAgentConfigureView = () => {
       if (template) {
         setFormData({
           name: template.name,
-          emoji: template.emoji,
+          iconName: template.icon.name || "Bot",
           instructions: template.instructions,
         });
       }
@@ -66,7 +67,7 @@ export const AIAgentConfigureView = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock delay
 
       toast.success(t("agentCreated"));
-      router.push("/ai-agents");
+      router.push(`/${locale}/ai-agents`);
     } catch (error) {
       toast.error(t("errorCreating"));
     } finally {
@@ -80,7 +81,7 @@ export const AIAgentConfigureView = () => {
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
-            <Link href="/ai-agents/new/templates">
+            <Link href={`/${locale}/ai-agents/new/templates`}>
               <ArrowLeft className="h-4 w-4" />
               {t("back")}
             </Link>
@@ -105,40 +106,22 @@ export const AIAgentConfigureView = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Emoji & Name Row */}
-              <div className="grid grid-cols-[auto,1fr] gap-4 items-start">
-                {/* Emoji Picker (Simple for now) */}
-                <div className="space-y-2">
-                  <Label htmlFor="emoji">{t("emoji")}</Label>
-                  <Input
-                    id="emoji"
-                    type="text"
-                    value={formData.emoji}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, emoji: e.target.value }))
-                    }
-                    className="text-4xl text-center w-20 h-20"
-                    maxLength={2}
-                  />
-                </div>
-
-                {/* Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="name">{t("name")}</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder={t("namePlaceholder")}
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, name: e.target.value }))
-                    }
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {t("nameHint")}
-                  </p>
-                </div>
+              {/* Name */}
+              <div className="space-y-2">
+                <Label htmlFor="name">{t("name")}</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder={t("namePlaceholder")}
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  {t("nameHint")}
+                </p>
               </div>
 
               {/* Instructions */}
@@ -200,7 +183,7 @@ export const AIAgentConfigureView = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push("/ai-agents")}
+              onClick={() => router.push(`/${locale}/ai-agents`)}
               disabled={isLoading}
             >
               {t("cancel")}

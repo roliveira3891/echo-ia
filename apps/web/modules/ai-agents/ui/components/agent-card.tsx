@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
@@ -24,6 +24,7 @@ interface AgentCardProps {
 
 export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) => {
   const t = useTranslations("aiAgents");
+  const locale = useLocale();
   const [isActive, setIsActive] = useState(agent.isActive);
 
   const handleToggle = () => {
@@ -32,15 +33,16 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
     onToggleActive?.(agent._id, newState);
   };
 
-  const resolutionRate = agent.stats?.resolutionRate || 0;
-  const totalConversations = agent.stats?.totalConversations || 0;
+  const Icon = agent.icon;
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-4xl">{agent.emoji}</div>
+            <div className="rounded-lg bg-primary/10 p-3">
+              <Icon className="h-6 w-6 text-primary" />
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-lg">{agent.name}</h3>
@@ -68,7 +70,7 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href={`/ai-agents/${agent._id}/edit`} className="cursor-pointer">
+                <Link href={`/${locale}/ai-agents/${agent._id}/edit`} className="cursor-pointer">
                   <Edit className="mr-2 h-4 w-4" />
                   {t("edit")}
                 </Link>
@@ -86,20 +88,8 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg border p-3">
-            <p className="text-2xl font-bold">{totalConversations}</p>
-            <p className="text-xs text-muted-foreground">{t("totalConversations")}</p>
-          </div>
-          <div className="rounded-lg border p-3">
-            <p className="text-2xl font-bold text-green-600">{resolutionRate}%</p>
-            <p className="text-xs text-muted-foreground">{t("resolutionRate")}</p>
-          </div>
-        </div>
-
         {/* Actions */}
-        <div className="flex items-center justify-between pt-2 border-t">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Switch
               checked={isActive}
@@ -115,7 +105,7 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
           </div>
 
           <Button asChild variant="outline" size="sm">
-            <Link href={`/ai-agents/${agent._id}/edit`}>
+            <Link href={`/${locale}/ai-agents/${agent._id}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               {t("edit")}
             </Link>

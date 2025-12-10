@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@workspace/ui/components/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { toast } from "sonner";
 
 export const AIAgentsListView = () => {
   const t = useTranslations("aiAgents");
+  const locale = useLocale();
   const [agents, setAgents] = useState(MOCK_AGENTS);
 
   const handleToggleActive = (agentId: string, isActive: boolean) => {
@@ -44,7 +45,7 @@ export const AIAgentsListView = () => {
           </div>
 
           <Button asChild className="gap-2">
-            <Link href="/ai-agents/new/templates">
+            <Link href={`/${locale}/ai-agents/new/templates`}>
               <Plus className="h-4 w-4" />
               {t("createNewAgent")}
             </Link>
@@ -62,7 +63,7 @@ export const AIAgentsListView = () => {
                   {t("noAgentsDescription")}
                 </p>
                 <Button asChild className="gap-2">
-                  <Link href="/ai-agents/new/templates">
+                  <Link href={`/${locale}/ai-agents/new/templates`}>
                     <Plus className="h-4 w-4" />
                     {t("createFirstAgent")}
                   </Link>

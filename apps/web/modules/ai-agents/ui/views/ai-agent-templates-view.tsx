@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
@@ -11,15 +11,16 @@ import { MOCK_TEMPLATES } from "../../lib/mock-data";
 
 export const AIAgentTemplatesView = () => {
   const t = useTranslations("aiAgents");
+  const locale = useLocale();
   const router = useRouter();
 
   const handleSelectTemplate = (templateId: string) => {
     // Navigate to configure page with template selected
-    router.push(`/ai-agents/new/configure?template=${templateId}`);
+    router.push(`/${locale}/ai-agents/new/configure?template=${templateId}`);
   };
 
   const handleCreateFromScratch = () => {
-    router.push(`/ai-agents/new/configure`);
+    router.push(`/${locale}/ai-agents/new/configure`);
   };
 
   return (
@@ -28,7 +29,7 @@ export const AIAgentTemplatesView = () => {
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
-            <Link href="/ai-agents">
+            <Link href={`/${locale}/ai-agents`}>
               <ArrowLeft className="h-4 w-4" />
               {t("back")}
             </Link>

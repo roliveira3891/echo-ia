@@ -1,11 +1,13 @@
 // Mock data for AI Agents development
+import type { LucideIcon } from "lucide-react";
+import { Headset, Briefcase, Phone, Sparkles } from "lucide-react";
 
 export type TemplateType = "support" | "sales" | "receptionist" | "custom";
 
 export interface AIAgentTemplate {
   id: TemplateType;
   name: string;
-  emoji: string;
+  icon: LucideIcon;
   description: string;
   instructions: string;
 }
@@ -13,18 +15,12 @@ export interface AIAgentTemplate {
 export interface AIAgent {
   _id: string;
   name: string;
-  emoji: string;
+  icon: LucideIcon;
   instructions: string;
   templateType: TemplateType;
   isActive: boolean;
   createdAt: number;
   updatedAt: number;
-  stats?: {
-    totalConversations: number;
-    resolvedConversations: number;
-    escalatedConversations: number;
-    resolutionRate: number;
-  };
 }
 
 // Templates disponíveis (hardcoded)
@@ -32,7 +28,7 @@ export const MOCK_TEMPLATES: AIAgentTemplate[] = [
   {
     id: "support",
     name: "Support Agent",
-    emoji: "🎧",
+    icon: Headset,
     description: "Handle customer support tickets and provide instant help with common issues.",
     instructions: `# Support Assistant - Customer Service AI
 
@@ -63,7 +59,7 @@ You help customers by searching the knowledge base for answers to their question
   {
     id: "sales",
     name: "Sales Agent",
-    emoji: "💼",
+    icon: Briefcase,
     description: "Qualify leads, answer product questions, and book demos automatically.",
     instructions: `# Sales Assistant
 
@@ -94,7 +90,7 @@ Your role is to qualify leads, answer product questions, and move prospects thro
   {
     id: "receptionist",
     name: "Receptionist",
-    emoji: "📞",
+    icon: Phone,
     description: "Perfect for greeting visitors and routing conversations to the right team.",
     instructions: `# Receptionist Assistant
 
@@ -128,50 +124,32 @@ export const MOCK_AGENTS: AIAgent[] = [
   {
     _id: "agent_1",
     name: "Support Agent",
-    emoji: "🎧",
+    icon: Headset,
     instructions: MOCK_TEMPLATES[0].instructions,
     templateType: "support",
     isActive: true,
     createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
     updatedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
-    stats: {
-      totalConversations: 156,
-      resolvedConversations: 142,
-      escalatedConversations: 14,
-      resolutionRate: 91,
-    },
   },
   {
     _id: "agent_2",
     name: "Receptionist",
-    emoji: "📞",
+    icon: Phone,
     instructions: MOCK_TEMPLATES[2].instructions,
     templateType: "receptionist",
     isActive: false,
     createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
     updatedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
-    stats: {
-      totalConversations: 45,
-      resolvedConversations: 38,
-      escalatedConversations: 7,
-      resolutionRate: 84,
-    },
   },
   {
     _id: "agent_3",
     name: "Sales Agent",
-    emoji: "💼",
+    icon: Briefcase,
     instructions: MOCK_TEMPLATES[1].instructions,
     templateType: "sales",
     isActive: true,
     createdAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
     updatedAt: Date.now() - 2 * 24 * 60 * 60 * 1000,
-    stats: {
-      totalConversations: 89,
-      resolvedConversations: 76,
-      escalatedConversations: 13,
-      resolutionRate: 85,
-    },
   },
 ];
 

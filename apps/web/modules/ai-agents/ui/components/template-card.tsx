@@ -12,13 +12,16 @@ interface TemplateCardProps {
 
 export const TemplateCard = ({ template, onSelect }: TemplateCardProps) => {
   const t = useTranslations("aiAgents.templates");
+  const Icon = template.icon;
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow hover:border-primary/50">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-4xl">{template.emoji}</div>
+            <div className="rounded-lg bg-primary/10 p-3">
+              <Icon className="h-8 w-8 text-primary" />
+            </div>
             <div>
               <CardTitle className="text-lg">
                 {t(`${template.id}.name`)}
