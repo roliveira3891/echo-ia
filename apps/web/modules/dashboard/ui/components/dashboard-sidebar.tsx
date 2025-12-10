@@ -50,8 +50,8 @@ const configurationItemsKeys = [
     icon: PaletteIcon,
   },
   {
-    titleKey: "sidebar.integrations",
-    url: "/integrations",
+    titleKey: "sidebar.channels",
+    url: "/channels",
     icon: LayoutDashboardIcon,
   },
   {
