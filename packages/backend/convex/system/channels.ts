@@ -26,16 +26,18 @@ export const handleIncomingMessage = internalAction({
     channelUserId: v.string(),              // Agnóstico: "+55119999999", "@user", "user_id_123", etc
     messageText: v.string(),
     externalMessageId: v.optional(v.string()), // ID do provider (para rastreamento)
+    metadata: v.optional(v.any()),          // Channel-specific metadata (e.g., Telegram user info)
   },
   handler: async (ctx: any, args: any) => {
     try {
       // 1. Lookup/create contactSession (agnóstico)
-      const contactSession = await ctx.runMutation(
+      const contactSession = await ctx.runAction(
         internal.system.channels.getOrCreateContactSession,
         {
           channel: args.channel,
           channelUserId: args.channelUserId,
           organizationId: args.organizationId,
+          metadata: args.metadata,
         }
       );
 
@@ -210,36 +212,211 @@ export const sendMessageToExternalChannel = internalAction({
 });
 
 /**
- * Internal mutation: Get or create contact session
+ * Internal action: Get or create contact session
+ * Changed to action to allow fetching profile photos from external APIs
  */
-export const getOrCreateContactSession = internalMutation({
+export const getOrCreateContactSession = internalAction({
   args: {
     channel: v.string(),
     channelUserId: v.string(),
     organizationId: v.string(),
+    metadata: v.optional(v.any()),
   },
-  handler: async (ctx, args) => {
-    let contactSession = await ctx.db
-      .query("contactSessions")
-      .withIndex("by_channel_user_id")
-      .filter((q) => q.eq(q.field("channel"), args.channel))
-      .filter((q) => q.eq(q.field("channelUserId"), args.channelUserId))
-      .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
-      .first();
+  handler: async (ctx, args): Promise<any> => {
+    // Query existing contact session
+    let contactSession: any = await ctx.runQuery(
+      internal.system.channels.findContactSession,
+      {
+        channel: args.channel,
+        channelUserId: args.channelUserId,
+        organizationId: args.organizationId,
+      }
+    );
 
     if (!contactSession) {
-      const contactSessionId = await ctx.db.insert("contactSessions", {
+      // Prepare contact data
+      const contactData: any = {
         name: args.channelUserId,
         email: `${args.channel}_${args.channelUserId}@local`,
         organizationId: args.organizationId,
         expiresAt: Date.now() + SESSION_DURATION_MS,
         channel: args.channel,
         channelUserId: args.channelUserId,
-      });
-      contactSession = await ctx.db.get(contactSessionId);
+      };
+
+      // For Telegram, fetch profile photo and update name
+      if (args.channel === "telegram" && args.metadata) {
+        // Update name with first name if available
+        if (args.metadata.firstName) {
+          contactData.name = args.metadata.firstName;
+        }
+
+        // Fetch profile photo
+        if (args.metadata.userId) {
+          // Get bot token from connection
+          const connection = await ctx.runQuery(
+            internal.system.channelConnections.getActiveConnection,
+            {
+              organizationId: args.organizationId,
+              channel: "telegram",
+            }
+          );
+
+          if (connection && connection.credentials?.apiKey) {
+            const profilePhotoUrl = await ctx.runAction(
+              internal.system.providers.telegram_provider.getUserProfilePhoto,
+              {
+                botToken: connection.credentials.apiKey,
+                userId: args.metadata.userId,
+              }
+            );
+
+            if (profilePhotoUrl) {
+              contactData.profilePictureUrl = profilePhotoUrl;
+            }
+          }
+        }
+      }
+
+      // Create contact session
+      const contactSessionId = await ctx.runMutation(
+        internal.system.channels.createContactSession,
+        contactData
+      );
+
+      contactSession = await ctx.runQuery(
+        internal.system.channels.getContactSessionById,
+        { contactSessionId }
+      );
+    } else if (contactSession.expiresAt < Date.now()) {
+      // Session exists but is expired, renew it
+      await ctx.runMutation(
+        internal.system.channels.updateContactSession,
+        {
+          contactSessionId: contactSession._id,
+          expiresAt: Date.now() + SESSION_DURATION_MS,
+        }
+      );
+      contactSession = await ctx.runQuery(
+        internal.system.channels.getContactSessionById,
+        { contactSessionId: contactSession._id }
+      );
+    } else if (args.channel === "telegram" && !contactSession.profilePictureUrl && args.metadata?.userId) {
+      // Update existing Telegram contact without photo
+      const connection = await ctx.runQuery(
+        internal.system.channelConnections.getActiveConnection,
+        {
+          organizationId: args.organizationId,
+          channel: "telegram",
+        }
+      );
+
+      if (connection && connection.credentials?.apiKey) {
+        const profilePhotoUrl = await ctx.runAction(
+          internal.system.providers.telegram_provider.getUserProfilePhoto,
+          {
+            botToken: connection.credentials.apiKey,
+            userId: args.metadata.userId,
+          }
+        );
+
+        if (profilePhotoUrl) {
+          await ctx.runMutation(
+            internal.system.channels.updateContactSessionProfilePhoto,
+            {
+              contactSessionId: contactSession._id,
+              profilePictureUrl: profilePhotoUrl,
+            }
+          );
+          contactSession = await ctx.runQuery(
+            internal.system.channels.getContactSessionById,
+            { contactSessionId: contactSession._id }
+          );
+        }
+      }
     }
 
     return contactSession;
+  },
+});
+
+/**
+ * Internal query: Find contact session
+ */
+export const findContactSession = internalQuery({
+  args: {
+    channel: v.string(),
+    channelUserId: v.string(),
+    organizationId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("contactSessions")
+      .withIndex("by_channel_user_id")
+      .filter((q) => q.eq(q.field("channel"), args.channel))
+      .filter((q) => q.eq(q.field("channelUserId"), args.channelUserId))
+      .filter((q) => q.eq(q.field("organizationId"), args.organizationId))
+      .first();
+  },
+});
+
+/**
+ * Internal mutation: Create contact session
+ */
+export const createContactSession = internalMutation({
+  args: {
+    name: v.string(),
+    email: v.string(),
+    organizationId: v.string(),
+    expiresAt: v.number(),
+    channel: v.string(),
+    channelUserId: v.string(),
+    profilePictureUrl: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("contactSessions", args);
+  },
+});
+
+/**
+ * Internal query: Get contact session by ID
+ */
+export const getContactSessionById = internalQuery({
+  args: {
+    contactSessionId: v.id("contactSessions"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.contactSessionId);
+  },
+});
+
+/**
+ * Internal mutation: Update contact session expiration
+ */
+export const updateContactSession = internalMutation({
+  args: {
+    contactSessionId: v.id("contactSessions"),
+    expiresAt: v.number(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.contactSessionId, {
+      expiresAt: args.expiresAt,
+    });
+  },
+});
+
+/**
+ * Internal mutation: Update contact session profile photo
+ */
+export const updateContactSessionProfilePhoto = internalMutation({
+  args: {
+    contactSessionId: v.id("contactSessions"),
+    profilePictureUrl: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.contactSessionId, {
+      profilePictureUrl: args.profilePictureUrl,
+    });
   },
 });
 

@@ -4,11 +4,16 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import {
   CreditCardIcon,
+  HomeIcon,
   InboxIcon,
   LayoutDashboardIcon,
   LibraryBigIcon,
   Mic,
   PaletteIcon,
+  PlugIcon,
+  RadioIcon,
+  SettingsIcon,
+  UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -30,11 +35,24 @@ import { useTheme } from "next-themes";
 
 import { useLocale, useTranslations } from "next-intl";
 
+const dashboardItemsKeys = [
+  {
+    titleKey: "sidebar.home",
+    url: "/",
+    icon: HomeIcon,
+  },
+];
+
 const customerSupportItemsKeys = [
   {
     titleKey: "sidebar.conversations",
     url: "/conversations",
     icon: InboxIcon,
+  },
+  {
+    titleKey: "sidebar.contacts",
+    url: "/contacts",
+    icon: UsersIcon,
   },
   {
     titleKey: "sidebar.knowledgeBase",
@@ -50,14 +68,32 @@ const configurationItemsKeys = [
     icon: PaletteIcon,
   },
   {
+    titleKey: "sidebar.channels",
+    url: "/channels",
+    icon: LayoutDashboardIcon,
+  },
+  {
     titleKey: "sidebar.integrations",
     url: "/integrations",
-    icon: LayoutDashboardIcon,
+    icon: PlugIcon,
+  },
+  {
+    titleKey: "sidebar.settings",
+    url: "/settings/lifecycle",
+    icon: SettingsIcon,
   },
   {
     titleKey: "sidebar.voiceAssistant",
     url: "/plugins/vapi",
     icon: Mic,
+  },
+];
+
+const marketingItemsKeys = [
+  {
+    titleKey: "sidebar.broadcast",
+    url: "/broadcast",
+    icon: RadioIcon,
   },
 ];
 
@@ -122,6 +158,31 @@ export const DashboardSidebar = () => {
       </SidebarHeader>
 
       <SidebarContent className="gap-0">
+        {/* Dashboard */}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {dashboardItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         {/* Customer Support */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
@@ -158,6 +219,34 @@ export const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {configurationItemsKeys.map((item) => {
+                const itemTitle = t(item.titleKey as any);
+                return (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      tooltip={itemTitle}
+                    >
+                      <Link href={getLocalizedUrl(item.url)}>
+                        <item.icon />
+                        <span>{itemTitle}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Marketing */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-xs font-medium text-sidebar-foreground/60">
+            {t("sidebar.marketing")}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {marketingItemsKeys.map((item) => {
                 const itemTitle = t(item.titleKey as any);
                 return (
                   <SidebarMenuItem key={item.titleKey}>

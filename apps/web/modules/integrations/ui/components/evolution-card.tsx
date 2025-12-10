@@ -181,17 +181,12 @@ export const EvolutionCard = () => {
               </CardDescription>
             </div>
           </div>
-          {isConnected ? (
+          {isConnected && (
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
               <CheckCircle2 className="mr-1 h-3 w-3" />
               {t("connected")}
             </Badge>
-          ) : isPending ? (
-            <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-              <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-              {t("pending")}
-            </Badge>
-          ) : null}
+          )}
         </div>
       </CardHeader>
 

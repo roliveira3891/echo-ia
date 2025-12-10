@@ -48,7 +48,7 @@
     "home": "Home",
     "conversations": "Conversations",
     "files": "Files",
-    "integrations": "Integrations",
+    "channels": "Channels",
     "customization": "Customization",
     "billing": "Billing",
     "settings": "Settings",
@@ -56,13 +56,19 @@
     "organization": "Organization",
     "logout": "Logout",
     "sidebar": {
+      "home": "Home",
       "customerSupport": "Customer Support",
       "conversations": "Conversations",
+      "contacts": "Contacts",
       "knowledgeBase": "Knowledge Base",
       "configuration": "Configuration",
-      "widgetCustomization": "Widget Customization",
+      "channels": "Channels",
       "integrations": "Integrations",
+      "settings": "Settings",
+      "widgetCustomization": "Widget Customization",
       "voiceAssistant": "Voice Assistant",
+      "marketing": "Marketing",
+      "broadcast": "Broadcast",
       "account": "Account",
       "plansBilling": "Plans & Billing",
       "theme": "Theme",
@@ -109,8 +115,9 @@
     "send": "Send"
   },
   "integrations": {
-    "title": "Setup & Integrations",
+    "title": "Integrations",
     "subtitle": "Choose the integration that's right for you",
+    "description": "Configure integrations with external tools and services",
     "organizationId": "Organization ID",
     "copy": "Copy",
     "copiedToClipboard": "Copied to clipboard",
@@ -235,6 +242,50 @@
       "connect": "Connect LinkedIn",
       "description2": "Connect your LinkedIn Company Page to receive and respond to customer messages.",
       "comingSoonMsg": "This integration is coming soon. Stay tuned!"
+    }
+  },
+  "broadcast": {
+    "title": "Broadcast",
+    "description": "Send bulk messages to your contacts",
+    "subtitle": "Configure and manage your mass messaging campaigns"
+  },
+  "channels": {
+    "title": "Channels",
+    "subtitle": "Connect and manage your communication channels",
+    "organizationId": "Organization ID",
+    "copy": "Copy",
+    "copiedToClipboard": "Copied to clipboard",
+    "failedToCopy": "Failed to copy to clipboard",
+    "channelIntegrations": "Communication Channels",
+    "channelIntegrationsDesc": "Connect your communication channels to receive and respond to messages from customers."
+  },
+  "dashboardHome": {
+    "title": "Dashboard",
+    "description": "Overview of your support and metrics"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "description": "Manage all your contacts and leads"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure and customize the system",
+    "nav": {
+      "lifecycle": "Lifecycle",
+      "contactFields": "Contact Fields",
+      "tags": "Tags"
+    },
+    "lifecycle": {
+      "title": "Lifecycle",
+      "description": "Configure the lifecycle stages of your contacts"
+    },
+    "contactFields": {
+      "title": "Contact Fields",
+      "description": "Customize your contact fields"
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Manage tags to organize your contacts"
     }
   }
 }

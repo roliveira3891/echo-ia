@@ -29,10 +29,6 @@ export const FacebookMessengerCard = () => {
               </CardDescription>
             </div>
           </div>
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-            <AlertCircle className="mr-1 h-3 w-3" />
-            {t("comingSoon")}
-          </Badge>
         </div>
       </CardHeader>
 

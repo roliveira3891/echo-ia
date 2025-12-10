@@ -268,3 +268,91 @@ export const deleteWebhook = internalAction({
     }
   },
 });
+
+/**
+ * Get user profile photo URL
+ * Fetches the profile photo of a Telegram user
+ */
+export const getUserProfilePhoto = internalAction({
+  args: {
+    botToken: v.string(),
+    userId: v.string(), // Telegram user ID (not chat ID)
+  },
+  handler: async (ctx: any, args: any) => {
+    try {
+      // 1. Get user profile photos
+      const response = await fetch(
+        `https://api.telegram.org/bot${args.botToken}/getUserProfilePhotos?user_id=${args.userId}&limit=1`
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.warn(
+          `[Telegram] Failed to get profile photo for user ${args.userId}:`,
+          errorData.description
+        );
+        return null;
+      }
+
+      const data = (await response.json()) as {
+        ok: boolean;
+        result: {
+          total_count: number;
+          photos: Array<
+            Array<{
+              file_id: string;
+              file_unique_id: string;
+              file_size: number;
+              width: number;
+              height: number;
+            }>
+          >;
+        };
+      };
+
+      // Check if user has profile photos
+      if (!data.ok || data.result.total_count === 0 || !data.result.photos[0]) {
+        return null;
+      }
+
+      // Get the largest photo from the first set (photos are grouped by quality)
+      const photoSizes = data.result.photos[0];
+      const largestPhoto = photoSizes[photoSizes.length - 1];
+
+      if (!largestPhoto) {
+        return null;
+      }
+
+      // 2. Get file path for the photo
+      const fileResponse = await fetch(
+        `https://api.telegram.org/bot${args.botToken}/getFile?file_id=${largestPhoto.file_id}`
+      );
+
+      if (!fileResponse.ok) {
+        return null;
+      }
+
+      const fileData = (await fileResponse.json()) as {
+        ok: boolean;
+        result: {
+          file_id: string;
+          file_unique_id: string;
+          file_size: number;
+          file_path: string;
+        };
+      };
+
+      if (!fileData.ok || !fileData.result.file_path) {
+        return null;
+      }
+
+      // 3. Construct the full URL to the photo
+      const photoUrl = `https://api.telegram.org/file/bot${args.botToken}/${fileData.result.file_path}`;
+
+      return photoUrl;
+    } catch (error) {
+      console.error(`[Telegram] Error getting profile photo:`, error);
+      return null;
+    }
+  },
+});
