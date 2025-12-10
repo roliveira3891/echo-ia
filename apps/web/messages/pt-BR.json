@@ -232,7 +232,7 @@
         "warning": "Esta integração utiliza Baileys, uma solução não-oficial de WhatsApp. O {appName} não é responsável por eventuais bloqueios ou restrições aplicadas pelo WhatsApp ao usar esta API.",
         "point1": "A Baileys não é afiliado, associado, autorizado, endossado ou de qualquer forma oficialmente conectado ao WhatsApp ou a qualquer uma de suas subsidiárias ou afiliadas.",
         "point2": "Existe risco de bloqueio ou suspensão da sua conta WhatsApp",
-        "point3": "Use por sua própria conta e risco",
+        "point3": "A Meta / Whatsapp pode alterar suas políticas a qualquer momento, afetando o funcionamento desta integração",
         "continue": "Continuar Mesmo Assim"
       },
       "qrcode": {
