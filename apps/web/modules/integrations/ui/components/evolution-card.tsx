@@ -181,8 +181,6 @@ export const EvolutionCard = () => {
               </CardDescription>
             </div>
           </div>
-        </div>
-        <div className="flex items-start justify-between">
           {isConnected && (
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
               <CheckCircle2 className="mr-1 h-3 w-3" />
