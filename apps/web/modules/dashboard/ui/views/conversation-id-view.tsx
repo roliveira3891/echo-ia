@@ -310,7 +310,7 @@ export const ConversationIdView = ({
       {/* Área de Mensagens */}
       <AIConversation className={cn(
         "flex-1 overflow-hidden",
-        isMobile && "mb-24"
+        isMobile && "mb-1"
       )}>
         <AIConversationContent className={cn(
           "px-4",
