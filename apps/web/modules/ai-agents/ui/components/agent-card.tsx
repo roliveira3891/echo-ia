@@ -20,9 +20,10 @@ interface AgentCardProps {
   agent: AIAgent;
   onToggleActive?: (agentId: string, isActive: boolean) => void;
   onDelete?: (agentId: string) => void;
+  onSetAsDefault?: (agentId: string) => void;
 }
 
-export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) => {
+export const AgentCard = ({ agent, onToggleActive, onDelete, onSetAsDefault }: AgentCardProps) => {
   const t = useTranslations("aiAgents");
   const locale = useLocale();
   const [isActive, setIsActive] = useState(agent.isActive);
@@ -44,7 +45,7 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
               <Icon className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-semibold text-lg">{agent.name}</h3>
                 {isActive ? (
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
@@ -53,6 +54,11 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
                 ) : (
                   <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
                     ○ {t("inactive")}
+                  </Badge>
+                )}
+                {agent.isDefault && (
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    {t("default")}
                   </Badge>
                 )}
               </div>
@@ -75,9 +81,29 @@ export const AgentCard = ({ agent, onToggleActive, onDelete }: AgentCardProps) =
                   {t("edit")}
                 </Link>
               </DropdownMenuItem>
+              {!agent.isDefault && (
+                <DropdownMenuItem onClick={() => onSetAsDefault?.(agent._id)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  {t("setAsDefault")}
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 onClick={() => onDelete?.(agent._id)}
                 className="text-red-600 focus:text-red-600"
+                disabled={agent.isDefault}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 {t("delete")}

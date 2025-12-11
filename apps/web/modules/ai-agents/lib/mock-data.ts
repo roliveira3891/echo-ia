@@ -19,6 +19,7 @@ export interface AIAgent {
   instructions: string;
   templateType: TemplateType;
   isActive: boolean;
+  isDefault: boolean;
   createdAt: number;
   updatedAt: number;
 }
@@ -128,6 +129,7 @@ export const MOCK_AGENTS: AIAgent[] = [
     instructions: MOCK_TEMPLATES[0].instructions,
     templateType: "support",
     isActive: true,
+    isDefault: true, // Este é o agente padrão
     createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
     updatedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
   },
@@ -138,6 +140,7 @@ export const MOCK_AGENTS: AIAgent[] = [
     instructions: MOCK_TEMPLATES[2].instructions,
     templateType: "receptionist",
     isActive: false,
+    isDefault: false,
     createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
     updatedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
   },
@@ -148,6 +151,7 @@ export const MOCK_AGENTS: AIAgent[] = [
     instructions: MOCK_TEMPLATES[1].instructions,
     templateType: "sales",
     isActive: true,
+    isDefault: false,
     createdAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
     updatedAt: Date.now() - 2 * 24 * 60 * 60 * 1000,
   },

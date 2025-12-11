@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@workspace/ui/components/button";
-import { Plus } from "lucide-react";
+import { Badge } from "@workspace/ui/components/badge";
+import { Plus, Edit } from "lucide-react";
 import Link from "next/link";
 import { AgentCard } from "../components/agent-card";
 import { MOCK_AGENTS } from "../../lib/mock-data";
@@ -32,6 +33,18 @@ export const AIAgentsListView = () => {
     }
   };
 
+  const handleSetAsDefault = (agentId: string) => {
+    setAgents((prev) =>
+      prev.map((agent) => ({
+        ...agent,
+        isDefault: agent._id === agentId,
+      }))
+    );
+    toast.success(t("setAsDefaultSuccess"));
+  };
+
+  const defaultAgent = agents.find((agent) => agent.isDefault);
+
   return (
     <div className="flex min-h-screen flex-col bg-muted p-8">
       <div className="mx-auto w-full max-w-7xl">
@@ -51,6 +64,39 @@ export const AIAgentsListView = () => {
             </Link>
           </Button>
         </div>
+
+        {/* Default Agent Banner */}
+        {defaultAgent && (
+          <div className="mt-8 p-4 bg-card border border-border rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="rounded-lg bg-primary/10 p-3">
+                  {(() => {
+                    const Icon = defaultAgent.icon;
+                    return <Icon className="h-6 w-6 text-primary" />;
+                  })()}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-lg">{defaultAgent.name}</span>
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      {t("default")}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {t("defaultAgentDescription")}
+                  </p>
+                </div>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/${locale}/ai-agents/${defaultAgent._id}/edit`}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  {t("edit")}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Agents Grid */}
         <div className="mt-8">
@@ -78,6 +124,7 @@ export const AIAgentsListView = () => {
                   agent={agent}
                   onToggleActive={handleToggleActive}
                   onDelete={handleDelete}
+                  onSetAsDefault={handleSetAsDefault}
                 />
               ))}
             </div>
