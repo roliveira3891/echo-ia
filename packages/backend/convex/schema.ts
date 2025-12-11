@@ -35,11 +35,13 @@ export default defineSchema({
       v.literal("escalated"),
       v.literal("resolved")
     ),
+    agentId: v.optional(v.id("aiAgents")),
   })
     .index("by_organization_id", ["organizationId"])
     .index("by_contact_session_id", ["contactSessionId"])
     .index("by_thread_id", ["threadId"])
-    .index("by_status_and_organization_id", ["status", "organizationId"]),
+    .index("by_status_and_organization_id", ["status", "organizationId"])
+    .index("by_agent_id", ["agentId"]),
   contactSessions: defineTable({
     name: v.string(),
     email: v.string(),
@@ -129,5 +131,68 @@ export default defineSchema({
     .index("by_channel", ["channel"])
     .index("by_org_and_channel", ["organizationId", "channel"])
     .index("by_channel_account_id", ["channel", "channelAccountId"]),
+
+  // ========================================
+  // AI AGENTS
+  // ========================================
+
+  // Templates globais (marketplace) - qualquer org pode usar para criar agentes
+  aiAgentTemplates: defineTable({
+    // Template identification
+    templateId: v.string(),              // "support", "sales", "receptionist", etc. (unique)
+    name: v.string(),                    // "Support Agent", "Sales Agent"
+    emoji: v.string(),                   // "🎧", "💼"
+    description: v.string(),             // Descrição do template para o marketplace
+    instructions: v.string(),            // Prompt padrão do template
+
+    // Metadata
+    isActive: v.boolean(),               // Template ativo (aparece no marketplace)
+    isSystem: v.boolean(),               // Template do sistema (não pode ser deletado)
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.optional(v.string()),   // userId do Clerk (para templates futuros)
+  })
+    .index("by_template_id", ["templateId"])
+    .index("by_is_active", ["isActive"]),
+
+  // Agentes configurados por organização (podem ter quantos quiserem)
+  aiAgents: defineTable({
+    organizationId: v.string(),
+
+    // Configuration
+    name: v.string(),                    // "Support Agent", "Sales Agent"
+    emoji: v.string(),                   // "🎧", "💼"
+    description: v.string(),             // Descrição curta do que o agente faz
+    instructions: v.string(),            // Prompt completo (até 10000 chars)
+
+    // Template info (opcional - referência ao template usado)
+    templateId: v.optional(v.string()),  // ID do template usado para criar (se veio de template)
+
+    // Status
+    isActive: v.boolean(),               // Ativo/Inativo (toggle)
+    isDefault: v.boolean(),              // Agente padrão da organização (só 1 pode ser true)
+
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.optional(v.string()),   // userId do Clerk
+  })
+    .index("by_organization_id", ["organizationId"])
+    .index("by_organization_and_active", ["organizationId", "isActive"])
+    .index("by_organization_and_default", ["organizationId", "isDefault"]),
+
+  // Assignments de agentes por canal (opcional - se não tiver, usa o default)
+  channelAgentAssignments: defineTable({
+    organizationId: v.string(),
+    channel: v.string(),                 // "whatsapp", "telegram", "widget", etc.
+    agentId: v.id("aiAgents"),           // Qual agente responde esse canal
+
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_organization_id", ["organizationId"])
+    .index("by_org_and_channel", ["organizationId", "channel"]) // Unique per org+channel
+    .index("by_agent_id", ["agentId"]),
 
 });
