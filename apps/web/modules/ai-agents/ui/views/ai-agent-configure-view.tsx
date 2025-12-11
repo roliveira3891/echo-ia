@@ -104,7 +104,7 @@ export const AIAgentConfigureView = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted p-8">
-      <div className="mx-auto w-full max-w-4xl">
+      <div className="mx-auto w-full max-w-6xl">
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
