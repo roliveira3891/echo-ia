@@ -25,7 +25,7 @@ export const AIAgentTemplatesView = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted p-8">
-      <div className="mx-auto w-full max-w-5xl">
+      <div className="mx-auto w-full max-w-7xl">
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
@@ -46,7 +46,7 @@ export const AIAgentTemplatesView = () => {
         </div>
 
         {/* Templates Grid */}
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {MOCK_TEMPLATES.map((template) => (
             <TemplateCard
               key={template.id}
@@ -56,22 +56,23 @@ export const AIAgentTemplatesView = () => {
           ))}
 
           {/* Create from Scratch Option */}
-          <Card className="overflow-hidden border-2 border-dashed hover:shadow-md transition-shadow hover:border-primary/50">
-            <CardHeader>
-              <div className="flex items-start justify-between">
+          <Card className="overflow-hidden border-2 border-dashed hover:shadow-md transition-shadow hover:border-primary/50 flex flex-col">
+            <CardHeader className="flex-1">
+              <div className="space-y-4">
+                {/* Icon and Title in same row */}
                 <div className="flex items-center gap-3">
-                  <div className="text-4xl">
-                    <Sparkles className="h-10 w-10" />
+                  <div className="rounded-lg bg-primary/10 p-2.5">
+                    <Sparkles className="h-5 w-5 text-primary" />
                   </div>
-                  <div>
-                    <CardTitle className="text-lg">
-                      {t("templates.scratch.name")}
-                    </CardTitle>
-                    <CardDescription className="mt-1">
-                      {t("templates.scratch.description")}
-                    </CardDescription>
-                  </div>
+                  <CardTitle className="text-base font-semibold">
+                    {t("templates.scratch.name")}
+                  </CardTitle>
                 </div>
+
+                {/* Description below */}
+                <CardDescription className="text-sm">
+                  {t("templates.scratch.description")}
+                </CardDescription>
               </div>
             </CardHeader>
 
