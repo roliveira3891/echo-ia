@@ -11,12 +11,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@work
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { getTemplateById, getAgentById, MOCK_TEMPLATES } from "../../lib/mock-data";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@workspace/backend/_generated/api";
+import { Id } from "@workspace/backend/_generated/dataModel";
 
 interface AIAgentFormData {
   name: string;
-  iconName: string;
+  emoji: string;
+  description: string;
   instructions: string;
+  templateId?: string;
 }
 
 export const AIAgentConfigureView = () => {
@@ -25,52 +29,63 @@ export const AIAgentConfigureView = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
-  const templateId = searchParams?.get("template");
+  const templateIdParam = searchParams?.get("template");
   const agentId = params?.agentId as string | undefined;
+
+  const isEditMode = !!agentId;
+
+  const agent = useQuery(
+    api.private.aiAgents.getById,
+    isEditMode && agentId ? { id: agentId as Id<"aiAgents"> } : "skip"
+  );
+
+  const template = useQuery(
+    api.private.aiAgentTemplates.getByTemplateId,
+    !isEditMode && templateIdParam ? { templateId: templateIdParam } : "skip"
+  );
+
+  const createAgent = useMutation(api.private.aiAgents.create);
+  const updateAgent = useMutation(api.private.aiAgents.update);
 
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<AIAgentFormData>({
     name: "",
-    iconName: "Bot",
+    emoji: "🤖",
+    description: "",
     instructions: "",
   });
 
-  // Determine if we're in edit mode or create mode
-  const isEditMode = !!agentId;
-
-  // Load data: either from existing agent (edit mode) or from template (create mode)
+  // Load data when agent or template is available
   useEffect(() => {
-    if (isEditMode && agentId) {
-      // Edit mode: load existing agent data
-      const agent = getAgentById(agentId);
-      if (agent) {
-        setFormData({
-          name: agent.name,
-          iconName: agent.icon.name || "Bot",
-          instructions: agent.instructions,
-        });
-      } else {
-        toast.error("Agente não encontrado");
-        router.push(`/${locale}/ai-agents`);
-      }
-    } else if (templateId) {
-      // Create mode: load template data
-      const template = getTemplateById(templateId as any);
-      if (template) {
-        setFormData({
-          name: template.name,
-          iconName: template.icon.name || "Bot",
-          instructions: template.instructions,
-        });
-      }
+    if (isEditMode && agent) {
+      setFormData({
+        name: agent.name,
+        emoji: agent.emoji,
+        description: agent.description || "",
+        instructions: agent.instructions,
+        templateId: agent.templateId,
+      });
+    } else if (!isEditMode && template) {
+      setFormData({
+        name: template.name,
+        emoji: template.emoji,
+        description: template.description || "",
+        instructions: template.instructions,
+        templateId: template.templateId,
+      });
     }
-  }, [agentId, templateId, isEditMode, locale, router]);
+  }, [agent, template, isEditMode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
       toast.error(t("nameRequired"));
+      return;
+    }
+
+    if (!isEditMode && !formData.description.trim()) {
+      toast.error(t("descriptionRequired"));
       return;
     }
 
@@ -82,12 +97,23 @@ export const AIAgentConfigureView = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Call backend mutation to create/update agent
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock delay
-
-      if (isEditMode) {
+      if (isEditMode && agentId) {
+        await updateAgent({
+          id: agentId as Id<"aiAgents">,
+          name: formData.name,
+          emoji: formData.emoji,
+          description: formData.description,
+          instructions: formData.instructions,
+        });
         toast.success(t("agentUpdated"));
       } else {
+        await createAgent({
+          name: formData.name,
+          emoji: formData.emoji,
+          description: formData.description,
+          instructions: formData.instructions,
+          templateId: formData.templateId,
+        });
         toast.success(t("agentCreated"));
       }
       router.push(`/${locale}/ai-agents`);
@@ -104,7 +130,7 @@ export const AIAgentConfigureView = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted p-8">
-      <div className="mx-auto w-full max-w-6xl">
+      <div className="mx-auto w-full max-w-7xl">
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
@@ -115,7 +141,7 @@ export const AIAgentConfigureView = () => {
           </Button>
 
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-4xl font-bold">
+            <h1 className="text-2xl md:text-4xl">
               {isEditMode ? t("editTitle") : t("title")}
             </h1>
             <p className="text-muted-foreground">
@@ -135,6 +161,27 @@ export const AIAgentConfigureView = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Emoji */}
+              <div className="space-y-2">
+                <Label htmlFor="emoji">{t("emoji")}</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="emoji"
+                    type="text"
+                    placeholder="🤖"
+                    value={formData.emoji}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, emoji: e.target.value }))
+                    }
+                    maxLength={2}
+                    className="w-20 text-center text-2xl"
+                  />
+                  <div className="flex-1 flex items-center text-sm text-muted-foreground">
+                    {t("emojiHint")}
+                  </div>
+                </div>
+              </div>
+
               {/* Name */}
               <div className="space-y-2">
                 <Label htmlFor="name">{t("name")}</Label>
@@ -151,6 +198,28 @@ export const AIAgentConfigureView = () => {
                 <p className="text-xs text-muted-foreground">
                   {t("nameHint")}
                 </p>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <Label htmlFor="description">{t("description")}</Label>
+                <Textarea
+                  id="description"
+                  placeholder={t("descriptionPlaceholder")}
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, description: e.target.value }))
+                  }
+                  rows={3}
+                  maxLength={200}
+                  required={!isEditMode}
+                />
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{t("descriptionHint")}</span>
+                  <span>
+                    {formData.description?.length || 0} / 200 {t("characters")}
+                  </span>
+                </div>
               </div>
 
               {/* Instructions */}

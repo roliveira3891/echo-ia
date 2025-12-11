@@ -3,16 +3,19 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import type { AIAgentTemplate } from "../../lib/mock-data";
 
 interface TemplateCardProps {
-  template: AIAgentTemplate;
+  template: {
+    id: string;
+    name: string;
+    emoji: string;
+    description: string;
+  };
   onSelect: (templateId: string) => void;
 }
 
 export const TemplateCard = ({ template, onSelect }: TemplateCardProps) => {
   const t = useTranslations("aiAgents.templates");
-  const Icon = template.icon;
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow hover:border-primary/50 flex flex-col">
@@ -20,17 +23,17 @@ export const TemplateCard = ({ template, onSelect }: TemplateCardProps) => {
         <div className="space-y-4">
           {/* Icon and Title in same row */}
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary/10 p-2.5">
-              <Icon className="h-5 w-5 text-primary" />
+            <div className="rounded-lg bg-primary/10 p-2.5 flex items-center justify-center w-10 h-10">
+              <span className="text-2xl">{template.emoji}</span>
             </div>
             <CardTitle className="text-base font-semibold">
-              {t(`${template.id}.name`)}
+              {template.name}
             </CardTitle>
           </div>
 
           {/* Description below */}
           <CardDescription className="text-sm">
-            {t(`${template.id}.description`)}
+            {template.description}
           </CardDescription>
         </div>
       </CardHeader>

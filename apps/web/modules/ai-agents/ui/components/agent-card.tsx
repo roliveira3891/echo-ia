@@ -34,15 +34,20 @@ export const AgentCard = ({ agent, onToggleActive, onDelete, onSetAsDefault }: A
     onToggleActive?.(agent._id, newState);
   };
 
-  const Icon = agent.icon;
-
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary/10 p-3">
-              <Icon className="h-6 w-6 text-primary" />
+            <div className="rounded-lg bg-primary/10 p-3 flex items-center justify-center">
+              {typeof agent.icon === 'string' ? (
+                <span className="text-2xl">{agent.icon}</span>
+              ) : (
+                (() => {
+                  const Icon = agent.icon;
+                  return <Icon className="h-6 w-6 text-primary" />;
+                })()
+              )}
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -62,9 +67,11 @@ export const AgentCard = ({ agent, onToggleActive, onDelete, onSetAsDefault }: A
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t(`templates.${agent.templateType}.name`)}
-              </p>
+              {agent.description && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  {agent.description}
+                </p>
+              )}
             </div>
           </div>
 
