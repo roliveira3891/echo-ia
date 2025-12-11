@@ -336,6 +336,8 @@
     "configure": {
       "title": "Configure Agent",
       "description": "Customize the behavior and instructions of your AI agent",
+      "editTitle": "Edit Agent",
+      "editDescription": "Update the behavior and instructions of your AI agent",
       "back": "Back",
       "configuration": "Basic Configuration",
       "configurationDescription": "Define your agent's name, emoji, and instructions",
@@ -359,7 +361,9 @@
       "save": "Save Agent",
       "saving": "Saving...",
       "agentCreated": "Agent created successfully!",
-      "errorCreating": "Error creating agent. Please try again."
+      "agentUpdated": "Agent updated successfully!",
+      "errorCreating": "Error creating agent. Please try again.",
+      "errorUpdating": "Error updating agent. Please try again."
     }
   }
 }

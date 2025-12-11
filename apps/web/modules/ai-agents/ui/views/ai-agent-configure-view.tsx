@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@work
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { getTemplateById, MOCK_TEMPLATES } from "../../lib/mock-data";
+import { getTemplateById, getAgentById, MOCK_TEMPLATES } from "../../lib/mock-data";
 
 interface AIAgentFormData {
   name: string;
@@ -24,7 +24,9 @@ export const AIAgentConfigureView = () => {
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
   const templateId = searchParams?.get("template");
+  const agentId = params?.agentId as string | undefined;
 
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<AIAgentFormData>({
@@ -33,9 +35,26 @@ export const AIAgentConfigureView = () => {
     instructions: "",
   });
 
-  // Load template data if template ID is provided
+  // Determine if we're in edit mode or create mode
+  const isEditMode = !!agentId;
+
+  // Load data: either from existing agent (edit mode) or from template (create mode)
   useEffect(() => {
-    if (templateId) {
+    if (isEditMode && agentId) {
+      // Edit mode: load existing agent data
+      const agent = getAgentById(agentId);
+      if (agent) {
+        setFormData({
+          name: agent.name,
+          iconName: agent.icon.name || "Bot",
+          instructions: agent.instructions,
+        });
+      } else {
+        toast.error("Agente não encontrado");
+        router.push(`/${locale}/ai-agents`);
+      }
+    } else if (templateId) {
+      // Create mode: load template data
       const template = getTemplateById(templateId as any);
       if (template) {
         setFormData({
@@ -45,7 +64,7 @@ export const AIAgentConfigureView = () => {
         });
       }
     }
-  }, [templateId]);
+  }, [agentId, templateId, isEditMode, locale, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,13 +82,21 @@ export const AIAgentConfigureView = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Call backend mutation to create agent
+      // TODO: Call backend mutation to create/update agent
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock delay
 
-      toast.success(t("agentCreated"));
+      if (isEditMode) {
+        toast.success(t("agentUpdated"));
+      } else {
+        toast.success(t("agentCreated"));
+      }
       router.push(`/${locale}/ai-agents`);
     } catch (error) {
-      toast.error(t("errorCreating"));
+      if (isEditMode) {
+        toast.error(t("errorUpdating"));
+      } else {
+        toast.error(t("errorCreating"));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -81,16 +108,18 @@ export const AIAgentConfigureView = () => {
         {/* Header */}
         <div className="space-y-4">
           <Button variant="ghost" asChild className="gap-2">
-            <Link href={`/${locale}/ai-agents/new/templates`}>
+            <Link href={isEditMode ? `/${locale}/ai-agents` : `/${locale}/ai-agents/new/templates`}>
               <ArrowLeft className="h-4 w-4" />
               {t("back")}
             </Link>
           </Button>
 
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-4xl font-bold">{t("title")}</h1>
+            <h1 className="text-2xl md:text-4xl font-bold">
+              {isEditMode ? t("editTitle") : t("title")}
+            </h1>
             <p className="text-muted-foreground">
-              {t("description")}
+              {isEditMode ? t("editDescription") : t("description")}
             </p>
           </div>
         </div>

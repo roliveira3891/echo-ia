@@ -381,6 +381,8 @@
     "configure": {
       "title": "Configurar Agente",
       "description": "Personalize o comportamento e as instruções do seu agente de IA",
+      "editTitle": "Editar Agente",
+      "editDescription": "Atualize o comportamento e as instruções do seu agente de IA",
       "back": "Voltar",
       "configuration": "Configuração Básica",
       "configurationDescription": "Defina o nome, emoji e instruções do seu agente",
@@ -404,7 +406,9 @@
       "save": "Salvar Agente",
       "saving": "Salvando...",
       "agentCreated": "Agente criado com sucesso!",
-      "errorCreating": "Erro ao criar agente. Tente novamente."
+      "agentUpdated": "Agente atualizado com sucesso!",
+      "errorCreating": "Erro ao criar agente. Tente novamente.",
+      "errorUpdating": "Erro ao atualizar agente. Tente novamente."
     }
   }
 }
