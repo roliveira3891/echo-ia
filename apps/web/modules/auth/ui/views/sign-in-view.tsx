@@ -57,14 +57,16 @@ export const SignInView = () => {
     : '/?locale=pt-BR';
 
   return (
+   
     <SignIn
       routing="hash"
       fallbackRedirectUrl={fallbackRedirectUrl}
       appearance={{
         elements: {
           // Container principal - aumentado para melhor espaço
-          card: "bg-white dark:bg-gray-900 shadow-lg rounded-xl border border-gray-200 dark:border-gray-800 w-full",
+          card: "bg-white dark:bg-gray-900 shadow-none rounded-xl border border-gray-200 dark:border-gray-800 w-full max-w-md mx-auto",
           cardBox: "shadow-none",
+          logoImage: "w-32 h-32 mb-4 mx-auto size-full object-contain",
 
           // Headers e títulos
           headerTitle: "text-3xl font-bold text-gray-900 dark:text-white",

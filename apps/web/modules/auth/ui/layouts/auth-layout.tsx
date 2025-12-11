@@ -78,7 +78,7 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen min-w-screen h-full w-full bg-white dark:bg-gray-950 transition-colors duration-300">
       {/* Cabeçalho fixo com logo, tema e idioma */}
-      <AuthHeader />
+      {/* <AuthHeader /> */}
 
       {/* Conteúdo principal - Centralizado */}
       <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 pt-24 sm:pt-28 pb-8">
