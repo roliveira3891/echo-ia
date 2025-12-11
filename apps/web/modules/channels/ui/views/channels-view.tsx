@@ -69,7 +69,7 @@ export const ChannelsView = () => {
               {t("subtitle")}
             </p>
           </div>
-          <div className="mt-8 space-y-6">
+          {/* <div className="mt-8 space-y-6">
             <div className="flex items-center gap-4">
               <Label className="w-34" htmlFor="organization-id">
                 {t("organizationId")}
@@ -90,9 +90,9 @@ export const ChannelsView = () => {
                 {t("copy")}
               </Button>
             </div>
-          </div>
+          </div> */}
 
-          <Separator className="my-8" />
+          <Separator className="my-5" />
 
           {/* Channel Integrations */}
           <div className="space-y-6">
