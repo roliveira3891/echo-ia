@@ -17,6 +17,7 @@ export interface AIAgent {
   name: string;
   icon: LucideIcon;
   instructions: string;
+  description: string;
   templateType: TemplateType;
   isActive: boolean;
   isDefault: boolean;
@@ -126,7 +127,8 @@ export const MOCK_AGENTS: AIAgent[] = [
     _id: "agent_1",
     name: "Support Agent",
     icon: Headset,
-    instructions: MOCK_TEMPLATES[0].instructions,
+    instructions: MOCK_TEMPLATES[0]?.instructions ?? "",
+    description: MOCK_TEMPLATES[0]?.description ?? "",
     templateType: "support",
     isActive: true,
     isDefault: true, // Este é o agente padrão
@@ -137,7 +139,8 @@ export const MOCK_AGENTS: AIAgent[] = [
     _id: "agent_2",
     name: "Receptionist",
     icon: Phone,
-    instructions: MOCK_TEMPLATES[2].instructions,
+    instructions: MOCK_TEMPLATES[2]?.instructions ?? "",
+    description: MOCK_TEMPLATES[0]?.description ?? "",
     templateType: "receptionist",
     isActive: false,
     isDefault: false,
@@ -148,7 +151,8 @@ export const MOCK_AGENTS: AIAgent[] = [
     _id: "agent_3",
     name: "Sales Agent",
     icon: Briefcase,
-    instructions: MOCK_TEMPLATES[1].instructions,
+    instructions: MOCK_TEMPLATES[1]?.instructions ?? "",
+    description: MOCK_TEMPLATES[0]?.description ?? "",
     templateType: "sales",
     isActive: true,
     isDefault: false,
